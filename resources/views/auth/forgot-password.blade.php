@@ -1,13 +1,9 @@
 <x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+    <div class="container-fluid p-3 p-md-5 shadow-lg" >
+        <img src="{{url('images/logo.png')}}" class="img-fluid"></img>
 
         <div class="mb-4 text-sm text-gray-600">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+            {{ __('Enter your email address for the reset password link.') }}
         </div>
 
         <!-- Session Status -->
@@ -27,10 +23,11 @@
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Email Password Reset Link') }}
+                <x-button class="button shadow-md">
+                    {{ __('Send Email') }}
                 </x-button>
             </div>
         </form>
-    </x-auth-card>
+        <p>v.1.1.1</p>
+    </div>
 </x-guest-layout>

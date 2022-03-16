@@ -1,0 +1,22 @@
+.container-fluid{
+    margin-top:5%;
+    width:400px;
+    background-color:white;
+    border-radius:25px;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.26);
+}
+
+@media (max-width: 576px) {
+    .container-fluid {
+        margin-top:30%;
+        width:300px;
+    }
+}
+
+.button{
+    background-color: #18A2BC;
+}
+
+.navbar{
+    background-color: #E81D4F;
+}

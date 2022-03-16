@@ -1,11 +1,6 @@
 <x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
-
+    <div class="container-fluid p-3 p-md-5 shadow-lg" >
+        <img src="{{url('images/logo.png')}}" class="img-fluid"></img>
         <!-- Session Status -->
         <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -47,10 +42,11 @@
                     </a>
                 @endif
 
-                <x-button class="ml-3">
+                <x-button class="ml-3 button shadow-md">
                     {{ __('Log in') }}
                 </x-button>
             </div>
         </form>
-    </x-auth-card>
+        <p>v.1.1.1</p>
+    </div>
 </x-guest-layout>
