@@ -3,12 +3,16 @@
 @section('content')
 <!--Actual Content-->
 <div class="container bg-light p-3 p-sm-5 mb-5 shadow-lg" style="color:#767070;">
+    <a type="button" class="btn shadow-md bg-danger" href="/adjustment-records" style="color:white">
+        Back </a>
 
-    <!--Employee Name-->
-    <h6 class="mb-0">John Doe</h6>
 
-    <!--Date and Day-->
-    <h2>March 03, 2022
+    <!-- Employee, Date and Day -->
+    <h2>John Doe
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-dot" viewBox="0 -5 16 16">
+            <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+        </svg>
+        March 03, 2022
         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-dot" viewBox="0 -5 16 16">
             <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
         </svg>

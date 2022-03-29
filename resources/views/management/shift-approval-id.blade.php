@@ -4,7 +4,7 @@
 <!--Actual Content-->
 <div class="container bg-light p-3 p-sm-5 mb-5 shadow-lg" style="color:#767070;">
 
-    <a type="button" class="btn shadow-md bg-danger mb-3" href="/approve-adjustments" style="color:white">
+    <a type="button" class="btn shadow-md bg-danger mb-3" href="/approve-shift-change" style="color:white">
             Back </a>
 
     <!--Employee Name-->

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('employee.dashboard');
+    return view('admin.dashboard');
 });
 
 Route::get('/dashboard', function () {
@@ -61,18 +61,49 @@ Route::view("/overtime-request-edit", 'employee.overtime-request-edit');
 
 /* Management */
 Route::view("/management", 'management.dashboard');
+
 Route::view("/employee-records-id", 'management.employee-spec');
 Route::view("/approve-adjustments", 'management.adjustment');
 Route::view("/adjustment-approvals-id", 'management.adjustment-approvals-id');
+
 Route::view("/approve-shift-change", 'management.shift');
 Route::view("/shift-approvals-id", 'management.shift-approval-id');
+
 Route::view("/approve-leaves", 'management.leave');
 Route::view("/leave-approvals-id", 'management.leave-approval-id');
+
 Route::view("/approve-overtimes", 'management.overtime');
 Route::view("/overtime-approvals-id", 'management.overtime-approval-id');
+
 Route::view("/manage-shifts", 'management.manage-shift');
 Route::view("/shift-manage-id", 'management.shift-manage-id');
 Route::view("/shift-manage-new", 'management.manage-shift-new');
 Route::view("/shift-manage-edit", 'management.manage-shift-edit');
+
+
+
+
+/* Admin */
+Route::view("/admin-time-in-out", 'admin.dashboard');
+
+Route::view("/departments", 'admin.department');
+Route::view("/department-new", 'admin.department-new');
+Route::view("/department-edit", 'admin.department-edit');
+
+Route::view("/shifts", 'admin.shift');
+Route::view("/shift-new", 'admin.shift-new');
+Route::view("/shift-edit", 'admin.shift-edit');
+
+Route::view("/leaves-category", 'admin.leave-cat');
+Route::view("/leave-category-details", 'admin.leave-cat-spec');
+Route::view("/leave-category-new", 'admin.leave-cat-new');
+Route::view("/leave-category-edit", 'admin.leave-cat-edit');
+Route::view("/leaves-subcategory", 'admin.leave-subcat');
+Route::view("/leave-subcategory-new", 'admin.leave-subcat-new');
+Route::view("/leave-subcategory-edit", 'admin.leave-subcat-edit');
+
+Route::view("/accounts", 'admin.account');
+Route::view("/account-new", 'admin.account-new');
+Route::view("/account-edit", 'admin.account-edit');
 
 require __DIR__.'/auth.php';

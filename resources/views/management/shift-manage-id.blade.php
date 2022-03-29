@@ -3,6 +3,10 @@
 @section('content')
 <!--Actual Content-->
 <div class="container bg-light p-3 p-sm-5 mb-5 shadow-lg" style="color:#767070;">
+    <a type="button" class="btn shadow-md bg-danger" href="/manage-shifts" style="color:white">
+        Back </a>
+
+    <br><br>
 
     <!--Employee Name-->
     <h3>John Doe</h3>
