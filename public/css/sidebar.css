@@ -104,8 +104,7 @@ a svg {
     background: #fff;
 }
 
-#sidebar ul li.active>a,
-a[aria-expanded="true"] {
+#sidebar ul li.active>a{
     color: #fff;
     background: #E81D4F;
 }
@@ -125,7 +124,7 @@ a[data-toggle="collapse"] {
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: rgba(24, 162, 188, 0.12);
+    background: white;
 }
 
 ul.CTAs {

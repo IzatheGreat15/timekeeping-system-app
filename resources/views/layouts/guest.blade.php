@@ -20,8 +20,8 @@
         <style>
             body{
                 background: url('images/bg.png');
-  background-repeat: no-repeat;
-  background-size: auto;
+                background-repeat: no-repeat;
+                background-size: auto;
             }
         </style>
     </head>

@@ -2,3 +2,38 @@
     color: white;
     background-color: #18A2BC;
 }
+
+.form-control, .form-control:focus{
+    border: none;
+    background-color: transparent;
+    border-bottom: 3px solid rgba(229, 229, 229, 1);
+}
+
+.col{
+    width: 9%;
+}
+
+.btn-clear{
+    background-color: transparent;
+    color: #767070;
+    border: none;
+}
+
+tr { 
+    cursor: pointer; 
+}
+
+.input-group-text{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+a{
+    cursor: pointer;
+}
+
+.notif{
+    background-color: rgba(24, 162, 188, 0.12);
+    cursor: pointer;
+}
