@@ -8,7 +8,7 @@
     <hr>
 
     <!--Attendance-->
-    <div class="row">
+    <div class="row" id="attendance">
         <div class="col">
             <p>
             <a data-toggle="collapse" href="#attendanceNotif" role="button" aria-expanded="true" class="dropdown-toggle w-100">Attendance</a>
@@ -28,7 +28,7 @@
 
 
     <!--Shift-->
-    <div class="row">
+    <div class="row" id="shifts">
         <div class="col">
             <p>
             <a data-toggle="collapse" href="#shiftNotif" role="button" aria-expanded="true" class="dropdown-toggle w-100">Shift</a>
@@ -47,7 +47,7 @@
     </div>
 
     <!--Leaves-->
-    <div class="row">
+    <div class="row" id="leaves">
         <div class="col">
             <p>
             <a data-toggle="collapse" href="#leaveNotif" role="button" aria-expanded="true" class="dropdown-toggle w-100">Leaves</a>
@@ -66,7 +66,7 @@
     </div>
 
     <!--Overtimes-->
-    <div class="row">
+    <div class="row" id="overtime">
         <div class="col">
             <p>
             <a data-toggle="collapse" href="#overtimeNotif" role="button" aria-expanded="true" class="dropdown-toggle w-100">Overtime</a>

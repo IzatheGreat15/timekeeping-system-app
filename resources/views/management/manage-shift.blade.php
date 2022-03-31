@@ -18,7 +18,7 @@
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
         </svg>
-    New Request </a>
+    Add </a>
 
     <div class="row">
         <div class="col-md mb-3">
@@ -49,7 +49,7 @@
     <!--Shift Records-->
     <div class="container bg-light p-1 p-sm-4 mb-3 mt-3 shadow">
         <div class="table-responsive">
-            <table class="table table-hover text-center">
+            <table class="table table-hover text-center" id="dept_table">
                 <thead>
                     <tr>
                         <th scope="col">Date Filed</th>
@@ -66,6 +66,7 @@
 
                 <tbody>
                     <tr>
+                        <td style="display: none;">001</td>
                         <td>03/02/22</td>
                         <td>John Doe</td>
                         <td>Marketing</td>
@@ -88,11 +89,11 @@
                                 </svg>
                             </a>
                             &nbsp;
-                            <button class="btn btn-clear p-0">
+                            <a class="btn btn-clear p-0 delete" data-toggle="modal" data-target=".delete-modal-sm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
                                     <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
                                 </svg>
-                            </button>
+                            </a>
                         </td>
                     </tr>
                 </tbody>
@@ -101,9 +102,40 @@
     </div>
 </div>
 
+<!-- Delete Modal -->
+<div class="modal fade delete-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content p-3 text-center">
+            <div class="row">
+                <div class="col"></div>
+                <div class="col"></div>
+                <div class="col">
+                    <button type="button " class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+                
+            <form>
+                <input id="dept_id" style="display: none;" />
+                <p>Are you sure you want to delete?</p>
+                    <button type="button" class="btn bg-success">YES</button>
+                    <button type="button" class="btn bg-danger" data-dismiss="modal" aria-label="Close">NO</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript">
     $(document).ready(function () {
         $("#management").addClass('active');
+
+        $("#dept_table").on('click', '.delete', function(){     
+            var currRow = $(this).closest("tr");
+            var id = currRow.find('td:eq(0)').text();
+            $("#dept_id").val(id);
+        });
     });
 </script>
 @endsection

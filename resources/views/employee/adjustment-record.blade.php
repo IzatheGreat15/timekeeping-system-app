@@ -138,7 +138,7 @@
             </div>
                 
             <form>
-                <input id="dept_id" style="display: none;" />
+                <input id="dept_id" style="display: block;" />
                 <p>Are you sure you want to delete?</p>
                     <button type="button" class="btn bg-success">YES</button>
                     <button type="button" class="btn bg-danger" data-dismiss="modal" aria-label="Close">NO</button>
