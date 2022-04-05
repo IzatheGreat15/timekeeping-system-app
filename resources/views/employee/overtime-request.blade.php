@@ -12,6 +12,8 @@
 
     <hr>
 
+    <!-- Get data from overtime_emp table --> 
+
     <!--Redirect to adjustment-new.blade.php-->
     <a type="button" class="btn shadow-md mb-3" href="/overtime-request-new" style="color:white">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-plus-circle" viewBox="0 1 16 16" style="overflow: visible">
@@ -83,7 +85,7 @@
                         <td>Late</td>
                         <td>APPROVED</td>
                         <td>REJECTED</td>
-                        <!--If request is APPROVED and REJECTED or if request is not of the user, buttons are disabled-->
+                        <!--If request is APPROVED and REJECTED or if request is not of the user, buttons are not shown-->
                         <td></td>
                     </tr>
 
@@ -100,7 +102,7 @@
                         <td>Late</td>
                         <td>PENDING</td>
                         <td>PENDING</td>
-                        <!--If request is APPROVED and REJECTED or if request is not of the user, buttons are disabled-->
+                        <!--If request is APPROVED and REJECTED or if request is not of the user, buttons are not shown-->
                         <td>
                             <a class="btn btn-clear p-0" href="overtime-records-id">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">

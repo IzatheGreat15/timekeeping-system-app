@@ -4,6 +4,8 @@
 <!--Actual Content-->
 <div class="container bg-light p-3 p-sm-5 mb-5 shadow-lg" style="color:#767070;">
 
+    <!-- Add data to main_leave table -->
+
     <h2>Add a Category of Leave</h2>
 
     <hr>

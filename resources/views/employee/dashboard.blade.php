@@ -6,7 +6,7 @@
     <button type="button" class="btn shadow-md">Time In</button>
     <button type="button" class="btn shadow-md">Time Out</button>
     
-    <!--Real Time Clock-->
+    <!-- Real Time Clock -->
     <div class="container bg-light p-2 p-sm-4 mb-3 mt-4 shadow" style="color:#767070;">
         <h1 class="float-right align-middle">7:30:05 PM</h1>
         <h3>Manila, Philippines</h3>
@@ -37,12 +37,22 @@
         </div>
     </div>
 
-    <!--Table for Time in/out records-->
+    <!-- Get data from attendance table -->
+
+    <!-- 
+        Each day, a new row of attendance is created for all users, each time in/time out column will
+        be filled out, every time the user times in or out.
+    --> 
+
+    <!-- Table for Time in/out records -->
     <div class="container bg-light p-1 p-sm-4 mb-3 shadow" style="color:#767070;">
         <div class="table-responsive">
             <table class="table table-hover">
                 <tr>
-                    <!--Filter Date using Datetime picker-->
+                    <!-- Filter Date using Datetime picker
+                         Once the id datepick is clicked, a Date picker will display and user can filter
+                         a specific date
+                    -->
                     <td id="datepick">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>

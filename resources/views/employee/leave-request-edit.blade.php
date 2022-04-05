@@ -7,6 +7,8 @@
 
     <hr>
 
+    <!-- Update data from leave_emp table --> 
+
     <!--Value of all fields are populated from the database-->
     
     <!-- Leave Balance -->

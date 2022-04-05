@@ -8,6 +8,8 @@
     
     <br><br>
 
+    <!-- Get data from shift_emp table --> 
+
     <!--Employee Name-->
     <h3>John Doe</h3>
 

@@ -4,6 +4,8 @@
 <!--Actual Content-->
 <div class="container bg-light p-3 p-sm-5 mb-5 shadow-lg" style="color:#767070;">
 
+    <!-- Add data to department table -->
+
     <h2>Add a Department</h2>
 
     <hr>

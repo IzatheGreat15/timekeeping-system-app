@@ -7,6 +7,8 @@
 
     <hr>
 
+    <!-- Add data to adjustment_emp table --> 
+
     <!--Request Form-->
     <form>
         <!--Date-->

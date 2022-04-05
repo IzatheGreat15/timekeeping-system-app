@@ -6,6 +6,8 @@
 
     <a type="button" class="btn shadow-md bg-danger mb-3" href="/approve-shift-change" style="color:white">
             Back </a>
+    
+    <!-- Get data from change_shift_emp table -->
 
     <!--Employee Name-->
     <h3>John Doe</h3>
@@ -135,12 +137,18 @@
     <div class="container bg-light p-1 p-sm-4 mb-3 mt-3 col-md shadow">
         <!-- Form -->
         <form>
+            <!-- Vaue is the change_shift_emp ID -->
+            <input type="text" style="display: none;"/>
+
             <div class="form-row mb-4">
                 <div class="col-sm mb-3">
                     <label>Comment: </label>
                     <textarea class="form-control"></textarea>
                 </div>
             </div>
+            <!--
+                Once approved, change the shift_ID of the shift_emp table to the shift_ID of the change_shift_emp table
+            -->
             <div class="form-row mb-4">
                 <div class="col-sm mb-3">
                     <button class="btn shadow-md bg-danger">Reject</button>

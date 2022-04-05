@@ -10,6 +10,8 @@
         Records
     </h6>
 
+    <!-- Get data from employee table --> 
+
     <hr>
 
     <div class="row">

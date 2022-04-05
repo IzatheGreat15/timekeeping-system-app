@@ -4,6 +4,8 @@
 <!--Actual Content-->
 <div class="container bg-light p-3 p-sm-5 mb-5 shadow-lg" style="color:#767070;">
 
+    <!-- Get data from shift table -->
+
     <h2>Shifts</h2>
 
     <hr>

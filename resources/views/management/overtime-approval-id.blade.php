@@ -7,6 +7,8 @@
     <a type="button" class="btn shadow-md bg-danger mb-3" href="/approve-adjustments" style="color:white">
             Back </a>
 
+    <!-- Get data from overtime_emp table -->
+
     <!--Employee Name-->
     <h3>John Doe</h3>
 
@@ -91,6 +93,9 @@
     <div class="container bg-light p-1 p-sm-4 mb-3 mt-3 col-md shadow">
         <!-- Form -->
         <form>
+            <!-- Vaue is the overtime_emp ID -->
+            <input type="text" style="display: none;"/>
+            
             <div class="form-row mb-4">
                 <div class="col-sm mb-3">
                     <label>Comment: </label>

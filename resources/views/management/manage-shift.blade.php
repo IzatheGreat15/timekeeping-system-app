@@ -10,6 +10,8 @@
         Shifts
     </h6>
 
+    <!-- Get data from shift_emp table --> 
+
     <hr>
 
     <!--Redirect to shift-manage-new.blade.php-->
@@ -118,6 +120,7 @@
                 
             <form>
                 <input id="dept_id" style="display: none;" />
+
                 <p>Are you sure you want to delete?</p>
                     <button type="button" class="btn bg-success">YES</button>
                     <button type="button" class="btn bg-danger" data-dismiss="modal" aria-label="Close">NO</button>

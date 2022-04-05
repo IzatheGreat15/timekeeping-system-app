@@ -49,6 +49,8 @@
         </div>
     </form>
 
+   <!-- Get data from adjustment_emp table --> 
+
     <!--Attendace Records-->
     <div class="container bg-light p-1 p-sm-4 mb-3 mt-5 shadow">
         <div class="table-responsive">
@@ -138,7 +140,7 @@
             </div>
                 
             <form>
-                <input id="dept_id" style="display: block;" />
+                <input id="dept_id" style="display: none;" />
                 <p>Are you sure you want to delete?</p>
                     <button type="button" class="btn bg-success">YES</button>
                     <button type="button" class="btn bg-danger" data-dismiss="modal" aria-label="Close">NO</button>

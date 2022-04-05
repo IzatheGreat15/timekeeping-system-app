@@ -10,6 +10,8 @@
         Adjustments
     </h6>
 
+    <!-- Get data from adjustment_emp table --> 
+
     <hr>
 
     <div class="row">

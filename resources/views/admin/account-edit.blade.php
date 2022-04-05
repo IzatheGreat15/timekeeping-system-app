@@ -4,6 +4,8 @@
 <!--Actual Content-->
 <div class="container bg-light p-3 p-sm-5 mb-5 shadow-lg" style="color:#767070;">
 
+    <!-- Update data from employee table -->
+
     <h2>Edit an Account</h2>
 
     <hr>

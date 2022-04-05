@@ -31,6 +31,8 @@
         </div>
     </form>
 
+    <!-- Get data from attendance table --> 
+
     <!--Attendace Records-->
     <div class="container bg-light p-1 p-sm-4 mb-3 mt-3 shadow">
         <div class="table-responsive">

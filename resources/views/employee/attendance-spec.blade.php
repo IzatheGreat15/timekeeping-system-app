@@ -6,6 +6,7 @@
     <a type="button" class="btn shadow-md bg-danger" href="/attendance-records" style="color:white">
         Back </a>
 
+    <!-- Get data from attendance table --> 
 
     <!-- Employee, Date and Day -->
     <h2>

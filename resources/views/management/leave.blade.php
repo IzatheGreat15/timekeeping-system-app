@@ -10,6 +10,8 @@
         Leaves
     </h6>
 
+    <!-- Get data from leave_emp table --> 
+
     <hr>
 
     <div class="row">

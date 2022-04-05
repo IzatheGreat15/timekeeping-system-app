@@ -6,7 +6,8 @@
     <a type="button" class="btn shadow-md bg-danger" href="/adjustment-records" style="color:white">
         Back </a>
 
-
+    <!-- Get data from adjustment_emp table --> 
+    
     <!-- Employee, Date and Day -->
     <h2>
         <div class="row">

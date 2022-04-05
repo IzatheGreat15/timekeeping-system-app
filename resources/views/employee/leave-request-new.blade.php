@@ -7,6 +7,8 @@
 
     <hr>
 
+    <!-- Add data to leave_emp table --> 
+
     <!-- Leave Balance -->
     <div class="row mb-3">
         <div class="col-md">

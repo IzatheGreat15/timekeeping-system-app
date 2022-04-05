@@ -12,6 +12,8 @@
 
     <hr>
 
+    <!-- Get data from overtime_emp table - show only APPROVED overtimes--> 
+
     <!--Form Date Filter-->
     <form>
         <div class="form-row">

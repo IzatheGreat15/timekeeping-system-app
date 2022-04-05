@@ -12,6 +12,8 @@
 
     <hr>
 
+    <!-- Get data from leave_emp table --> 
+    
     <!--Redirect to adjustment-new.blade.php-->
     <a type="button" class="btn shadow-md mb-3" href="/leave-request-new" style="color:white">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-plus-circle" viewBox="0 1 16 16" style="overflow: visible">

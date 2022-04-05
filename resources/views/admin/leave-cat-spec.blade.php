@@ -7,6 +7,8 @@
     <a type="button" class="btn shadow-md bg-danger" href="/leaves-category" style="color:white">
         Back </a>
 
+    <!-- Get data from main_leave table -->
+
     <br><br>
 
     <!-- Leave Category Name -->
