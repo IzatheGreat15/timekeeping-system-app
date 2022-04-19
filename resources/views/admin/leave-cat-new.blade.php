@@ -11,13 +11,13 @@
     <hr>
 
     <!-- Form -->
-    <form class="mt-5">
-
+    <form class="mt-5" method="POST" action="/add-new-main-leave">
+        @csrf 
         <!-- Category Name -->
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Category Name: </label>
-                <input type="text" class="form-control">
+                <input type="text" name="leave_name" class="form-control" required>
             </div>
         </div>
 
@@ -25,7 +25,7 @@
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Description: </label>
-                <textarea class="form-control"></textarea>
+                <textarea name="description" class="form-control" required></textarea>
             </div>
         </div>
 
@@ -33,7 +33,20 @@
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Total Balance: </label>
-                <input type="number" min="0" class="form-control">
+                <input type="number" name="total_balance" min="1" class="form-control" required>
+            </div>
+        </div>
+
+        <!-- Require Supporting Documents -->
+        <div class="form-group row">
+            <div class="col-sm-4">Require Supporting Documents? </div>
+            <div class="col-sm-2">
+                <div class="form-check">
+                    <select class="form-control" name="req_doc">
+                        <option value="YES">YES</option>
+                        <option value="NO">NO</option>
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -50,5 +63,6 @@
     $(document).ready(function () {
         $("#admin").addClass('active');
     });
+
 </script>
 @endsection

@@ -13,13 +13,21 @@
     <!-- Values are populated from the database -->
 
     <!-- Form -->
-    <form class="mt-5">
+    <form class="mt-5" method="POST" action="/department-update">
+        @csrf
 
-    <!-- Department Name -->
+        <!-- Department ID -->
+        <div class="form-row">
+            <div class="col-sm mb-3">
+                <input type="hidden" class="form-control" name="id" value="{{ $departments->id }}">
+            </div>
+        </div>
+
+        <!-- Department Name -->
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Department Name: </label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="dept_name" value="{{ $departments->dept_name }}">
             </div>
         </div>
 
@@ -27,7 +35,7 @@
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Department Description: </label>
-                <textarea class="form-control"></textarea>
+                <textarea class="form-control" name="description">{{ $departments->description }}</textarea>
             </div>
         </div>
 

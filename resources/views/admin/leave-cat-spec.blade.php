@@ -12,7 +12,7 @@
     <br><br>
 
     <!-- Leave Category Name -->
-    <h2>Vacation Leave</h2>
+    <h2>{{ $leave->leave_name }} Leave</h2>
 
     <hr>
 
@@ -26,16 +26,16 @@
                     <tr>
                     <tr>
                         <td class="w-50 font-weight-bold font-italic text-justify" colspan="2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            {!! nl2br(e($leave->description)) !!}
                         </td>
                     <tr>
                     <tr>
                         <td class="w-50">Total Balance</td>
-                        <td class="w-50 font-weight-bold">13</td>
+                        <td class="w-50 font-weight-bold">{{ $leave->total_balance }}</td>
                     <tr>
                     <tr>
                         <td class="w-50">Require Supporting Documents</td>
-                        <td class="w-50 font-weight-bold font-italic">YES/NO</td>
+                        <td class="w-50 font-weight-bold font-italic">{{ $leave->req_doc }}</td>
                     <tr>
                 </table>
             </div>
@@ -48,15 +48,17 @@
                     <tr>
                         <td class="w-50">Subcategories</td>
                     </tr>
-                    <tr>
-                        <td class="w-50 font-weight-bold">Subcategory 1</td>
-                    </tr>
-                    <tr>
-                        <td class="w-50 font-weight-bold">Subcategory 2</td>
-                    </tr>
-                    <tr>
-                        <td class="w-50 font-weight-bold">Subcategory 3</td>
-                    </tr>
+                    @if($sub_leaves->count() > 0)
+                        @foreach($sub_leaves as $sub)
+                        <tr>
+                            <td class="w-50 font-weight-bold">{{ $sub->leave_name }}</td>
+                        </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td class="w-50 font-weight-bold">None</td>
+                        </tr>
+                    @endif
                 </table>
             </div>
         </div>

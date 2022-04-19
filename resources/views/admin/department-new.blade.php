@@ -11,13 +11,13 @@
     <hr>
 
     <!-- Form -->
-    <form class="mt-5">
-
+    <form class="mt-5" method="POST" action="/add-new-department">
+    @csrf 
     <!-- Department Name -->
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Department Name: </label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="dept_name" required>
             </div>
         </div>
 
@@ -25,7 +25,7 @@
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Department Description: </label>
-                <textarea class="form-control"></textarea>
+                <textarea class="form-control" name="description" required></textarea>
             </div>
         </div>
 

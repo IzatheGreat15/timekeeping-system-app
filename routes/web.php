@@ -1,6 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\MainLeaveController;
+
+use App\Models\Department;
+use App\Models\Shift;
+use App\Models\Main_Leave;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +28,8 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+/* Replace the 'id' in the URL with actual ID */
 
 /* General */
 Route::view("/change-password", 'general.change-password');
@@ -61,8 +71,8 @@ Route::view("/overtime-request-edit", 'employee.overtime-request-edit');
 
 /* Management */
 Route::view("/management", 'management.dashboard');
-
 Route::view("/employee-records-id", 'management.employee-spec');
+
 Route::view("/approve-adjustments", 'management.adjustment');
 Route::view("/adjustment-approvals-id", 'management.adjustment-approvals-id');
 
@@ -84,20 +94,31 @@ Route::view("/shift-manage-edit", 'management.manage-shift-edit');
 
 
 /* Admin */
-Route::view("/admin-time-in-out", 'admin.dashboard');
-
-Route::view("/departments", 'admin.department');
+Route::get("/departments", [DepartmentController::class, "show_department"]);
 Route::view("/department-new", 'admin.department-new');
-Route::view("/department-edit", 'admin.department-edit');
+Route::post("/add-new-department", [DepartmentController::class, "add_department"]);
+Route::get("/department-edit/{id}", [DepartmentController::class, "edit_department"]);
+Route::post("/department-update", [DepartmentController::class, "update_department"]);
+Route::post("/department-delete", [DepartmentController::class, "delete_department"]);
+Route::post("/department-search", [DepartmentController::class, "search_department"]);
 
-Route::view("/shifts", 'admin.shift');
+Route::get("/shifts", [ShiftController::class, "show_shift"]);
 Route::view("/shift-new", 'admin.shift-new');
-Route::view("/shift-edit", 'admin.shift-edit');
+Route::post("/add-new-shift", [ShiftController::class, "add_shift"]);
+Route::get("/shift-edit/{id}", [ShiftController::class, "edit_shift"]);
+Route::post("/shift-update", [ShiftController::class, "update_shift"]);
+Route::post("/shift-delete", [ShiftController::class, "delete_shift"]);
+Route::post("/shift-search", [ShiftController::class, "search_shift"]);
 
-Route::view("/leaves-category", 'admin.leave-cat');
-Route::view("/leave-category-details", 'admin.leave-cat-spec');
+Route::get("/leaves-category", [MainLeaveController::class, "show_main_leave"]);
+Route::get("/leave-category-details/{id}", [MainLeaveController::class, "display_main_leave"]);
 Route::view("/leave-category-new", 'admin.leave-cat-new');
-Route::view("/leave-category-edit", 'admin.leave-cat-edit');
+Route::post("/add-new-main-leave", [MainLeaveController::class, "add_main_leave"]);
+Route::get("/leave-category-edit/{id}", [MainLeaveController::class, "edit_main_leave"]);
+Route::post("/main-leave-update", [MainLeaveController::class, "update_main_leave"]);
+Route::post("/main-leave-delete", [MainLeaveController::class, "delete_main_leave"]);
+Route::post("/leave-category-search", [MainLeaveController::class, "search_main_leave"]);
+
 Route::view("/leaves-subcategory", 'admin.leave-subcat');
 Route::view("/leave-subcategory-new", 'admin.leave-subcat-new');
 Route::view("/leave-subcategory-edit", 'admin.leave-subcat-edit');
