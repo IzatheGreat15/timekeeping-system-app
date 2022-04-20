@@ -26,7 +26,7 @@
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Category Name: </label>
-                <input type="text" name="leave_name" class="form-control" value="{{ $leave->leave_name }}">
+                <input type="text" name="main_leave_name" class="form-control" value="{{ $leave->main_leave_name }}">
             </div>
         </div>
 

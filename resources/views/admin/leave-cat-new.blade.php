@@ -17,7 +17,7 @@
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Category Name: </label>
-                <input type="text" name="leave_name" class="form-control" required>
+                <input type="text" name="main_leave_name" class="form-control" required>
             </div>
         </div>
 

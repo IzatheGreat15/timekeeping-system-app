@@ -12,7 +12,7 @@
     <br><br>
 
     <!-- Leave Category Name -->
-    <h2>{{ $leave->leave_name }} Leave</h2>
+    <h2>{{ $leave->main_leave_name }} Leave</h2>
 
     <hr>
 
@@ -51,7 +51,7 @@
                     @if($sub_leaves->count() > 0)
                         @foreach($sub_leaves as $sub)
                         <tr>
-                            <td class="w-50 font-weight-bold">{{ $sub->leave_name }}</td>
+                            <td class="w-50 font-weight-bold">{{ $sub->sub_leave_name }}</td>
                         </tr>
                         @endforeach
                     @else

@@ -40,10 +40,6 @@
                     <td class="w-50">Manager/Supervisor</td>
                     <td class="w-50 font-weight-bold">Mr. Sherlock Holmes</td>
                 </tr>
-                <tr>
-                    <td class="w-50">Manager/Supervisor</td>
-                    <td class="w-50 font-weight-bold">Mr. John Watson</td>
-                </tr>
                 <!-- only if the position is Manager/Supervisor-->
                 <tr>
                     <td class="w-50">Substitute</td>

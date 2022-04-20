@@ -71,7 +71,7 @@
                 </thead>
 
                 <tbody>
-                    <tr>
+                    <tr onclick="window.location='/shift-change-id';">
                         <!-- Hide ID -->
                         <td style="display: none;">001</td>
                         <!--Name shown only for management-->

@@ -44,21 +44,21 @@ class MainLeaveController extends Controller
     public function add_main_leave(Request $request){
         /* validate all fields */
         $request->validate([
-            'leave_name'    => 'required',
-            'description'   => 'required',
-            'total_balance' => 'required',
-            'req_doc'       => 'required'
+            'main_leave_name'    => 'required',
+            'description'        => 'required',
+            'total_balance'      => 'required',
+            'req_doc'            => 'required'
         ]);
 
         /* insert data */
         DB::table('main_leaves')
             ->insert([
-                'leave_name'    => $request->leave_name,   
-                'description'   => $request->description,
-                'total_balance' => $request->total_balance,
-                'req_doc'       => $request->req_doc,
-                'created_at'    => date('Y-m-d H:i:s'),
-                'updated_at'    => date('Y-m-d H:i:s')
+                'main_leave_name'    => $request->main_leave_name,   
+                'description'        => $request->description,
+                'total_balance'      => $request->total_balance,
+                'req_doc'            => $request->req_doc,
+                'created_at'         => date('Y-m-d H:i:s'),
+                'updated_at'         => date('Y-m-d H:i:s')
             ]);
 
         return redirect('/leaves-category')->with('success', 'Leave added successfully');
@@ -82,21 +82,22 @@ class MainLeaveController extends Controller
     public function update_main_leave(Request $request){
         /* validate all fields */
         $request->validate([
-            'leave_name'    => 'required',
-            'description'   => 'required',
-            'total_balance' => 'required',
-            'req_doc'       => 'required'
+            'main_leave_name'    => 'required',
+            'description'        => 'required',
+            'total_balance'      => 'required',
+            'req_doc'            => 'required'
         ]);
 
 
         /* update data */
         DB::table('main_leaves')->where('id', '=', $request->id)
             ->update([
-                'leave_name'    => $request->leave_name,   
-                'description'   => $request->description,
-                'total_balance' => $request->total_balance,
-                'req_doc'       => $request->req_doc,
-                'updated_at'    => date('Y-m-d H:i:s')
+                'main_leave_name'    => $request->main_leave_name,   
+                'description'        => $request->description,
+                'total_balance'      => $request->total_balance,
+                'req_doc'            => $request->req_doc,
+                'created_at'         => date('Y-m-d H:i:s'),
+                'updated_at'         => date('Y-m-d H:i:s')
             ]);
 
         return redirect('/leaves-category')->with('success', 'Leave edited successfully');
@@ -124,7 +125,7 @@ class MainLeaveController extends Controller
         /* make sure the search function is case insensitive; search in leave name, description, and balance */
         $leaves = DB::table('main_leaves')
                         ->select('*')
-                        ->where(DB::raw('lower(leave_name)'), 'like', '%' . strtolower($info) . '%')
+                        ->where(DB::raw('lower(main_leave_name)'), 'like', '%' . strtolower($info) . '%')
                         ->orWhere(DB::raw('lower(description)'), 'like', '%' . strtolower($info) . '%')
                         ->orWhere(DB::raw('lower(total_balance)'), 'like', '%' . strtolower($info) . '%')
                         ->get();

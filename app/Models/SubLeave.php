@@ -11,7 +11,7 @@ class SubLeave extends Model
 
     protected $fillable = [
         'main_leave_ID',
-        'leave_name',
+        'sub_leave_name',
         'description',
     ];
 }

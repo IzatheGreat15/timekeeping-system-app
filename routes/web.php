@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\MainLeaveController;
+use App\Http\Controllers\SubLeaveController;
 
 use App\Models\Department;
 use App\Models\Shift;
@@ -119,8 +120,9 @@ Route::post("/main-leave-update", [MainLeaveController::class, "update_main_leav
 Route::post("/main-leave-delete", [MainLeaveController::class, "delete_main_leave"]);
 Route::post("/leave-category-search", [MainLeaveController::class, "search_main_leave"]);
 
-Route::view("/leaves-subcategory", 'admin.leave-subcat');
-Route::view("/leave-subcategory-new", 'admin.leave-subcat-new');
+Route::get("/leaves-subcategory", [SubLeaveController::class, "show_sub_leave"]);
+Route::get("/leave-subcategory-new", [SubLeaveController:: class, "add_sub_leave"]);
+Route::post("/add-new-sub-leave", [SubLeaveController:: class, "store_sub_leave"]);
 Route::view("/leave-subcategory-edit", 'admin.leave-subcat-edit');
 
 Route::view("/accounts", 'admin.account');

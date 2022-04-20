@@ -30,10 +30,8 @@
                 <label>Status: </label>
                 <select class="form-control">
                     <option>ALL</option>
-                    <option>PENDING</option>
-                    <option>SENT BACK</option>
-                    <option>APPROVED</option>
-                    <option>REJECTED</option>
+                    <option>ACTIVE</option>
+                    <option>INACTIVE</option>
                 </select>
             </div>
     </div>

@@ -66,7 +66,7 @@
                         <tr>
                             <td style="display: none;">{{ $leave->id }}</td>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $leave->leave_name }}</td>
+                            <td>{{ $leave->main_leave_name }}</td>
                             <td>{{ Str::limit($leave->description, 20) }}</td>
                             <td>{{ $leave->total_balance }}</td>
                             <td>

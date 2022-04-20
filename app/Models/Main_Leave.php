@@ -10,7 +10,7 @@ class Main_Leave extends Model
     use HasFactory;
 
     protected $fillable = [
-        'leave_name',
+        'main_leave_name',
         'description',
         'total_balance'
     ];

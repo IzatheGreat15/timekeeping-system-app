@@ -11,17 +11,17 @@
     <hr>
 
     <!-- Form -->
-    <form class="mt-5">
-
+    <form class="mt-5" method="POST" accept="/add-new-account">
+        @csrf
         <!-- Employee Name -->
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>First Name: </label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" required>
             </div>
             <div class="col-sm mb-3">
                 <label>Last Name: </label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" required>
             </div>
         </div>
 
@@ -29,25 +29,32 @@
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Email: </label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" required>
             </div>
             <div class="col-sm mb-3">
                 <label>Password: </label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" required>
             </div>
         </div>
 
-        <!-- Position and Department -->
+        <!-- Position and Role -->
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Position: </label>
+                <input type="text" class="form-control">
+            </div>
+            <div class="col-sm mb-3">
+                <label>Role: </label>
                 <select class="form-control">
                     <option>Employee</option>
-                    <option>Manager</option>
-                    <option>Supervisor</option>
-                    <option>CEO</option>
+                    <option>Management</option>
+                    <option>Administrator</option>
                 </select>
             </div>
+        </div>
+
+        <!-- Department -->
+        <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Department: </label>
                 <!-- Department from the database -->
@@ -59,12 +66,24 @@
             </div>
         </div>
 
-        <!-- Substitute - show only if the position is Manager/Supervisor -->
+        <!-- Option whether to allow employee have a substitute -->
         <div class="form-row">
+            <div class="col-sm mb-3 form-inline">
+                <label> Require Substitute? </label>
+                <select class="form-control" id="req_sub">
+                    <option>YES</option>
+                    <option selected>NO</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Substitute - show only if the position is Manager/Supervisor -->
+        <div class="form-row" id="sub" style="display: none;"> 
             <div class="col-sm mb-3">
                 <label>Substitute: </label>
                 <!-- Choose another manager/supervisor(same level) from database -->
-                <select class="form-control">
+                <select class="form-control" id="select_sub">
+                    <option value="NULL">-- Please select a substitue --</option>
                     <option>Sherlock Holmes</option>
                     <option>John Watson</option>
                     <option>Jim Moriarty</option>
@@ -72,27 +91,31 @@
             </div>
         </div>
 
+        <!-- Option whether to allow employee have a immediate superior -->
+        <div class="form-row mt-3">
+            <div class="col-sm mb-3 form-inline">
+                <label> Require Immediate Superior? </label>
+                <select class="form-control" id="req_sup">
+                    <option>YES</option>
+                    <option selected>NO</option>
+                </select>
+            </div>
+        </div>
+
         <!-- Direct Managers/Supervisors -->
-        <div class="form-row">
+        <div class="form-row" id="sup" style="display: none;">
             <div class="col-sm mb-3">
                 <label>Direct Managers/Supervisors: </label>
                 <!-- Choose a manager/supervisor(same department) from database -->
-                <select class="form-control">
-                    <option>Sherlock Holmes</option>
-                    <option>John Watson</option>
-                    <option>Jim Moriarty</option>
-                </select>
-            </div>
-            <div class="col-sm mb-3">
-                <br>
-                <!-- Choose a manager/supervisor(same department) from database -->
-                <select class="form-control mt-2">
+                <select class="form-control" id="select_sup">
+                    <option value="NULL">-- Please select an immediate superior --</option>
                     <option>Sherlock Holmes</option>
                     <option>John Watson</option>
                     <option>Jim Moriarty</option>
                 </select>
             </div>
         </div>
+
         <div class="flex items-center justify-end mt-4">
             <a type="button" class="btn shadow-md bg-danger" href="/accounts" style="color:white">
                 Back </a>
@@ -105,6 +128,30 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#admin").addClass('active');
+    });
+
+    /* for the display of substitute */
+    $("#req_sub").change(function() {
+        var value = $("#req_sub").val();
+
+        if(value == "YES"){
+            $("#sub").show();
+        } else {
+            $("#select_sub").val($("#select_sub option:first").val());
+            $("#sub").hide();
+        }
+    });
+
+    /* for the display of immediate superior */
+    $("#req_sup").change(function() {
+        var value = $("#req_sup").val();
+
+        if(value == "YES"){
+            $("#sup").show();
+        } else {
+            $("#select_sup").val($("#select_sup option:first").val());
+            $("#sup").hide();
+        }
     });
 </script>
 @endsection

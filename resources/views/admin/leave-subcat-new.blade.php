@@ -11,13 +11,13 @@
     <hr>
 
     <!-- Form -->
-    <form class="mt-5">
-
+    <form class="mt-5" method="POST" action="/add-new-sub-leave">
+        @csrf 
         <!-- Subcategory Name -->
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Subcategory Name: </label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="leave_name" required>
             </div>
         </div>
 
@@ -25,25 +25,27 @@
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Description: </label>
-                <textarea class="form-control"></textarea>
+                <textarea class="form-control" name="description" required></textarea>
             </div>
         </div>
 
+        @if($leaves->count() > 0)
         <!-- Category -->
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Category: </label>
                 <!-- options from the database -->
-                <select class="form-control">
-                    <option>Category 1</option>
-                    <option>Category 2</option>
-                    <option>Category 3</option>
+                <select class="form-control" name="main_leave_ID" required>
+                    @foreach ($leaves as $leave)
+                    <option value="{{ $leave->id }}">{{ $leave->leave_name }}</option>
+                    @endforeach
                 </select>
             </div>
         </div>
+        @endif
 
         <div class="flex items-center justify-end mt-4">
-            <a type="button" class="btn shadow-md bg-danger" href="/leaves-category" style="color:white">
+            <a type="button" class="btn shadow-md bg-danger" href="/leaves-subcategory" style="color:white">
                 Back </a>
             <button class="btn shadow-md">Submit</button>
         </div>

@@ -44,10 +44,6 @@
                     <td class="w-50 font-weight-bold font-italic">Mr. Sherlock Holmes</td>
                 </tr>
                 <tr>
-                    <td class="w-50 font-italic">Supervisor/Manager</td>
-                    <td class="w-50 font-weight-bold font-italic">Mr. John Watson</td>
-                </tr>
-                <tr>
                     <td class="w-50 font-italic">Assigned by</td>
                     <td class="w-50 font-weight-bold font-italic">Mr. Jim Moriarty</td>
                 </tr>
