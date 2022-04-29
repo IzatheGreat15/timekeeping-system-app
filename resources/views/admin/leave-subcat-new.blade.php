@@ -10,6 +10,15 @@
 
     <hr>
 
+    <!-- Error Messages -->
+    @if ($errors->any())
+        <ul class="list-group mb-3">
+            @foreach ($errors->all() as $error)
+                <li class="list-group-item list-group-item-danger">{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
+
     <!-- Form -->
     <form class="mt-5" method="POST" action="/add-new-sub-leave">
         @csrf 
@@ -17,7 +26,7 @@
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Subcategory Name: </label>
-                <input type="text" class="form-control" name="leave_name" required>
+                <input type="text" class="form-control" name="sub_leave_name" required>
             </div>
         </div>
 
@@ -37,7 +46,7 @@
                 <!-- options from the database -->
                 <select class="form-control" name="main_leave_ID" required>
                     @foreach ($leaves as $leave)
-                    <option value="{{ $leave->id }}">{{ $leave->leave_name }}</option>
+                    <option value="{{ $leave->id }}">{{ $leave->main_leave_name }}</option>
                     @endforeach
                 </select>
             </div>

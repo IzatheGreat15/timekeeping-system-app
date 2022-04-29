@@ -12,16 +12,16 @@
 
     <!-- Success Message -->
     @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p>{{ $message }}</p>
-        </div>
+        <ul class="list-group mb-3">
+            <li class="list-group-item list-group-item-success">{{ $message }}</li>
+        </ul>
     @endif
 
     <!-- Error Message -->
     @if ($message = Session::get('error'))
-        <div class="alert alert-danger">
-            <p>{{ $message }}</p>
-        </div>
+        <ul class="list-group mb-3">
+            <li class="list-group-item list-group-item-danger">{{ $message }}</li>
+        </ul>
     @endif
 
     <!-- Form Search -->

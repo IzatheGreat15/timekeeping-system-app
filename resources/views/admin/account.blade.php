@@ -10,8 +10,24 @@
 
     <hr>
 
+    <!-- Success Message -->
+    @if ($message = Session::get('success'))
+        <ul class="list-group mb-3">
+            <li class="list-group-item list-group-item-success">{{ $message }}</li>
+        </ul>
+    @endif
+
+    <!-- Error Message -->
+    @if ($message = Session::get('error'))
+        <ul class="list-group mb-3">
+            <li class="list-group-item list-group-item-danger">{{ $message }}</li>
+        </ul>
+    @endif
+
+
     <!-- Form Search -->
-    <form>
+    <form method="POST" action="/account-search">
+        @csrf 
         <div class="form-row">
             <div class="col-sm mb-3">
                 <!--Redirect to department-new.blade.php-->
@@ -26,7 +42,7 @@
             </div>
             <div class="col-md mb-3">
                 <label>Search</label>
-                <input type="text" class="form-control">
+                <input type="text" name="account_info" class="form-control">
             </div>
         </div>
     </form>
@@ -39,7 +55,7 @@
                     <tr>
                         <th scope="col">Employee <br> Name</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Position</th>
+                        <th scope="col">Job Title</th>
                         <th scope="col">Department</th>
                         <th scope="col">Direct <br> Managers/ <br> Supervisors</th>
                         <th scope="col">Substitute</th>
@@ -49,17 +65,34 @@
                 </thead>
 
                 <tbody>
+                    @foreach($accs as $acc)
                     <tr>
-                        <td style="display: none;">001</td>
-                        <td>John Doe</td>
-                        <td>johndoe@email.com</td>
-                        <td>Manager</td>
-                        <td>Marketing</td>
-                        <td>Sherlock Holmes <br> John Watson</td>
-                        <td>Jim Moriarty</td>
-                        <td>ACTIVE</td>
+                        <td style="display: none;">{{ $acc->id }}</td>
+                        <td>{{ $acc->first_name }} {{ $acc->last_name }}</td>
+                        <td>{{ $acc->email }}</td>
+                        <td>{{ $acc->position }}</td>
+                        <td>{{ $acc->dept_name }}</td>
+                        <!-- Immediate Superior -->
                         <td>
-                            <a class="btn btn-clear p-0" href="/account-edit">
+                        @if($acc->approval1_ID != $acc->id)
+                            {{ DB::table('users')->select('*')->where('id', '=', $acc->approval1_ID)->get()->first()->first_name }} 
+                            {{ DB::table('users')->select('*')->where('id', '=', $acc->approval1_ID)->get()->first()->last_name }}
+                        @else
+                            ----
+                        @endif
+                        </td>
+                        <!-- Substitute -->
+                        <td>
+                        @if($acc->sub_ID != $acc->id)
+                            {{ DB::table('users')->select('*')->where('id', '=', $acc->sub_ID)->get()->first()->first_name }} 
+                            {{ DB::table('users')->select('*')->where('id', '=', $acc->sub_ID)->get()->first()->last_name }}
+                        @else
+                            ----
+                        @endif
+                        </td>
+                        <td>{{ $acc->status }}</td>
+                        <td style="width: 8%;">
+                            <a class="btn btn-clear p-0" href="/account-edit/{{ $acc->id }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
@@ -73,6 +106,7 @@
                             </a>
                         </td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -93,12 +127,13 @@
                 </div>
             </div>
                 
-            <form>
-                <input id="dept_id" style="display: none;" />
+            <form method="POST" action="/account-delete">
+                @csrf
+                <input id="dept_id" name="id" style="display: none;" />
                 <p>Are you sure you want to delete 
                     <br>
                     <strong id="dept_name"></strong>?</p>
-                    <button type="button" class="btn bg-success">YES</button>
+                    <button type="submit" class="btn bg-success">YES</button>
                     <button type="button" class="btn bg-danger" data-dismiss="modal" aria-label="Close">NO</button>
             </form>
         </div>

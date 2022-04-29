@@ -10,11 +10,26 @@
 
     <hr>
 
+    <!-- Success Message -->
+    @if ($message = Session::get('success'))
+        <ul class="list-group mb-3">
+            <li class="list-group-item list-group-item-success">{{ $message }}</li>
+        </ul>
+    @endif
+
+    <!-- Error Message -->
+    @if ($message = Session::get('error'))
+        <ul class="list-group mb-3">
+            <li class="list-group-item list-group-item-danger">{{ $message }}</li>
+        </ul>
+    @endif
+
     <!-- Form Search -->
-    <form>
+    <form method="POST" action="/leave-subcategory-search"> 
+        @csrf 
         <div class="form-row">
             <div class="col-sm mb-3">
-                @if ($leaves > 0)
+                @if ($leaves->count() > 0)
                 <!--Redirect to department-new.blade.php-->
                 <a type="button" class="btn shadow-md mb-4" href="/leave-subcategory-new" style="color:white">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-plus-circle" viewBox="0 1 16 16" style="overflow: visible">
@@ -28,7 +43,7 @@
             </div>
             <div class="col-md mb-3">
                 <label>Search</label>
-                <input type="text" class="form-control">
+                <input type="text" name="sub_leave_info" class="form-control">
             </div>
         </div>
     </form>
@@ -57,7 +72,7 @@
                             <td>{{ Str::limit($sub->description, 20) }}</td>
                             <td>{{ $sub->main_leave_name }}</td>
                             <td>
-                                <a class="btn btn-clear p-0" href="/leave-subcategory-edit">
+                                <a class="btn btn-clear p-0" href="/leave-subcategory-edit/{{ $sub->id }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
@@ -94,12 +109,13 @@
                 </div>
             </div>
                 
-            <form>
-                <input id="dept_id" style="display: none;" />
+            <form method="POST" action="/sub-leave-delete">
+                @csrf 
+                <input id="dept_id" name="id" style="display: none;" />
                 <p>Are you sure you want to delete 
                     <br>
                     <strong id="dept_name"></strong> Leave?</p>
-                    <button type="button" class="btn bg-success">YES</button>
+                    <button type="submit" class="btn bg-success">YES</button>
                     <button type="button" class="btn bg-danger" data-dismiss="modal" aria-label="Close">NO</button>
             </form>
         </div>

@@ -12,14 +12,30 @@
 
     <!-- Values are populated from the database -->
     
+    <!-- Error Messages -->
+    @if ($errors->any())
+        <ul class="list-group mb-3">
+            @foreach ($errors->all() as $error)
+                <li class="list-group-item list-group-item-danger">{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
+    
     <!-- Form -->
-    <form class="mt-5">
+    <form class="mt-5" method="POST" action="/sub-leave-update">
+        @csrf 
+        <!-- Category ID -->
+        <div class="form-row">
+            <div class="col-sm mb-3">
+                <input type="hidden" name="id" class="form-control" value="{{ $leave->id}}" required>
+            </div>
+        </div>
 
         <!-- Subcategory Name -->
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Subcategory Name: </label>
-                <input type="text" class="form-control">
+                <input type="text" name="sub_leave_name" class="form-control" value="{{ $leave->sub_leave_name }}" required>
             </div>
         </div>
 
@@ -27,7 +43,7 @@
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Description: </label>
-                <textarea class="form-control"></textarea>
+                <textarea name="description" class="form-control" required>{{ $leave->description }}</textarea>
             </div>
         </div>
 
@@ -36,16 +52,16 @@
             <div class="col-sm mb-3">
                 <label>Category: </label>
                 <!-- options from the database -->
-                <select class="form-control">
-                    <option>Category 1</option>
-                    <option>Category 2</option>
-                    <option>Category 3</option>
+                <select name="main_leave_ID" class="form-control" required>
+                    @foreach($main as $m)
+                        <option value="{{ $m->id }}" {{ $leave->main_leave_ID == $m->id? 'selected' : '' }}>{{ $m->main_leave_name }}</option>
+                    @endforeach
                 </select>
             </div>
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <a type="button" class="btn shadow-md bg-danger" href="/leaves-category" style="color:white">
+            <a type="button" class="btn shadow-md bg-danger" href="/leaves-subcategory" style="color:white">
                 Back </a>
             <button class="btn shadow-md">Submit</button>
         </div>

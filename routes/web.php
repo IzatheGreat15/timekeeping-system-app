@@ -5,6 +5,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\MainLeaveController;
 use App\Http\Controllers\SubLeaveController;
+use App\Http\Controllers\UserController;
 
 use App\Models\Department;
 use App\Models\Shift;
@@ -123,10 +124,20 @@ Route::post("/leave-category-search", [MainLeaveController::class, "search_main_
 Route::get("/leaves-subcategory", [SubLeaveController::class, "show_sub_leave"]);
 Route::get("/leave-subcategory-new", [SubLeaveController:: class, "add_sub_leave"]);
 Route::post("/add-new-sub-leave", [SubLeaveController:: class, "store_sub_leave"]);
-Route::view("/leave-subcategory-edit", 'admin.leave-subcat-edit');
+Route::get("/leave-subcategory-edit/{id}", [SubLeaveController::class, "edit_sub_leave"]);
+Route::post("/sub-leave-update", [SubLeaveController::class, "update_sub_leave"]);
+Route::post("/sub-leave-delete", [SubLeaveController::class, "delete_sub_leave"]);
+Route::post("/leave-subcategory-search", [SubLeaveController::class, "search_sub_leave"]);
 
-Route::view("/accounts", 'admin.account');
-Route::view("/account-new", 'admin.account-new');
-Route::view("/account-edit", 'admin.account-edit');
+
+Route::get("/accounts", [UserController::class, "show_account"]);
+//Route::view("/account-new", 'admin.account-new');
+Route::get("/account-new", [UserController::class, "new_account"]);
+Route::get('/account/ajax', [UserController::class, "account_dropdown"]);
+Route::post("/add-new-account", [UserController::class, "store_account"]);
+Route::get("/account-edit/{id}", [UserController::class, "edit_account"]);
+Route::post("/account-update", [UserController::class, "update_account"]);
+Route::post("/account-delete", [UserController::class, "delete_account"]);
+Route::post("/account-search", [UserController::class, "search_account"]);
 
 require __DIR__.'/auth.php';

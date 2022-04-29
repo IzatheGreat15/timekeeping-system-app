@@ -50,9 +50,9 @@ class MainLeaveController extends Controller
             'req_doc'            => 'required'
         ]);
 
-        /* insert data */
-        DB::table('main_leaves')
-            ->insert([
+        /* insert data and get the id of the newly created entry */
+        $id = DB::table('main_leaves')
+            ->insertGetId([
                 'main_leave_name'    => $request->main_leave_name,   
                 'description'        => $request->description,
                 'total_balance'      => $request->total_balance,
@@ -60,6 +60,23 @@ class MainLeaveController extends Controller
                 'created_at'         => date('Y-m-d H:i:s'),
                 'updated_at'         => date('Y-m-d H:i:s')
             ]);
+
+        /* get all the accounts of the users */
+        $accounts = DB::table('users')
+                    ->select('*')
+                    ->get();
+        
+        /* loop through users table and create leave_bal_emp with the newly created main leave for each users */
+        foreach($accounts as $acc){
+            DB::table('leave_bal_emp')
+                ->insert([
+                    'emp_ID'            => $acc->id,
+                    'main_leave_ID'     => $id,
+                    'balance'           => $request->total_balance,
+                    'created_at'        => date('Y-m-d H:i:s'),
+                    'updated_at'        => date('Y-m-d H:i:s')
+                ]);
+        }
 
         return redirect('/leaves-category')->with('success', 'Leave added successfully');
     }
@@ -96,9 +113,22 @@ class MainLeaveController extends Controller
                 'description'        => $request->description,
                 'total_balance'      => $request->total_balance,
                 'req_doc'            => $request->req_doc,
-                'created_at'         => date('Y-m-d H:i:s'),
                 'updated_at'         => date('Y-m-d H:i:s')
             ]);
+
+            
+        /* get all entries in the leave_bal_emp that has the main_leave_ID of the request 
+           and their current balance is greater than the total balance of the request */
+
+        /* update current balance with the total balance of the request */
+        DB::table('leave_bal_emp')
+                ->where('main_leave_ID', '=', $request->id)
+                ->where('balance', '>', $request->total_balance)
+                ->update([
+                    'balance'            => $request->total_balance,
+                    'updated_at'         => date('Y-m-d H:i:s')
+                ]);
+       
 
         return redirect('/leaves-category')->with('success', 'Leave edited successfully');
     }

@@ -10,21 +10,59 @@
     <form class="mt-5">
         <!--Name-->
         <div class="row mb-3">
-            <div class="col">
+            <div class="col-sm">
                 <label>First Name</label>
                 <input type="text" class="form-control" value="John"/>
             </div>
-            <div class="col">
+            <div class="col-sm">
                 <label>Last Name</label>
                 <input type="text" class="form-control" value="Doe"/>
             </div>
         </div>
 
-        <!--Email-->
-        <div class="row mb-5">
-            <div class="col">
+        <!--Email and Status-->
+        <div class="row mb-3">
+            <div class="col-sm">
                 <label>Email Address</label>
                 <input type="text" class="form-control" value="johndoe@email.com"/>
+            </div>
+            <div class="col-sm">
+                <label>Status</label>
+                <input type="text" class="form-control" value="ACTIVE" readonly/>
+            </div>
+        </div>
+
+        <!--Department and Position-->
+        <div class="row mb-3">
+            <div class="col-sm">
+                <label>Department</label>
+                <input type="text" class="form-control" value="Marketing" readonly/>
+            </div>
+            <div class="col-sm">
+                <label>Job Title</label>
+                <input type="text" class="form-control" value="Salesperson" readonly/>
+            </div>
+        </div>
+
+        <!-- Show ony if applicable -->
+
+        <!-- Substitute -->
+        <div class="row mb-3">
+            <div class="col-sm">
+                <label>Substitute</label>
+                <input type="text" class="form-control" value="Sherlock Holmes" readonly/>
+            </div>
+        </div>
+
+        <!-- Aprrovers -->
+        <div class="row mb-5">
+            <div class="col-sm">
+                <label>Position of Approver 1</label>
+                <input type="text" class="form-control" value="John Watson" readonly/>
+            </div>
+            <div class="col-sm">
+                <label>Position of Approver 2</label>
+                <input type="text" class="form-control" value="Jim Moriarty" readonly/>
             </div>
         </div>
 
