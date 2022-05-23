@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -62,6 +64,7 @@ class UserController extends Controller
             'position'         => 'required',
             'dept_ID'          => 'required',
             'role'             => 'required',
+            ''
         ]);
 
         /* insert data and get the id of the newly inserted data */
@@ -77,9 +80,27 @@ class UserController extends Controller
                 'role'               => $request->role          
             ]);
 
-        /*if the user has no sub_ID pr approval_ID, store their own id */
+        /*if the user has no sub_ID or approval_ID, store their own id */
         $subID = ($request->sub_ID == "NULL")? $id : $request->sub_ID;
         $approval1ID = ($request->approval_ID == "NULL")? $id : $request->approval_ID;
+         
+        /* create an entry in approvals table for the user and get id of newly created entry */
+        $approvals = DB::table('approvals')
+                        ->insertGetId([
+                            'approval1_ID'      => $approval1ID,
+                            'approval2_ID'      => NULL,
+                            'created_at'        => date('Y-m-d H:i:s'),
+                            'updated_at'        => date('Y-m-d H:i:s')
+                        ]);
+
+        /* insert subID and approvalID to user table for the user */
+        DB::table('users')->where('id', '=', $id)
+            ->update([
+                'sub_ID'             => $subID,
+                'approval_ID'        => $approvals, 
+                'created_at'         => date('Y-m-d H:i:s'),
+                'updated_at'         => date('Y-m-d H:i:s')    
+            ]);
 
         /* set the second approver as the immediate superior of the first approver */
         $approval2 = DB::table('users')
@@ -87,17 +108,15 @@ class UserController extends Controller
                         ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
                         ->where('users.id', '=', $approval1ID)
                         ->get()->first();
-         
-        /* create an entry in approvals table for the user and get id of newly created entry */
-        $approvals = DB::table('approvals')
-                        ->insertGetId([
-                            'approval1_ID'      => $approval1ID,
-                            'approval2_ID'      => $approval2->approval1_ID,
-                            'created_at'        => date('Y-m-d H:i:s'),
-                            'updated_at'        => date('Y-m-d H:i:s')
-                        ]);
 
-                        
+        $approval2ID = ($approval2->approval1_ID == "NULL")? $id : $approval2->approval1_ID; 
+        
+        /* insert subID and approvalID to user table for the user */
+        DB::table('approvals')->where('id', '=', $approvals)
+            ->update([
+                'approval2_ID'       => $approval2ID, 
+                'updated_at'         => date('Y-m-d H:i:s')    
+            ]);
 
         /* create entries for the user in the leave_bal_emp table to store their balance of their leaves */
 
@@ -118,14 +137,11 @@ class UserController extends Controller
                 ]);
         }
 
-        /* insert subID and approvalID to user table for the user */
-        DB::table('users')->where('id', '=', $id)
-            ->update([
-                'sub_ID'             => $subID,
-                'approval_ID'        => $approvals, 
-                'created_at'         => date('Y-m-d H:i:s'),
-                'updated_at'         => date('Y-m-d H:i:s')    
-            ]);
+        /* create a folder for the supporting documents of the user in the storage/supporting_docs 
+        $path = public_path('storage/supporting_docs');
+        echo $path." ";
+        File::makeDirectory($path, 0777, true, true);*/
+        Storage::makeDirectory('supporting_docs/'.$id);
 
         return redirect('/accounts')->with('success', 'Account added successfully');
     }
