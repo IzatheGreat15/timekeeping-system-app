@@ -106,7 +106,7 @@
                     </ul>
                 </li>
 
-
+                @if(Auth::user()->role == "Management")
                 <!--Management Only show only when the account type is manager, supervisor, CEO-->
                 <li id="management">
                         <a href="#manageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
@@ -136,7 +136,7 @@
                     </ul>
                 </li>
 
-
+                @elseif (Auth::user()->role == "Admin")
                 <!--Admin Only show only when the account type is admin-->
                 <li id="admin">
                         <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
@@ -169,6 +169,7 @@
                     </ul>
                 </li>
             </ul>
+            @endif
 
             <ul class="list-unstyled components">
                 <p style="color:#767070">v.1.1.1</p>

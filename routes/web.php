@@ -24,11 +24,11 @@ use Illuminate\Support\Facades\Mail;
 */
 
 Route::get('/', function () {
-    return view('employee.dashboard');
+    return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/time-in-out', function () {
+    return view('employee.dashboard');
 })->middleware(['auth'])->name('dashboard');
 
 /* Replace the 'id' in the URL with actual ID */
@@ -39,7 +39,7 @@ Route::view("/manage-account", 'general.manage-account');
 Route::view("/notifications", 'general.notifications');
 
 /* Time in/out */
-Route::view("/time-in-out", 'employee.dashboard');
+//Route::view("/time-in-out", 'employee.dashboard');
 
 /* Attendance */
 Route::view("/attendance-records", 'employee.attendance-record');
