@@ -16,6 +16,8 @@ class AdjustmentEmp extends Model
         'reason',
         'comment_ID',
         'status1',
-        'status2'
+        'status2',
+        'updated_at1',
+        'updated_at2'
     ];
 }
