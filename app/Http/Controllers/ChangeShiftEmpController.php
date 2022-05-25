@@ -127,6 +127,29 @@ class ChangeShiftEmpController extends Controller
         return view('employee.shift-change-edit', compact('assigned', 'shifts', 'req'));
     }
 
+    /*
+        update chnage shift request to database
+     */
+    public function update_change_shift(Request $request){
+        /* validate all fields */
+        $request->validate([
+            'shift_emp_ID'       => 'required',
+            'shift_ID'           => 'required',
+            'reason'             => 'required|max:255',
+        ]);
+
+        /* insert data to database */
+        DB::table('change_shift_emp')
+        ->update([
+            'shift_emp_ID'     => $request->shift_emp_ID,
+            'shift_ID'         => $request->shift_ID,
+            'reason'           => $request->reason,
+            'updated_at'       => date('Y-m-d H:i:s')
+        ]);
+
+        return redirect('/shift-change')->with('success', 'Change shift request updated successfully');
+    }
+
     /**
      * Soft delete a change shift request (change statuses to cancelled)
      */
