@@ -17,6 +17,9 @@ class LeaveEmp extends Model
         'end_date',
         'comment_ID',
         'status1',
-        'status2'
+        'status2',
+        'updated_at1',
+        'updated_at2',
+        'document_file'
     ];
 }

@@ -11,7 +11,7 @@
     <!-- Get data from leave_emp table --> 
 
     <!--Employee Name-->
-    <h3>John Doe</h3>
+    <h3>{{ $req->first_name}} {{ $req->last_name }}</h3>
 
     <hr>
 
@@ -21,27 +21,44 @@
             <table class="table table-hover">
                 <tr>
                     <td class="w-50">Leave</td>
-                    <td class="w-50 font-weight-bold">Magna Carta</td>
+                    @if($req->sub_leave_ID > 0)
+                            <td class="w-50 font-weight-bold">
+                                {{ 
+                                    DB::table('sub_leaves')
+                                       ->select('sub_leave_name')
+                                       ->where('id', '=', $req->sub_leave_ID)
+                                       ->get()->first()->sub_leave_name
+                                }}
+                            </td>
+
+                        @else
+                            <td class="w-50 font-weight-bold">{{ $req->main_leave_name }}</td>
+                        @endif
                 </tr>
                 <tr>
                     <td class="w-50">From Date</td>
-                    <td class="w-50 font-weight-bold">03/02/2022</td>
+                    <td class="w-50 font-weight-bold">{{ date('Y/m/d', strtotime($req->start_date)) }}</td>
                 </tr>
                 <tr>
                     <td class="w-50">To Date</td>
-                    <td class="w-50 font-weight-bold">03/02/2022</td>
+                    <td class="w-50 font-weight-bold">{{ date('Y/m/d', strtotime($req->end_date)) }}</td>
                 </tr>
                 <tr>
                     <td class="w-50 font-italic" colspan="2">Reason</td>
                 </tr>
                 <tr>
                     <td class="w-50 font-weight-bold font-italic text-justify" colspan="2">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    {{ $req->reason }}
                     </td>
                 </tr>
                 <tr>
                     <td class="w-50">Supporting Documents</td>
-                    <td class="w-50 font-weight-bold">file attached</td>
+                    <td class="w-50 font-weight-bold text-info">
+                        <a href="public/supporting_docs/{{ Auth::user()->id }}"
+                           download="{{ $req->document_file }}">
+                            {{ $req->document_file }}
+                        </a>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -52,34 +69,59 @@
                 <table class="table table-hover">
                 <tr>
                         <td class="w-50 font-italic">Postion of Approver 1</td>
-                        <td class="w-50 font-weight-bold font-italic">Mr. Mycroft Holmes (Datetime)</td>
+                        <td class="w-50 font-weight-bold font-italic">
+                            <!-- First Name -->
+                            {{ DB::table('users')
+                               ->select('*')
+                               ->where('id', '=', $approvals->approval1_ID)
+                               ->get()->first()->first_name }} 
+                            <!-- Last Name -->
+                            {{ DB::table('users')
+                               ->select('*')
+                               ->where('id', '=', $approvals->approval1_ID)
+                               ->get()->first()->last_name }}
+                            <!-- Datetime -->
+                            ({{ $req->updated_at1 }})</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic">Status 1</td>
-                        <td class="w-50 font-weight-bold font-italic">SENT BACK</td>
+                        <td class="w-50 font-weight-bold font-italic">{{ $req->status1 }}</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic" colspan="2">Remarks</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-weight-bold font-italic text-justify" colspan="2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        {{ $req->comment1 }}
                         </td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic">Postion of Approver 2</td>
-                        <td class="w-50 font-weight-bold font-italic">Mr. Mycroft Holmes (Datetime)</td>
+                        <td class="w-50 font-weight-bold font-italic">
+                            <!-- First Name -->
+                            {{ DB::table('users')
+                               ->select('*')
+                               ->where('id', '=', $approvals->approval2_ID)
+                               ->get()->first()->first_name }} 
+                            <!-- Last Name -->
+                            {{ DB::table('users')
+                               ->select('*')
+                               ->where('id', '=', $approvals->approval2_ID)
+                               ->get()->first()->last_name }}
+                            <!-- Datetime -->
+                            ({{ $req->updated_at2 }})
+                        </td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic">Status 2</td>
-                        <td class="w-50 font-weight-bold font-italic">PENDING</td>
+                        <td class="w-50 font-weight-bold font-italic">{{ $req->status2 }}</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic" colspan="2">Remarks</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-weight-bold font-italic text-justify" colspan="2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        {{ $req->comment2 }}
                         </td>
                     </tr>
                 </table>

@@ -24,10 +24,12 @@
                 <input type="date" class="form-control">
             </div>
             <!--For Management Only-->
+            @if(Auth::user()->role != 'Employee')
             <div class="col-sm mb-3">
                 <label>Employee: </label>
                 <input type="text" class="form-control" placeholder="John Doe">
             </div>
+            @endif
         </div>
     </form>
 
@@ -41,7 +43,9 @@
                     <tr>
                         <th scope="col">Date Filed</th>
                         <!--Name shown only for management-->
+                        @if(Auth::user()->role != 'Employee')
                         <th scope="col">Name</th>
+                        @endif
                         <th scope="col">From Date</th>
                         <th scope="col">To Date</th>
                         <th scope="col">Leave</th>
@@ -50,16 +54,40 @@
                 </thead>
 
                 <tbody>
+                @if($requests->count() > 0)
+                    @foreach($requests as $req)
                     <!--Each row can be clicked redirect to leave-spec.blade.php-->
-                    <tr onclick="window.location='/leave-records-id';">
+                    <tr onclick="window.location='/leave-records/{{ $req->id }}';">
+                        <!-- Hide ID -->
+                        <td style="display: none;">{{ $req->id }}</td>
                         <!--Name shown only for management-->
-                        <td>03/02/2022</td>
-                        <td>John Doe</td>
-                        <td>03/02/2022</td>
-                        <td>03/02/2022</td>
-                        <td>Magna Carta</td>
-                        <td>Reason</td>
+                        <td>{{ date('Y/m/d', strtotime($req->created_at)) }}</td>
+                        @if(Auth::user()->role != 'Employee')
+                            <td>{{ $req->first_name }} {{ $req->last_name }}</td>
+                        @endif
+                        <td>{{ date('Y/m/d', strtotime($req->start_date)) }}</td>
+                        <td>{{ date('Y/m/d', strtotime($req->end_date)) }}</td>
+                        @if($req->sub_leave_ID > 0)
+                            <td>
+                                {{ 
+                                    Str::limit(DB::table('sub_leaves')
+                                       ->select('sub_leave_name')
+                                       ->where('id', '=', $req->sub_leave_ID)
+                                       ->get()->first()->sub_leave_name, 10)
+                                }}
+                            </td>
+
+                        @else
+                            <td>{{ Str::limit($req->main_leave_name, 10)}}</td>
+                        @endif
+                        <td>{{ Str::limit($req->reason, 10) }}</td>
                     </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="8">No confirmed leave requests yet!</td>
+                    </tr>
+                @endif
                 </tbody>
             </table>
         </div>

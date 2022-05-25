@@ -33,7 +33,7 @@
                 <img src="{{url('images/logo.png')}}" class="img-fluid"></img>
             </div>
             <ul class="list-unstyled components">
-                <p style="color:#767070">Services</p>
+                <p style="color:#767070">Services {{ Auth::user()->first_name }}</p>
                 <li id="time">
                     <a href="/time-in-out">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-hourglass-split" viewBox="0 2 16 16" style="overflow: visible">
@@ -106,7 +106,7 @@
                     </ul>
                 </li>
 
-
+                @if(Auth::user()->role == "Management")
                 <!--Management Only show only when the account type is manager, supervisor, CEO-->
                 <li id="management">
                         <a href="#manageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
@@ -136,7 +136,7 @@
                     </ul>
                 </li>
 
-
+                @elseif (Auth::user()->role == "Admin")
                 <!--Admin Only show only when the account type is admin-->
                 <li id="admin">
                         <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
@@ -169,6 +169,7 @@
                     </ul>
                 </li>
             </ul>
+            @endif
 
             <ul class="list-unstyled components">
                 <p style="color:#767070">v.1.1.1</p>
@@ -247,7 +248,8 @@
                                     <a class="dropdown-item" href="/change-password">Change Password</a>
                                     <a class="dropdown-item" href="/manage-account">Manage Account</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Log out</a>
+                                    <!-- Log out -->
+                                    <a class="dropdown-item" href="/logout-user">Log out</a>
                                 </div>
                             </li>
                         </ul>

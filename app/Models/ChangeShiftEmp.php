@@ -15,6 +15,8 @@ class ChangeShiftEmp extends Model
         'shift_ID',
         'comment_ID',
         'status1',
-        'status2'
+        'status2',
+        'updated_at1',
+        'updated_at2'
     ];
 }

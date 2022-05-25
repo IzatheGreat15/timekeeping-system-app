@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\ChangeShiftEmpController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\LeaveEmpController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\MainLeaveController;
 use App\Http\Controllers\OvertimeEmpController;
@@ -9,6 +11,7 @@ use App\Http\Controllers\SubLeaveController;
 use App\Http\Controllers\UserController;
 
 use App\Models\Department;
+use App\Models\LeaveEmp;
 use App\Models\Shift;
 use App\Models\Main_Leave;
 use Illuminate\Support\Facades\Mail;
@@ -25,11 +28,11 @@ use Illuminate\Support\Facades\Mail;
 */
 
 Route::get('/', function () {
-    return view('employee.dashboard');
+    return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/time-in-out', function () {
+    return view('employee.dashboard');
 })->middleware(['auth'])->name('dashboard');
 
 /* Replace the 'id' in the URL with actual ID */
@@ -38,9 +41,10 @@ Route::get('/dashboard', function () {
 Route::view("/change-password", 'general.change-password');
 Route::view("/manage-account", 'general.manage-account');
 Route::view("/notifications", 'general.notifications');
+Route::get("/logout-user", [UserController::class, "logout_user"]);
 
 /* Time in/out */
-Route::view("/time-in-out", 'employee.dashboard');
+//Route::view("/time-in-out", 'employee.dashboard');
 
 /* Attendance */
 Route::view("/attendance-records", 'employee.attendance-record');
@@ -55,15 +59,19 @@ Route::view("/shift-records", 'employee.shift-record');
 Route::view("/shift-records-id", 'employee.shift-spec');
 Route::view("/shift-change", 'employee.shift-change');
 Route::view("/shift-change-id", 'employee.shift-change-spec');
-Route::view("/shift-change-new", 'employee.shift-change-new');
+Route::get("/shift-change-new", [ChangeShiftEmpController::class, "new_change_shift"]);
 Route::view("/shift-change-edit", 'employee.shift-change-edit');
 
 /* Leave */
-Route::view("/leave-records", 'employee.leave-record');
-Route::view("/leave-records-id", 'employee.leave-spec');
-Route::view("/leave-request", 'employee.leave-request');
-Route::view("/leave-request-new", 'employee.leave-request-new');
-Route::view("/leave-request-edit", 'employee.leave-request-edit');
+Route::get("/leave-records", [LeaveEmpController::class, "show_leave_record"]);
+Route::get("/leave-records/{id}", [LeaveEmpController::class, "view_leave_record"]);
+Route::get("/leave-request", [LeaveEmpController::class, "show_leave_request"]);
+Route::get("/leave-request-new", [LeaveEmpController::class, "new_leave_request"]);
+Route::post("/add-leave-request", [LeaveEmpController::class, "add_leave_request"]);
+Route::get("/leave-request-edit/{id}", [LeaveEmpController::class, "edit_leave_request"]);
+Route::post("/leave-request-update", [LeaveEmpController::class, "update_leave_request"]);
+Route::post("/leave-request-delete", [LeaveEmpController::class, "delete_leave_request"]);
+Route::post("/leave-request-search", [LeaveEmpController::class, "search_leave_request"]);
 
 /* Overtime */
 Route::view("/overtime-records", 'employee.overtime-records');
