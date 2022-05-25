@@ -48,6 +48,7 @@ class ChangeShiftEmpController extends Controller
                     ->get()->first();
         return view('employee.shift-change-spec', compact('req', 'approvals'));         
     }
+
     /*
         Show add form
      */
@@ -99,5 +100,43 @@ class ChangeShiftEmpController extends Controller
         ]);
 
         return redirect('/shift-change')->with('success', 'Change shift request filed successfully');
+    }
+
+    /*
+        Show edit form
+     */
+    public function edit_change_shift($id){
+        $date = date("Y/m/d");
+    
+        $assigned = DB::table('shift_emp')
+                    ->select('shift_emp.*', 'shifts.*')
+                    ->join('shifts', 'shifts.id', '=', 'shift_emp.shift_ID')
+                    ->where('shift_emp.emp_ID', '=', Auth::user()->id)
+                    ->where('end_date', '>=', $date)
+                    ->get();
+
+        $shifts = DB::table('shifts')
+                    ->select('*')
+                    ->get();
+        
+        $req = DB::table('change_shift_emp')
+                   ->select('*')
+                   ->where('id', '=', $id)
+                   ->get()->first();
+
+        return view('employee.shift-change-edit', compact('assigned', 'shifts', 'req'));
+    }
+
+    /**
+     * Soft delete a change shift request (change statuses to cancelled)
+     */
+    public function delete_change_shift(Request $request){
+        DB::table('change_shift_emp')->where('id', '=', $request->id)
+            ->update([
+                'status1'   => "CANCELLED",
+                'status2'   => "CANCELLED"
+            ]);
+
+        return redirect('/shift-change')->with('success', 'Leave request cancelled successfully');
     }
 }

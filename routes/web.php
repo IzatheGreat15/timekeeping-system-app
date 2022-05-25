@@ -61,7 +61,7 @@ Route::get("/shift-change", [ChangeShiftEmpController::class, "display_change_sh
 Route::get("/shift-change/{id}", [ChangeShiftEmpController::class, "view_change_shift"]);
 Route::get("/shift-change-new", [ChangeShiftEmpController::class, "new_change_shift"]);
 Route::post("/shift-change-add", [ChangeShiftEmpController::class, "add_change_shift"]);
-Route::view("/shift-change-edit", 'employee.shift-change-edit');
+Route::get("/shift-change-edit/{id}", [ChangeShiftEmpController::class, "edit_change_shift"]);
 Route::post("/shift-change-delete", [ChangeShiftEmpController::class, "delete_change_shift"]);
 
 /* Leave */
