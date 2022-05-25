@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\MainLeaveController;
+use App\Http\Controllers\OvertimeEmpController;
 use App\Http\Controllers\SubLeaveController;
 use App\Http\Controllers\UserController;
 
@@ -67,9 +68,9 @@ Route::view("/leave-request-edit", 'employee.leave-request-edit');
 /* Overtime */
 Route::view("/overtime-records", 'employee.overtime-records');
 Route::view("/overtime-records-id", 'employee.overtime-spec');
-Route::view("/overtime-request", 'employee.overtime-request');
-Route::view("/overtime-request-new", 'employee.overtime-request-new');
-Route::view("/overtime-request-edit", 'employee.overtime-request-edit');
+Route::get("/overtime-request", [OvertimeEmpController::class, "show_overtime_requests"]);
+Route::view("/overtime-request-new", [OvertimeEmpController::class, "add_overtime_request"]);
+Route::get("/overtime-request-edit", [OvertimeEmpController::class, "edit_overtime_request"]);
 
 /* Management */
 Route::view("/management", 'management.dashboard');
