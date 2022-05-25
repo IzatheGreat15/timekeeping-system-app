@@ -17,8 +17,9 @@
             <div class="col-sm mb-3">
                 <label>Assigned Shift: </label>
                 <select class="form-control">
-                    <option>Graveyard Shift (12:00AM - 8:00AM) 03/02/2022 - 04/02/2022</option>
-                    <option>Another Shift (12:00AM - 8:00AM) 03/02/2022 - 04/02/2022</option>
+                    @foreach($assigned as $shift)
+                    <option>{{ $shift->shift_name }} ( {{ date('h:i A', strtotime($shift->start_time))  }} - {{ date('h:i A', strtotime($shift->end_time))  }}) {{ date('Y/m/d', strtotime($shift->start_date)) }} - {{ date('Y/m/d', strtotime($shift->end_date)) }}</option>
+                    @endforeach
                 </select>
             </div>
         </div>

@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -137,12 +139,6 @@ class UserController extends Controller
                 ]);
         }
 
-        /* create a folder for the supporting documents of the user in the storage/supporting_docs 
-        $path = public_path('storage/supporting_docs');
-        echo $path." ";
-        File::makeDirectory($path, 0777, true, true);*/
-        Storage::makeDirectory('supporting_docs/'.$id);
-
         return redirect('/accounts')->with('success', 'Account added successfully');
     }
 
@@ -260,5 +256,16 @@ class UserController extends Controller
             return view('admin.account', compact('accs'));
         else
             return redirect('/accounts')->with('error', 'No account found. Try Again');
+    }
+
+    /*
+        Logout user
+    */
+    public function logout_user(){
+        
+        Session::flush();
+        Auth::logout();
+
+        return redirect('/');
     }
 }

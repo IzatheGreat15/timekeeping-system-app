@@ -65,6 +65,7 @@
                 </thead>
 
                 <tbody>
+                @if ($accs->count() > 0)
                     @foreach($accs as $acc)
                     <tr>
                         <td style="display: none;">{{ $acc->id }}</td>
@@ -107,6 +108,11 @@
                         </td>
                     </tr>
                     @endforeach
+                @else
+                    <tr>
+                        <td colspan="8">No users created yet!</td>
+                    </tr>
+                 @endif
                 </tbody>
             </table>
         </div>
