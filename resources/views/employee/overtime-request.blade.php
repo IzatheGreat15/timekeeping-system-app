@@ -93,7 +93,7 @@
                         @endforeach
                     @else
                     <tr>
-                        <td colspan="4">No overtime requests available yet!</td>
+                        <td colspan="10">No overtime requests available yet!</td>
                     </tr>
                     @endif
                 </tbody>

@@ -15,10 +15,10 @@ class OvertimeEmpController extends Controller
     */
     public function show_overtime_requests(){
         $overtimeRequests = DB::table('overtime_emp')
-                              ->select('overtime-emp.*', 'users.first_name', 'users.last_name')
-                              ->join('users', 'users.id', '=', 'overtime-emp.emp_ID')
+                              ->select('overtime_emp.*', 'users.first_name', 'users.last_name')
+                              ->join('users', 'users.id', '=', 'overtime_emp.emp_ID')
                               ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
-                              ->where('overtime-emp.emp_ID', '=', Auth::user()->id)
+                              ->where('overtime_emp.emp_ID', '=', Auth::user()->id)
                               ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
                               ->orWhere('approvals.approval2_ID', '=', Auth::user()->id)
                               ->get();
