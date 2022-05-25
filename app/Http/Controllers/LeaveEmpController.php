@@ -61,10 +61,11 @@ class LeaveEmpController extends Controller
                     ->where('leave_emp.id', '=', $id)
                     ->get()->first();
 
-        $approvals = DB::table('users')
+        $approvals = DB::table('leave_emp')
                     ->select('users.*', 'approvals.*')
+                    ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
                     ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
-                    ->where('users.id', '=', Auth::user()->id)
+                    ->where('leave_emp.id', '=', $id)
                     ->get()->first();
 
         return view('employee.leave-spec', compact('req', 'approvals'));

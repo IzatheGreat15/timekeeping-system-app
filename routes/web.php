@@ -56,12 +56,13 @@ Route::view("/adjustment-edit-id", 'employee.adjustment-edit');
 
 /* Shift */
 Route::view("/shift-records", 'employee.shift-record');
-Route::view("/shift-records-id", 'employee.shift-spec');
+Route::get("/shift-records/{id}", [ChangeShiftEmpController::class, "view_change_shift"]);
 Route::get("/shift-change", [ChangeShiftEmpController::class, "display_change_shift"]);
-Route::view("/shift-change-id", 'employee.shift-change-spec');
+Route::get("/shift-change/{id}", [ChangeShiftEmpController::class, "view_change_shift"]);
 Route::get("/shift-change-new", [ChangeShiftEmpController::class, "new_change_shift"]);
 Route::post("/shift-change-add", [ChangeShiftEmpController::class, "add_change_shift"]);
 Route::view("/shift-change-edit", 'employee.shift-change-edit');
+Route::post("/shift-change-delete", [ChangeShiftEmpController::class, "delete_change_shift"]);
 
 /* Leave */
 Route::get("/leave-records", [LeaveEmpController::class, "show_leave_record"]);

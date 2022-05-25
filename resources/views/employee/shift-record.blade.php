@@ -60,15 +60,6 @@
                         <td>Graveyard Shift</td>
                         <td>04:00AM <br> 06:00PM</td>
                     </tr>
-                    <tr onclick="window.location='/shift-records-id';">
-                        <!--Name shown only for management-->
-                        <td>03/02/22</td>
-                        <td>John Doe</td>
-                        <td>03/02/22</td>
-                        <td>03/02/22</td>
-                        <td>Graveyard Shift</td>
-                        <td>04:00AM <br> 06:00PM</td>
-                    </tr>
                 </tbody>
             </table>
         </div>

@@ -68,7 +68,13 @@
             <div class="table-responsive">
                 <table class="table table-hover">
                 <tr>
-                        <td class="w-50 font-italic">Postion of Approver 1</td>
+                        <td class="w-50 font-italic">
+                            <!-- Position -->
+                            {{ DB::table('users')
+                               ->select('*')
+                               ->where('id', '=', $approvals->approval1_ID)
+                               ->get()->first()->position }}
+                        </td>
                         <td class="w-50 font-weight-bold font-italic">
                             <!-- First Name -->
                             {{ DB::table('users')
