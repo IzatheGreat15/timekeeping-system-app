@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2022 at 03:11 PM
+-- Generation Time: Apr 29, 2022 at 03:42 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.1
 
@@ -55,6 +55,15 @@ CREATE TABLE `approvals` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `approvals`
+--
+
+INSERT INTO `approvals` (`id`, `approval1_ID`, `approval2_ID`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, NULL, '2022-04-23 08:02:37'),
+(2, 1, 1, NULL, '2022-04-23 08:02:06'),
+(3, 1, 1, NULL, '2022-04-23 07:38:50');
 
 -- --------------------------------------------------------
 
@@ -123,7 +132,8 @@ CREATE TABLE `departments` (
 --
 
 INSERT INTO `departments` (`id`, `dept_name`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'IT', 'dsfsd\r\nsdfsdf\r\n\r\nsdf', '2022-04-19 20:29:17', '2022-04-19 20:29:17');
+(1, 'IT', 'dsfsd\r\nsdfsdf\r\n\r\nsdf', '2022-04-19 20:29:17', '2022-04-19 20:29:17'),
+(2, 'Marketing', 'marketing department', '2022-04-23 03:39:35', '2022-04-23 03:39:35');
 
 -- --------------------------------------------------------
 
@@ -155,6 +165,19 @@ CREATE TABLE `leave_bal_emp` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `leave_bal_emp`
+--
+
+INSERT INTO `leave_bal_emp` (`id`, `emp_ID`, `main_leave_ID`, `balance`, `created_at`, `updated_at`) VALUES
+(1, 13, 1, 20, '2022-04-22 06:25:58', '2022-04-23 01:47:35'),
+(2, 13, 2, 30, '2022-04-22 06:25:58', '2022-04-23 01:44:00'),
+(3, 14, 1, 20, '2022-04-23 00:58:31', '2022-04-23 01:47:35'),
+(4, 14, 2, 30, '2022-04-23 00:58:31', '2022-04-23 01:44:00'),
+(5, 1, 3, 30, '2022-04-23 01:24:27', '2022-04-23 01:44:00'),
+(6, 13, 3, 30, '2022-04-23 01:24:27', '2022-04-23 01:44:00'),
+(7, 14, 3, 30, '2022-04-23 01:24:27', '2022-04-23 01:44:00');
 
 -- --------------------------------------------------------
 
@@ -200,7 +223,9 @@ CREATE TABLE `main_leaves` (
 --
 
 INSERT INTO `main_leaves` (`id`, `main_leave_name`, `description`, `total_balance`, `req_doc`, `created_at`, `updated_at`) VALUES
-(1, 'Dummy', 'dummy\r\n\r\ndescription of this leave', 113, 'NO', '2022-04-19 20:28:45', '2022-04-19 20:28:45');
+(1, 'Dummy 123', 'dummy\r\n\r\ndescription of this leave', 20, 'NO', '2022-04-20 19:03:50', '2022-04-23 01:47:35'),
+(2, 'Categorysfsdf', 'None of the views in the given array exist.', 34, 'YES', '2022-04-20 18:55:31', '2022-04-20 18:55:31'),
+(3, 'Vacation', 'for vacation purposes kekeke', 20, 'YES', '2022-04-23 01:24:27', '2022-04-23 01:24:27');
 
 -- --------------------------------------------------------
 
@@ -346,7 +371,8 @@ CREATE TABLE `sub_leaves` (
 --
 
 INSERT INTO `sub_leaves` (`id`, `main_leave_ID`, `sub_leave_name`, `description`, `created_at`, `updated_at`) VALUES
-(1, 1, 'dummy sub', 'sdfsdfd\r\n\r\ndsf', '2022-04-19 20:01:54', '2022-04-19 20:01:54');
+(2, 1, 'subcategory leave 123', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum', '2022-04-20 18:25:24', '2022-04-20 19:07:38'),
+(3, 2, 'subcategory leave 1232', 'None of the views in the given array exist.', '2022-04-20 19:07:11', '2022-04-20 19:07:11');
 
 -- --------------------------------------------------------
 
@@ -389,6 +415,15 @@ CREATE TABLE `users` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `role` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `email_verified_at`, `password`, `position`, `status`, `remember_token`, `dept_ID`, `approval_ID`, `sub_ID`, `created_at`, `updated_at`, `role`) VALUES
+(1, 'John', 'Doe', 'johndoe@email.com', NULL, 'JohnDoe123', 'CEO', 'ACTIVE', NULL, 1, 1, 1, NULL, '2022-04-23 08:02:37', 'Management'),
+(13, 'Kathleen Iza', 'Monzales', 'monzalesiza@gmail.com', NULL, 'kimzadith8', 'Vice President', 'ACTIVE', NULL, 1, 2, 13, '2022-04-22 06:25:58', '2022-04-23 08:02:06', 'Management'),
+(14, 'Sherlock', 'Holmes', 'dummy@email.com1', NULL, '$2y$10$JegyUV4g2me2Mp54mfRMT.BZc/tY/QHUqqqDDzSHbFU7IMw2XamZi', 'Homicide Detective', 'INACTIVE', NULL, 1, 3, 14, '2022-04-23 00:58:31', '2022-04-23 07:38:50', 'Employee');
 
 --
 -- Indexes for dumped tables
@@ -552,7 +587,7 @@ ALTER TABLE `adjustment_emp`
 -- AUTO_INCREMENT for table `approvals`
 --
 ALTER TABLE `approvals`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `attendance`
@@ -576,7 +611,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -588,7 +623,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `leave_bal_emp`
 --
 ALTER TABLE `leave_bal_emp`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `leave_emp`
@@ -600,7 +635,7 @@ ALTER TABLE `leave_emp`
 -- AUTO_INCREMENT for table `main_leaves`
 --
 ALTER TABLE `main_leaves`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -636,7 +671,7 @@ ALTER TABLE `shift_emp`
 -- AUTO_INCREMENT for table `sub_leaves`
 --
 ALTER TABLE `sub_leaves`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `time_adjustments`
@@ -648,7 +683,7 @@ ALTER TABLE `time_adjustments`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables
