@@ -278,7 +278,6 @@ class LeaveEmpController extends Controller
         if($requests->count() > 0)
             return view('employee.leave-request', compact('requests'));
         else
-        echo "no found";
-           // return redirect('/leave-request')->with('error', 'No leave request found. Try Again');
+            return redirect('/leave-request')->with('error', 'No leave request found. Try Again');
     }
 }

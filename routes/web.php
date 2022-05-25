@@ -56,9 +56,10 @@ Route::view("/adjustment-edit-id", 'employee.adjustment-edit');
 /* Shift */
 Route::view("/shift-records", 'employee.shift-record');
 Route::view("/shift-records-id", 'employee.shift-spec');
-Route::view("/shift-change", 'employee.shift-change');
+Route::get("/shift-change", [ChangeShiftEmpController::class, "display_change_shift"]);
 Route::view("/shift-change-id", 'employee.shift-change-spec');
 Route::get("/shift-change-new", [ChangeShiftEmpController::class, "new_change_shift"]);
+Route::post("/shift-change-add", [ChangeShiftEmpController::class, "add_change_shift"]);
 Route::view("/shift-change-edit", 'employee.shift-change-edit');
 
 /* Leave */

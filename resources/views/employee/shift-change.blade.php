@@ -12,6 +12,20 @@
 
     <hr>
 
+    <!-- Success Message -->
+    @if ($message = Session::get('success'))
+        <ul class="list-group mb-3">
+            <li class="list-group-item list-group-item-success">{{ $message }}</li>
+        </ul>
+    @endif
+
+    <!-- Error Message -->
+    @if ($message = Session::get('error'))
+        <ul class="list-group mb-3">
+            <li class="list-group-item list-group-item-danger">{{ $message }}</li>
+        </ul>
+    @endif
+
     <!-- Get data from change_shift_emp table --> 
 
     <!--Redirect to adjustment-new.blade.php-->
@@ -34,10 +48,12 @@
                 <input type="date" class="form-control">
             </div>
             <!--For Management Only - Employee-->
+            @if(Auth::user()->role != 'Employee')
             <div class="col-sm mb-3">
                 <label>Employee: </label>
-                <input type="text" class="form-control" placeholder="John Doe">
+                <input type="text" class="form-control" name="name" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}">
             </div>
+            @endif
             <div class="col-sm mb-3">
                 <label>Status: </label>
                 <select class="form-control">
@@ -59,7 +75,9 @@
                     <tr>
                         <th scope="col">Date Filed</th>
                         <!--Name shown only for management-->
+                        @if(Auth::user()->role != 'Employee')
                         <th scope="col">Name</th>
+                        @endif
                         <th scope="col">Date</th>
                         <th scope="col">Shift</th>
                         <th scope="col">Schedule</th>
@@ -71,33 +89,22 @@
                 </thead>
 
                 <tbody>
+                @if($requests->count() > 0)
+                    @foreach($requests as $req)
                     <tr onclick="window.location='/shift-change-id';">
                         <!-- Hide ID -->
-                        <td style="display: none;">001</td>
+                        <td style="display: none;">{{ $req->id }}</td>
                         <!--Name shown only for management-->
-                        <td>03/02/22</td>
-                        <td>John Doe</td>
-                        <td>03/02/22 <br> 03/02/22</td>
-                        <td>Graveyard Shift</td>
-                        <td>04:00AM <br> 06:00PM</td>
-                        <td>Late</td>
-                        <td>APPROVED</td>
-                        <td>REJECTED</td>
-                        <!--If request is APPROVED and REJECTED and if the entry is not of the user, buttons are not shown-->
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <!-- Hide ID -->
-                        <td style="display: none;">001</td>
-                        <!--Name shown only for management-->
-                        <td>03/02/22</td>
-                        <td>John Doe</td>
-                        <td>03/02/22 <br> 03/02/22</td>
-                        <td>Graveyard Shift</td>
-                        <td>04:00AM <br> 06:00PM</td>
-                        <td>Late</td>
-                        <td>SENT BACK</td>
-                        <td>---------</td>
+                        <td>{{ date('Y/m/d', strtotime($req->created_at)) }}</td>
+                        @if(Auth::user()->role != 'Employee')
+                        <td>{{ $req->first_name }} {{ $req->last_name }}</td>
+                        @endif
+                        <td>{{ date('Y/m/d', strtotime($req->start_date)) }} <br> {{ date('Y/m/d', strtotime($req->end_date)) }}</td>
+                        <td>{{ $req->shift_name }}</td>
+                        <td>{{ date('h:i A', strtotime($req->start_time))  }} <br> {{ date('h:i A', strtotime($req->end_time))  }}</td>
+                        <td>{{ Str::limit($req->reason, 10) }}</td>
+                        <td>{{ $req->status1 }}</td>
+                        <td>{{ $req->status2 }}</td>
                         <!--If request is APPROVED and REJECTED and if the entry is not of the user, buttons are not shown-->
                         <td>
                             <a class="btn btn-clear p-0" href="/shift-change-id">
@@ -107,6 +114,7 @@
                                 </svg>
                             </a>
                             &nbsp;
+                            @if(($req->status1 == 'PENDING' || $req->status1 == 'SENT BACK' || $req->status1 == 'PENDING' || $req->status1 == 'SENT BACK') && $req->emp_ID == Auth::user()->id)
                             <a class="btn btn-clear p-0" href="/shift-change-edit">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -119,8 +127,15 @@
                                     <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
                                 </svg>
                             </a>
+                            @endif
                         </td>
                     </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="8">No change shift requests created yet!</td>
+                    </tr>
+                @endif
                 </tbody>
             </table>
         </div>
