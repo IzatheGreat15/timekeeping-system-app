@@ -21,8 +21,8 @@
     @endif
     
     <!--Form Date Filter-->
-    <form>
-    @csrf
+    <form method="POST" action="/adjustment_update">
+        @csrf
         <!--Date-->
         <div class="form-row mb-4">
             <div class="col-sm mb-3">

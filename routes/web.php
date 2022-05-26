@@ -57,6 +57,7 @@ Route::get("/adjustment-records/{id}", [AdjustmentEmpController::class, "view_ad
 Route::view("/adjustment-new", 'employee.adjustment-new');
 Route::post("/adjustment-add", [AdjustmentEmpController::class, "add_adjustment"]);
 Route::get("/adjustment-edit/{id}", [AdjustmentEmpController::class, "edit_adjustment"]);
+Route::post("/adjustment_update", [AdjustmentEmpController::class, "update_adjustment"]);
 Route::post("/adjustment-delete", [AdjustmentEmpController::class, "delete_adjustment"]);
 
 /* Shift */
