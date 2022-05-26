@@ -87,18 +87,16 @@
     });
 
     function timeFunc(){
-        /* split hours and minutes of the times */
-        const time1 = $("#start_time").val().split(":");
-        const time2 = $("#end_time").val().split(":");
+        var start_time = new Date("01/01/2007 " + $('#start_time').val());
+        var end_time = new Date("01/01/2007 " + $('#end_time').val());
 
-        /* convert minutes to hours and add */
-        const hr1 = parseInt(time1[0]) + (parseInt(time1[1]) / 60);
-        const hr2 = parseInt(time2[0]) + (parseInt(time2[1]) / 60);
-            
-        const hour_diff = (hr2-hr1).toFixed(1);
+        var diff = (end_time - start_time) / 60000;
 
-        if(hour_diff !== "NaN"){
-            $("#hours").val(hour_diff);
+        var minutes = diff % 60;
+        var hours = (diff - minutes) / 60;
+
+        if(hours !== "NaN"){
+            $("#hours").val((start_time > end_time)? 24 + hours : hours);
             if($("#hours").val() < 1){
                 $("#hours").addClass("border border-danger");
             } else {

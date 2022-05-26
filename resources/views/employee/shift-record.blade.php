@@ -26,10 +26,12 @@
                 <input type="date" class="form-control">
             </div>
             <!--For Management Only-->
+            @if(Auth::user()->role == 'Management')
             <div class="col-sm mb-3">
                 <label>Employee: </label>
-                <input type="text" class="form-control" placeholder="John Doe">
+                <input type="text" class="form-control" name="name" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}">
             </div>
+            @endif
         </div>
     </form>
 
@@ -41,7 +43,9 @@
                     <tr>
                         <th scope="col">Date Filed</th>
                         <!--Name shown only for management-->
+                        @if(Auth::user()->role == 'Management')
                         <th scope="col">Name</th>
+                        @endif
                         <th scope="col">From Date</th>
                         <th scope="col">To Date</th>
                         <th scope="col">Shift</th>
@@ -50,16 +54,26 @@
                 </thead>
 
                 <tbody>
+                @if($requests->count() > 0)
+                    @foreach($requests as $req)
                     <!--Each row can be clicked redirect to shift-spec.blade.php-->
                     <tr onclick="window.location='/shift-records-id';">
                         <!--Name shown only for management-->
-                        <td>03/02/22</td>
-                        <td>John Doe</td>
-                        <td>03/02/22</td>
-                        <td>03/02/22</td>
-                        <td>Graveyard Shift</td>
-                        <td>04:00AM <br> 06:00PM</td>
+                        <td>{{ date('Y/m/d', strtotime($req->created_at)) }}</td>
+                        @if(Auth::user()->role == 'Management')
+                        <td>{{ $req->first_name }} {{ $req->last_name }}</td>
+                        @endif
+                        <td>{{ date('Y/m/d', strtotime($req->start_date)) }}</td>
+                        <td> {{ date('Y/m/d', strtotime($req->end_date)) }}</td>
+                        <td>{{ $req->shift_name }}</td>
+                        <td>{{ date('h:i A', strtotime($req->start_time))  }} <br> {{ date('h:i A', strtotime($req->end_time))  }}</td>
                     </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="6">No change shift records yet!</td>
+                    </tr>
+                @endif
                 </tbody>
             </table>
         </div>

@@ -48,7 +48,7 @@
                 <input type="date" class="form-control">
             </div>
             <!--For Management Only - Employee-->
-            @if(Auth::user()->role != 'Employee')
+            @if(Auth::user()->role == 'Management')
             <div class="col-sm mb-3">
                 <label>Employee: </label>
                 <input type="text" class="form-control" name="name" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}">
@@ -75,7 +75,7 @@
                     <tr>
                         <th scope="col">Date Filed</th>
                         <!--Name shown only for management-->
-                        @if(Auth::user()->role != 'Employee')
+                        @if(Auth::user()->role == 'Management')
                         <th scope="col">Name</th>
                         @endif
                         <th scope="col">Date</th>
@@ -96,7 +96,7 @@
                         <td style="display: none;">{{ $req->id }}</td>
                         <!--Name shown only for management-->
                         <td>{{ date('Y/m/d', strtotime($req->created_at)) }}</td>
-                        @if(Auth::user()->role != 'Employee')
+                        @if(Auth::user()->role == 'Management')
                         <td>{{ $req->first_name }} {{ $req->last_name }}</td>
                         @endif
                         <td>{{ date('Y/m/d', strtotime($req->start_date)) }} <br> {{ date('Y/m/d', strtotime($req->end_date)) }}</td>

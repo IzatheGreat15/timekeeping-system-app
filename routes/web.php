@@ -55,7 +55,7 @@ Route::view("/adjustment-new", 'employee.adjustment-new');
 Route::view("/adjustment-edit-id", 'employee.adjustment-edit');
 
 /* Shift */
-Route::view("/shift-records", 'employee.shift-record');
+Route::get("/shift-records", [ChangeShiftEmpController::class, "display_shift_records"]);
 Route::get("/shift-records/{id}", [ChangeShiftEmpController::class, "view_change_shift"]);
 Route::get("/shift-change", [ChangeShiftEmpController::class, "display_change_shift"]);
 Route::get("/shift-change/{id}", [ChangeShiftEmpController::class, "view_change_shift"]);

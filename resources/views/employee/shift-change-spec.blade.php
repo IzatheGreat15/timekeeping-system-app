@@ -45,11 +45,18 @@
                 </tr>
                 <tr>
                     <td class="w-50">Schedule</td>
-                    <td class="w-50 font-weight-bold">{{ date('h:i A', strtotime($req->start_time))  }} - {{ date('h:i A', strtotime($req->end_time))  }}</td>
+                    <td class="w-50 font-weight-bold">
+                        <span id="start_time">
+                            {{ date('h:i A', strtotime($req->start_time))  }}
+                        </span> - 
+                        <span id="end_time">
+                            {{ date('h:i A', strtotime($req->end_time))  }}
+                        </span>
+                    </td>
                 </tr>
                 <tr>
                     <td class="w-50">No. of Hours</td>
-                    <td class="w-50 font-weight-bold">{{ (strtotime($req->end_time) - strtotime($req->start_time))/3600 }}</td>
+                    <td class="w-50 font-weight-bold" id="time_difference"></td>
                 </tr>
                 <tr>
                     <td class="w-50 font-italic" colspan="2">Reason</td>
@@ -163,6 +170,16 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#shift").addClass('active');
+
+        var start_time = new Date("01/01/2007 " + $('#start_time').text());
+        var end_time = new Date("01/01/2007 " + $('#end_time').text());
+
+        var diff = (end_time - start_time) / 60000;
+
+        var minutes = diff % 60;
+        var hours = (diff - minutes) / 60;
+
+        $('#time_difference').text((start_time > end_time)? 24 + hours : hours);
     });
 </script>
 @endsection

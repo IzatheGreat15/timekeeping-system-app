@@ -70,9 +70,9 @@
                             <td style="display: none;">{{ $shift->id }}</td>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $shift->shift_name }}</td>
-                            <td>{{ date('h:i A', strtotime($shift->start_time)) }}</td>
-                            <td>{{ date('h:i A', strtotime($shift->end_time)) }}</td>
-                            <td>{{ (strtotime($shift->end_time) - strtotime($shift->start_time))/3600 }}</td>
+                            <td id="start_time{{ $loop->iteration }}">{{ date('h:i A', strtotime($shift->start_time)) }}</td>
+                            <td id="end_time{{ $loop->iteration }}">{{ date('h:i A', strtotime($shift->end_time)) }}</td>
+                            <td id="time_difference{{ $loop->iteration }}"></td>
                             <td>
                                 <a class="btn btn-clear p-0" href="/shift-edit/{{ $shift->id }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -138,6 +138,19 @@
             $("#dept_id").val(id);
             $("#dept_name").text(name);
         });
+
+        var x;
+        for(x = 1; x < $('#dept_table tr').length; x++){
+            var start_time = new Date("01/01/2007 " + $('#start_time' + x).text());
+            var end_time = new Date("01/01/2007 " + $('#end_time' + x).text());
+
+            var diff = (end_time - start_time) / 60000;
+
+            var minutes = diff % 60;
+            var hours = (diff - minutes) / 60;
+
+            $('#time_difference' + x).text((start_time > end_time)? 24 + hours : hours);
+        }
     });
 </script>
 @endsection

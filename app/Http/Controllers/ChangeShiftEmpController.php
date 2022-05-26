@@ -11,6 +11,26 @@ class ChangeShiftEmpController extends Controller
     /*
         display all change shift requests
      */
+    public function display_shift_records(){
+        $requests = DB::table('change_shift_emp')
+                   ->select('change_shift_emp.*', 'users.first_name', 'users.last_name', 'shifts.shift_name', 'shifts.start_time', 'shifts.end_time', 'shift_emp.start_date', 'shift_emp.end_date')
+                   ->join('users', 'users.id', '=', 'change_shift_emp.emp_ID')
+                   ->join('shift_emp', 'shift_emp.id', '=', 'shift_emp_ID')
+                   ->join('shifts', 'shifts.id', '=', 'change_shift_emp.shift_ID')
+                   ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                   ->where('change_shift_emp.emp_ID', '=', Auth::user()->id)
+                   ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
+                   ->orWhere('approvals.approval2_ID', '=', Auth::user()->id)
+                   ->where('change_shift_emp.status1', '=', "APPROVED")
+                   ->where('change_shift_emp.status2', '=', "APPROVED")
+                   ->get();
+
+        return view('employee.shift-record', compact('requests'));         
+    }
+
+    /*
+        display all change shift requests
+     */
     public function display_change_shift(){
         $requests = DB::table('change_shift_emp')
                    ->select('change_shift_emp.*', 'users.first_name', 'users.last_name', 'shifts.shift_name', 'shifts.start_time', 'shifts.end_time', 'shift_emp.start_date', 'shift_emp.end_date')
