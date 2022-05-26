@@ -35,15 +35,15 @@
         <div class="form-row mb-4 mt-5">
             <div class="col-sm mb-3">
                 <label>Date: </label>
-                <input type="date" class="form-control" value="{{ $overtimeRequests->date }}">
+                <input type="date" class="form-control" name="date" value="{{ $overtimeRequests->date }}">
             </div>
             <div class="col-sm mb-3">
                 <label>From: </label>
-                <input type="time" class="form-control" value="{{ $overtimeRequests->start_time }}">
+                <input type="time" class="form-control" name="start_time" value="{{ $overtimeRequests->start_time }}">
             </div>
             <div class="col-sm mb-3">
                 <label>To: </label>
-                <input type="time" class="form-control" value="{{ $overtimeRequests->end_time }}">
+                <input type="time" class="form-control" name="end_time" value="{{ $overtimeRequests->end_time }}">
             </div>
             <!--Automatically calculates no. of hours-->
             <div class="col-sm mb-3">
@@ -56,7 +56,7 @@
         <div class="form-row mb-4">
             <div class="col-sm mb-3">
                 <label>Reason: </label>
-                <textarea class="form-control">{{ $overtimeRequests->reason }}</textarea>
+                <textarea class="form-control" name="reason">{{ $overtimeRequests->reason }}</textarea>
             </div>
         </div>
 

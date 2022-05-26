@@ -152,7 +152,8 @@
                 </div>
             </div>
 
-            <form>
+            <form method="POST" action="/overtime-request-deleted">
+                @csrf
                 <input id="id" name="id" style="display: none;" />
                 <p>Are you sure you want to delete?</p>
                     <button type="button" class="btn bg-success">YES</button>
