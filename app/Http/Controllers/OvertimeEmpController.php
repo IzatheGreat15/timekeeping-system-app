@@ -93,7 +93,8 @@ class OvertimeEmpController extends Controller
                     'date' => $request->date,
                     'start_time' => $request->start_time,
                     'end_time' => $request->end_time,
-                    'reason' => $request->reason
+                    'reason' => $request->reason,
+                    'updated_at' => date('Y-m-d H:i:s')
                 ]);
 
         return redirect('/overtime-request')->with('success', 'Overtime request updated successfully');
