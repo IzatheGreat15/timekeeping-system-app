@@ -163,10 +163,11 @@
                 </div>
             </div>
                 
-            <form>
-                <input id="dept_id" style="display: none;" />
+            <form method="POST" action="/adjustment-delete"> 
+                @csrf 
+                <input id="dept_id" name="id" style="display: none;" />
                 <p>Are you sure you want to delete?</p>
-                    <button type="button" class="btn bg-success">YES</button>
+                    <button type="submit" class="btn bg-success">YES</button>
                     <button type="button" class="btn bg-danger" data-dismiss="modal" aria-label="Close">NO</button>
             </form>
         </div>

@@ -248,8 +248,9 @@ class LeaveEmpController extends Controller
     public function delete_leave_request(Request $request){
         DB::table('leave_emp')->where('id', '=', $request->id)
             ->update([
-                'status1'   => "CANCELLED",
-                'status2'   => "CANCELLED"
+                'status1'         => "CANCELLED",
+                'status2'         => "CANCELLED",
+                'updated_at'      => date('Y-m-d H:i:s')
             ]);
 
         return redirect('/leave-request')->with('success', 'Leave request cancelled successfully');

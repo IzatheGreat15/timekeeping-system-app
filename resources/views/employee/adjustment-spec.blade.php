@@ -30,31 +30,67 @@
                 <table class="table table-hover">
                     <tr>
                         <td class="w-50">Shift</td>
-                        <td class="w-50 font-weight-bold">04:00AM - 06:00PM</td>
+                        <td class="w-50 font-weight-bold">{{ date('h:i A', strtotime($shift->start_time))  }} - {{ date('h:i A', strtotime($shift->end_time))  }}</td>
                     <tr>
                     <tr>
                         <td class="w-50">Time In (1)</td>
-                        <td class="w-50 font-weight-bold">04:01AM</td>
+                        <td class="w-50 font-weight-bold">
+                        @if($att->time_in1 != NULL)
+                            {{ date('h:i A', strtotime($att->time_in1))  }}
+                        @else
+                            ---------
+                        @endif
+                        </td>
                     </tr>
                     <tr>
                         <td class="w-50">Time Out (1)</td>
-                        <td class="w-50 font-weight-bold">04:01AM</td>
+                        <td class="w-50 font-weight-bold">
+                        @if($att->time_out1 != NULL)
+                            {{ date('h:i A', strtotime($att->time_out1))  }}
+                        @else
+                            ---------
+                        @endif
+                        </td>
                     </tr>
                     <tr>
                         <td class="w-50">Time In (2)</td>
-                        <td class="w-50 font-weight-bold">04:01AM</td>
+                        <td class="w-50 font-weight-bold">
+                        @if($att->time_in2 != NULL)
+                            {{ date('h:i A', strtotime($att->time_in2))  }}
+                        @else
+                            ---------
+                        @endif
+                        </td>
                     </tr>
                     <tr>
                         <td class="w-50">Time Out (2)</td>
-                        <td class="w-50 font-weight-bold">04:01AM</td>
+                        <td class="w-50 font-weight-bold">
+                        @if($att->time_out2 != NULL)
+                            {{ date('h:i A', strtotime($att->time_out2))  }}
+                        @else
+                            ---------
+                        @endif
+                        </td>
                     </tr>
                     <tr>
                         <td class="w-50">Time In (3)</td>
-                        <td class="w-50 font-weight-bold">04:01AM</td>
+                        <td class="w-50 font-weight-bold">
+                        @if($att->time_in3 != NULL)
+                            {{ date('h:i A', strtotime($att->time_in3))  }}
+                        @else
+                            ---------
+                        @endif
+                        </td>
                     </tr>
                     <tr>
                         <td class="w-50">Time Out (3)</td>
-                        <td class="w-50 font-weight-bold">04:01AM</td>
+                        <td class="w-50 font-weight-bold">
+                        @if($att->time_out3 != NULL)
+                            {{ date('h:i A', strtotime($att->time_out3))  }}
+                        @else
+                            ---------
+                        @endif
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -68,27 +104,63 @@
                     </tr>
                     <tr>
                         <td class="w-50">Time In (1)</td>
-                        <td class="w-50 font-weight-bold">04:01AM</td>
+                        <td class="w-50 font-weight-bold">
+                        @if($req->time_in1 != NULL)
+                            {{ date('h:i A', strtotime($req->time_in1))  }}
+                        @else
+                            ---------
+                        @endif
+                        </td>
                     </tr>
                     <tr>
                         <td class="w-50">Time Out (1)</td>
-                        <td class="w-50 font-weight-bold">04:01AM</td>
+                        <td class="w-50 font-weight-bold">
+                        @if($req->time_out1 != NULL)
+                            {{ date('h:i A', strtotime($req->time_out1))  }}
+                        @else
+                            ---------
+                        @endif
+                        </td>
                     </tr>
                     <tr>
                         <td class="w-50">Time In (2)</td>
-                        <td class="w-50 font-weight-bold">04:01AM</td>
+                        <td class="w-50 font-weight-bold">
+                        @if($req->time_in2 != NULL)
+                            {{ date('h:i A', strtotime($req->time_in2))  }}
+                        @else
+                            ---------
+                        @endif
+                        </td>
                     </tr>
                     <tr>
                         <td class="w-50">Time Out (2)</td>
-                        <td class="w-50 font-weight-bold">04:01AM</td>
+                        <td class="w-50 font-weight-bold">
+                        @if($req->time_out2 != NULL)
+                            {{ date('h:i A', strtotime($req->time_out2))  }}
+                        @else
+                            ---------
+                        @endif
+                        </td>
                     </tr>
                     <tr>
                         <td class="w-50">Time In (3)</td>
-                        <td class="w-50 font-weight-bold">04:01AM</td>
+                        <td class="w-50 font-weight-bold">
+                        @if($req->time_in3 != NULL)
+                            {{ date('h:i A', strtotime($req->time_in3))  }}
+                        @else
+                            ---------
+                        @endif
+                        </td>
                     </tr>
                     <tr>
                         <td class="w-50">Time Out (3)</td>
-                        <td class="w-50 font-weight-bold">04:01AM</td>
+                        <td class="w-50 font-weight-bold">
+                        @if($req->time_out3 != NULL)
+                            {{ date('h:i A', strtotime($req->time_out3))  }}
+                        @else
+                            ---------
+                        @endif
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -104,39 +176,77 @@
                     </tr>
                     <tr>
                         <td class="w-50 font-weight-bold font-italic text-justify" colspan="2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            {{ $req->reason }}
                         </td>
                     </tr>
                     <tr>
-                        <td class="w-50 font-italic">Postion of Approver 1</td>
-                        <td class="w-50 font-weight-bold font-italic">Mr. Mycroft Holmes (Datetime)</td>
+                        <td class="w-50 font-italic">
+                            <!-- Position -->
+                            {{ DB::table('users')
+                               ->select('*')
+                               ->where('id', '=', $approvals->approval1_ID)
+                               ->get()->first()->position }}
+                        </td>
+                        <td class="w-50 font-weight-bold font-italic">
+                            <!-- First Name -->
+                            {{ DB::table('users')
+                               ->select('*')
+                               ->where('id', '=', $approvals->approval1_ID)
+                               ->get()->first()->first_name }} 
+                            <!-- Last Name -->
+                            {{ DB::table('users')
+                               ->select('*')
+                               ->where('id', '=', $approvals->approval1_ID)
+                               ->get()->first()->last_name }}
+                            <!-- Datetime -->
+                            ({{ $req->updated_at1 }})
+                        </td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic">Status 1</td>
-                        <td class="w-50 font-weight-bold font-italic">SENT BACK</td>
+                        <td class="w-50 font-weight-bold font-italic">{{ $req->status1 }}</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic" colspan="2">Remarks</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-weight-bold font-italic text-justify" colspan="2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        {{ $req->comment1 }}
                         </td>
                     </tr>
                     <tr>
-                        <td class="w-50 font-italic">Postion of Approver 2</td>
-                        <td class="w-50 font-weight-bold font-italic">Mr. Mycroft Holmes (Datetime)</td>
+                        <td class="w-50 font-italic">
+                            <!-- Position -->
+                            {{ DB::table('users')
+                               ->select('*')
+                               ->where('id', '=', $approvals->approval2_ID)
+                               ->get()->first()->position }}
+                        </td>
+                        <td class="w-50 font-weight-bold font-italic">
+                            <!-- First Name -->
+                            {{ DB::table('users')
+                               ->select('*')
+                               ->where('id', '=', $approvals->approval2_ID)
+                               ->get()->first()->first_name }} 
+                            <!-- Last Name -->
+                            {{ DB::table('users')
+                               ->select('*')
+                               ->where('id', '=', $approvals->approval2_ID)
+                               ->get()->first()->last_name }}
+                            <!-- Datetime -->
+                            ({{ $req->updated_at2 }})
+                        </td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic">Status 2</td>
-                        <td class="w-50 font-weight-bold font-italic">PENDING</td>
+                        <td class="w-50 font-weight-bold font-italic">{{ $req->status2 }}</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic" colspan="2">Remarks</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-weight-bold font-italic text-justify" colspan="2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        {{ $req->comment2 }}
                         </td>
                     </tr>
                 </table>

@@ -50,12 +50,14 @@ Route::get("/logout-user", [UserController::class, "logout_user"]);
 /* Attendance */
 Route::view("/attendance-records", 'employee.attendance-record');
 Route::view("/attendance-records-id", 'employee.attendance-spec');
+
+/* Adjustment */
 Route::get("/adjustment-records", [AdjustmentEmpController::class, "show_adjustment"]);
-Route::view("/adjustment-records-id", "employee.adjustment-spec");
 Route::get("/adjustment-records/{id}", [AdjustmentEmpController::class, "view_adjustment"]);
 Route::view("/adjustment-new", 'employee.adjustment-new');
 Route::post("/adjustment-add", [AdjustmentEmpController::class, "add_adjustment"]);
 Route::view("/adjustment-edit-id", 'employee.adjustment-edit');
+Route::post("/adjustment-delete", [AdjustmentEmpController::class, "delete_adjustment"]);
 
 /* Shift */
 Route::get("/shift-records", [ChangeShiftEmpController::class, "display_shift_records"]);

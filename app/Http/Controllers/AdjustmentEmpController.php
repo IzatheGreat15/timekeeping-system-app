@@ -34,28 +34,39 @@ class AdjustmentEmpController extends Controller
         $req= DB::table('adjustment_emp')
                     ->select('adjustment_emp.*', 'users.first_name', 'users.last_name',
                     'attendance.created_at AS date', 'time_adjustments.time_in1', 
-                    'time_adjustments.time_out1', 'time_adjustments.time_in2', 'time_adjustments.time_out2', 'time_adjustments.time_in2', 'time_adjustments.time_out3')
+                    'time_adjustments.time_out1', 'time_adjustments.time_in2', 'time_adjustments.time_out2', 'time_adjustments.time_in3', 'time_adjustments.time_out3',
+                    'comments.*')
                     ->join('users', 'users.id', '=', 'adjustment_emp.emp_ID')
                     ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
                     ->join('time_adjustments', 'time_adjustments.id', '=', 'adjustment_emp.time_ID')
                     ->join('attendance', 'attendance.id', '=', 'adjustment_emp.att_ID')
+                    ->join('comments', 'comment_id', '=', 'adjustment_emp.comment_ID')
                     ->where('adjustment_emp.id', '=', $id)
                     ->get()->first();
 
         /* get the shift of the user during the adjustment request */
         $shift = DB::table('shift_emp')
-                 ->select('*')
-                 ->where('emp_ID', '=', $req->emp_ID)
-                 ->where('start_date', '<=', $req->date)
-                 ->where('end_date', '>=', $req->date)
+                 ->select('shift_emp.*', 'shifts.start_time', 'shifts.end_time')
+                 ->join('shifts', 'shifts.id', '=', 'shift_emp.shift_ID')
+                 ->where('shift_emp.emp_ID', '=', $req->emp_ID)
+                 ->where('shift_emp.start_date', '<=', $req->date)
+                 ->where('shift_emp.end_date', '>=', $req->date)
                  ->get()->first();
         
         $att = DB::table('attendance')
-                 ->select('*')
-                 ->where('id', '=', $req->att_ID)
+                 ->select('time_adjustments.*')
+                 ->join('time_adjustments', 'time_adjustments.id', '=', 'attendance.time_ID')
+                 ->where('attendance.id', '=', $req->att_ID)
                  ->get()->first();
 
-        return view('employee.adjustment-spec', compact('req', 'shift', 'att'));
+        $approvals = DB::table('adjustment_emp')
+                 ->select('users.*', 'approvals.*')
+                 ->join('users', 'users.id', '=', 'adjustment_emp.emp_ID')
+                 ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                 ->where('adjustment_emp.id', '=', $id)
+                 ->get()->first();
+
+        return view('employee.adjustment-spec', compact('req', 'shift', 'att', 'approvals'));
     }
 
     /*
@@ -114,4 +125,19 @@ class AdjustmentEmpController extends Controller
         
         return redirect('/adjustment-records')->with('success', 'Adjustment request filed successfully!');
     }
+
+    /*
+        Soft delete a new shift in database
+    */
+    public function delete_adjustment(Request $request){
+        DB::table('adjustment_emp')->where('id', '=', $request->id)
+        ->update([
+            'status1'         => "CANCELLED",
+            'status2'         => "CANCELLED",
+            'updated_at'      => date('Y-m-d H:i:s')
+        ]);
+
+        return redirect('/adjustment-records')->with('success', 'Adjustment request cancelled successfully');
+    }
 }
+
