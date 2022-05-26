@@ -32,10 +32,10 @@ class OvertimeEmpController extends Controller
     public function add_overtime_request(Request $request){
         /* validate all fields */
         $request->validate([
-            'date' => 'required',
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'reason' => 'required'
+            'date'        => 'required',
+            'start_time'  => 'required',
+            'end_time'    => 'required',
+            'reason'      => 'required'
         ]);
 
         /* create an entry in the comments table and get id */
@@ -52,11 +52,12 @@ class OvertimeEmpController extends Controller
               'date'        => $request->date,
               'start_time'  => $request->start_time,
               'end_time'    => $request->end_time,
+              'reason'      => $request->reason,
               'comment_ID'  => $comment_ID,
               'status1'     => 'PENDING',
               'status2'     => 'PENDING',
-              'updated_at1' => date('Y-m-d H:i:s'),
-              'updated_at2' => date('Y-m-d H:i:s')
+              'created_at'  => date('Y-m-d H:i:s'),
+              'updated_at' => date('Y-m-d H:i:s')
           ]);
 
         return redirect('/overtime-request')->with('success', 'Overtime request added successfully');

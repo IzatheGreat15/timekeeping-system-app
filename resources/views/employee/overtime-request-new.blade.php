@@ -11,9 +11,9 @@
 
     <!-- Error Messages -->
     @if ($errors->any())
-        <ul class="list-group mb-3">
+        <ul class="list-group">
             @foreach ($errors->all() as $error)
-                <li class="list-group-item list-group-item-danger">{{ $error }}</li>
+                <li class="list-group-item list-group-item-danger mb-3">{{ $error }}</li>
             @endforeach
         </ul>
     @endif
@@ -25,15 +25,15 @@
         <div class="form-row mb-4 mt-5">
             <div class="col-sm mb-3">
                 <label>Date: </label>
-                <input type="date" class="form-control" required>
+                <input type="date" class="form-control" name="date" required>
             </div>
             <div class="col-sm mb-3">
                 <label>From: </label>
-                <input type="time" class="form-control" required>
+                <input type="time" class="form-control" name="start_time" required>
             </div>
             <div class="col-sm mb-3">
                 <label>To: </label>
-                <input type="time" class="form-control" required>
+                <input type="time" class="form-control" name="end_time" required>
             </div>
             <!--Automatically calculates no. of hours-->
             <div class="col-sm mb-3">
@@ -46,7 +46,7 @@
         <div class="form-row mb-4">
             <div class="col-sm mb-3">
                 <label>Reason: </label>
-                <textarea class="form-control" required></textarea>
+                <textarea class="form-control" name="reason" required></textarea>
             </div>
         </div>
 
