@@ -66,27 +66,6 @@
                         {{ $req->reason }}
                     </td>
                 </tr>
-                <tr>
-                    <td class="w-50 font-italic">
-                        <!-- Position -->
-                        {{ DB::table('users')
-                               ->select('*')
-                               ->where('id', '=', $approvals->approval1_ID)
-                               ->get()->first()->position }} 
-                    </td>
-                    <td class="w-50 font-weight-bold font-italic">
-                        <!-- First Name -->
-                        {{ DB::table('users')
-                               ->select('*')
-                               ->where('id', '=', $approvals->approval1_ID)
-                               ->get()->first()->first_name }} 
-                        <!-- Last Name -->
-                        {{ DB::table('users')
-                               ->select('*')
-                               ->where('id', '=', $approvals->approval1_ID)
-                               ->get()->first()->last_name }}
-                    </td>
-                </tr>
             </table>
         </div>
     </div>
@@ -129,7 +108,8 @@
                         {{ $req->comment1 }}
                         </td>
                     </tr>
-                    <td class="w-50 font-italic">
+                    <tr>
+                        <td class="w-50 font-italic">
                             <!-- Position -->
                             {{ DB::table('users')
                                ->select('*')
@@ -150,6 +130,7 @@
                             <!-- Datetime -->
                             ({{ $req->updated_at2 }})
                         </td>
+                    </tr>
                     <tr>
                         <td class="w-50 font-italic">Status 2</td>
                         <td class="w-50 font-weight-bold font-italic">{{ $req->status2 }}</td>
