@@ -11,20 +11,28 @@
 
     <!-- Error Messages -->
     @if ($errors->any())
-        <ul class="list-group mb-3">
+        <ul class="list-group">
             @foreach ($errors->all() as $error)
-                <li class="list-group-item list-group-item-danger">{{ $error }}</li>
+                <li class="list-group-item list-group-item-danger mb-3">{{ $error }}</li>
             @endforeach
         </ul>
     @endif
     
+    <!-- Error Message -->
+    @if ($message = Session::get('error'))
+        <ul class="list-group mb-3">
+            <li class="list-group-item list-group-item-danger">{{ $message }}</li>
+        </ul>
+    @endif
+
     <!--Request Form-->
-    <form>
+    <form method="POST" action="/adjustment-add">
+        @csrf
         <!--Date-->
         <div class="form-row mb-4">
             <div class="col-sm mb-3">
                 <label>Date: </label>
-                <input type="date" class="form-control">
+                <input type="date" class="form-control" name="date">
             </div>
             <div class="col-sm mb-3">
             </div>
@@ -34,15 +42,15 @@
         <div class="form-row">
             <div class="col-sm mb-3 mx-3">
                 <label>Time In 1: </label>
-                <input type="time" class="form-control">
+                <input type="time" name="time_in1" class="form-control">
             </div>
             <div class="col-sm mb-3 mx-3">
                 <label>Time In 2: </label>
-                <input type="time" class="form-control">
+                <input type="time" name="time_in2" class="form-control">
             </div>
             <div class="col-sm mb-3 mx-3">
                 <label>Time In 3: </label>
-                <input type="time" class="form-control">
+                <input type="time" name="time_in3" class="form-control">
             </div>
         </div>
 
@@ -50,15 +58,15 @@
         <div class="form-row">
             <div class="col-sm mb-3 mx-3">
                 <label>Time Out 1: </label>
-                <input type="time" class="form-control">
+                <input type="time" name="time_out1" class="form-control">
             </div>
             <div class="col-sm mb-3 mx-3">
                 <label>Time Out 2: </label>
-                <input type="time" class="form-control">
+                <input type="time" name="time_out2" class="form-control">
             </div>
             <div class="col-sm mb-3 mx-3">
                 <label>Time Out 3: </label>
-                <input type="time" class="form-control">
+                <input type="time" name="time_out3" class="form-control">
             </div>
         </div>
 
@@ -66,7 +74,7 @@
         <div class="form-row mb-4">
             <div class="col-sm mb-3">
                 <label>Reason: </label>
-                <textarea class="form-control"></textarea>
+                <textarea class="form-control" name="reason"></textarea>
             </div>
         </div>
 

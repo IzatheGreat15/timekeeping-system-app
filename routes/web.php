@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdjustmentEmpController;
 use App\Http\Controllers\ChangeShiftEmpController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
@@ -52,6 +53,7 @@ Route::view("/attendance-records-id", 'employee.attendance-spec');
 Route::view("/adjustment-records", 'employee.adjustment-record');
 Route::view("/adjustment-records-id", 'employee.adjustment-spec');
 Route::view("/adjustment-new", 'employee.adjustment-new');
+Route::post("/adjustment-add", [AdjustmentEmpController::class, "add_adjustment"]);
 Route::view("/adjustment-edit-id", 'employee.adjustment-edit');
 
 /* Shift */
@@ -64,6 +66,7 @@ Route::post("/shift-change-add", [ChangeShiftEmpController::class, "add_change_s
 Route::get("/shift-change-edit/{id}", [ChangeShiftEmpController::class, "edit_change_shift"]);
 Route::post("/shift-change-update", [ChangeShiftEmpController::class, "update_change_shift"]);
 Route::post("/shift-change-delete", [ChangeShiftEmpController::class, "delete_change_shift"]);
+//search to be done
 
 /* Leave */
 Route::get("/leave-records", [LeaveEmpController::class, "show_leave_record"]);
