@@ -83,8 +83,9 @@ Route::post("/leave-request-search", [LeaveEmpController::class, "search_leave_r
 Route::view("/overtime-records", 'employee.overtime-records');
 Route::view("/overtime-records-id", 'employee.overtime-spec');
 Route::get("/overtime-request", [OvertimeEmpController::class, "show_overtime_requests"]);
-Route::view("/overtime-request-new", [OvertimeEmpController::class, "add_overtime_request"]);
+Route::view("/overtime-request-new", 'employee.overtime-request-new');
 Route::get("/overtime-request-edit", [OvertimeEmpController::class, "edit_overtime_request"]);
+Route::post("/overtime-request-created", [OvertimeEmpController::class, "add_overtime_request"]);
 
 /* Management */
 Route::view("/management", 'management.dashboard');
