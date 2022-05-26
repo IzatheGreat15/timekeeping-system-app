@@ -33,13 +33,31 @@ class OvertimeEmpController extends Controller
         /* validate all fields */
         $request->validate([
             'date' => 'required',
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-            'reason' => $request->reason
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'reason' => 'required'
         ]);
 
-        /* insert data */
-        OvertimeEmp::create($request->all());
+        /* create an entry in the comments table and get id */
+        $comment_ID = DB::table('comments')
+                        ->insertGetId([
+                            'created_at'    => date('Y-m-d H:i:s'),
+                            'updated_at'    => date('Y-m-d H:i:s')
+                        ]);
+
+        /* insert data to database */
+        DB::table('overtime_emp')
+          ->insert([
+              'emp_ID'      => Auth::user()->id,
+              'date'        => $request->date,
+              'start_time'  => $request->start_time,
+              'end_time'    => $request->end_time,
+              'comment_ID'  => $comment_ID,
+              'status1'     => 'PENDING',
+              'status2'     => 'PENDING',
+              'updated_at1' => date('Y-m-d H:i:s'),
+              'updated_at2' => date('Y-m-d H:i:s')
+          ]);
 
         return redirect('/overtime-request')->with('success', 'Overtime request added successfully');
     }
@@ -48,7 +66,7 @@ class OvertimeEmpController extends Controller
         Shows the form for editing the overtime request in database
     */
     public function edit_overtime_request($id){
-        $overtimeRequests = DB::table('overtime-emp')
+        $overtimeRequests = DB::table('overtime_emp')
                               ->select('*')
                               ->where('id', '=', $id)
                               ->get()->first();
@@ -69,7 +87,7 @@ class OvertimeEmpController extends Controller
         ]);
 
         /* update data */
-        DB::table('overtime-emp')->where('id', '=', $request->id)
+        DB::table('overtime_emp')->where('id', '=', $request->id)
                 ->update([
                     'date' => $request->date,
                     'start_time' => $request->start_time,
@@ -85,7 +103,7 @@ class OvertimeEmpController extends Controller
     */
     public function delete_overtime_request(Request $request){
         /* delete data */
-        DB::table('overtime-emp')->where('id', '=', $request->id)
+        DB::table('overtime_emp')->where('id', '=', $request->id)
                 ->delete();
 
         return redirect('/overtime-request')->with('success', 'Overtime request deleted successfully');

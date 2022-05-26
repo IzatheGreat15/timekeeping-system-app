@@ -7,7 +7,7 @@
 
     <hr>
 
-    <!-- Add data from pvertime_emp table --> 
+    <!-- Add data from pvertime_emp table -->
 
     <!-- Error Messages -->
     @if ($errors->any())
@@ -17,23 +17,23 @@
             @endforeach
         </ul>
     @endif
-    
-    <!--Request Form-->
-    <form>
 
+    <!--Request Form-->
+    <form method="POST" action="/overtime-request-created">
+    @csrf
         <!--Date and Times-->
         <div class="form-row mb-4 mt-5">
             <div class="col-sm mb-3">
                 <label>Date: </label>
-                <input type="date" class="form-control">
+                <input type="date" class="form-control" required>
             </div>
             <div class="col-sm mb-3">
                 <label>From: </label>
-                <input type="time" class="form-control">
+                <input type="time" class="form-control" required>
             </div>
             <div class="col-sm mb-3">
                 <label>To: </label>
-                <input type="time" class="form-control">
+                <input type="time" class="form-control" required>
             </div>
             <!--Automatically calculates no. of hours-->
             <div class="col-sm mb-3">
@@ -46,7 +46,7 @@
         <div class="form-row mb-4">
             <div class="col-sm mb-3">
                 <label>Reason: </label>
-                <textarea class="form-control"></textarea>
+                <textarea class="form-control" required></textarea>
             </div>
         </div>
 
