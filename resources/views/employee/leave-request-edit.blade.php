@@ -11,6 +11,15 @@
 
     <!--Value of all fields are populated from the database-->
     
+    <!-- Error Messages -->
+    @if ($errors->any())
+        <ul class="list-group mb-3">
+            @foreach ($errors->all() as $error)
+                <li class="list-group-item list-group-item-danger">{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
+    
     <!-- Leave Balance -->
     <div class="row mb-3">
         @foreach($balance as $bal)
