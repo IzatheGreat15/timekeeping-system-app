@@ -36,6 +36,20 @@
         </svg>
     New Request </a>
 
+    <!-- Success Message -->
+    @if ($message = Session::get('success'))
+        <ul class="list-group mb-3">
+            <li class="list-group-item list-group-item-success">{{ $message }}</li>
+        </ul>
+    @endif
+
+    <!-- Error Message -->
+    @if ($message = Session::get('error'))
+        <ul class="list-group mb-3">
+            <li class="list-group-item list-group-item-danger">{{ $message }}</li>
+        </ul>
+    @endif
+
     <!--Form Date Filter-->
     <form>
         <div class="form-row">
