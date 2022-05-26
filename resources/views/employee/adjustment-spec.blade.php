@@ -11,23 +11,14 @@
     <!-- Employee, Date and Day -->
     <h2>
         <div class="row">
-            <div class="col-md mb-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-dot" viewBox="0 -5 16 16">
-                    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
-                </svg>
-                John Doe
+            <div class="col-md mt-3">
+                {{ $req->first_name }} {{ $req->last_name }}
             </div>
             <div class="col-md mb-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-dot" viewBox="0 -5 16 16">
                     <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
                 </svg>
-                March 03, 2022
-            </div>
-            <div class="col-md mb-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-dot" viewBox="0 -5 16 16">
-                    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
-                </svg>
-                Thu
+                {{ date('D M j  Y', strtotime($req->date)) }}
             </div>
         </div>
     </h2>

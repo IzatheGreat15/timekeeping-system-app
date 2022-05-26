@@ -32,7 +32,7 @@
         <div class="form-row mb-4">
             <div class="col-sm mb-3">
                 <label>Date: </label>
-                <input type="date" class="form-control" name="date">
+                <input type="date" class="form-control" name="date" max="<?php echo date('Y-m-d'); ?>">
             </div>
             <div class="col-sm mb-3">
             </div>

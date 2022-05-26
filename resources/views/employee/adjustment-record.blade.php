@@ -46,10 +46,12 @@
                 <input type="date" class="form-control">
             </div>
             <!--For Management Only - Employee-->
+            @if(Auth::user()->role == 'Management')
             <div class="col-sm mb-3">
                 <label>Employee: </label>
-                <input type="text" class="form-control" placeholder="John Doe">
+                <input type="text" class="form-control" name="name" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}">
             </div>
+            @endif
             <div class="col-sm mb-3">
                 <label>Status: </label>
                 <select class="form-control">
@@ -72,7 +74,9 @@
                 <thead>
                     <tr>
                         <!--Name shown only for management-->
+                        @if(Auth::user()->role == 'Management')
                         <th scope="col">Name</th>
+                        @endif
                         <th scope="col">Date Filed</th>
                         <th scope="col">Date</th>
                         <th scope="col">Time In</th>
@@ -85,26 +89,38 @@
                 </thead>
 
                 <tbody>
+                @if($requests->count() > 0)
+                    @foreach($requests as $req)
                     <tr>
                         <!-- Hide ID -->
-                        <td style="display: none;">001</td>
+                        <td style="display: none;">{{ $req->id }}</td>
                         <!--Name shown only for management-->
-                        <td>John Doe</td>
-                        <td>03/02/22</td>
-                        <td>03/02/22</td>
-                        <td>04:01AM</td>
-                        <td>06:02PM</td>
-                        <td>Late</td>
-                        <td>PENDING</td>
-                        <td>-------</td>
+                        @if(Auth::user()->role == 'Management')
+                            <td>{{ $req->first_name }} {{ $req->last_name }}</td>
+                        @endif
+                        <td>{{ date('Y/m/d', strtotime($req->created_at)) }}</td>
+                        <td>{{ date('Y/m/d', strtotime($req->date)) }}</td>
+                        <td>{{ date('h:i A', strtotime($req->time_in1))  }}</td>
+                        <!-- Display the last time out -->
+                        @if($req->time_out3 != NULL)
+                            <td>{{ date('h:i A', strtotime($req->time_out3))  }}</td>
+                        @elseif($req->time_out2 != NULL)
+                            <td>{{ date('h:i A', strtotime($req->time_out2))  }}</td>
+                        @else
+                            <td>{{ date('h:i A', strtotime($req->time_out1))  }}</td>
+                        @endif
+                        <td>{{ $req->reason }}</td>
+                        <td>{{ $req->status1 }}</td>
+                        <td>{{ $req->status2 }}</td>
                         <td>
-                            <a class="btn btn-clear p-0" href="/adjustment-records-id">
+                            <a class="btn btn-clear p-0" href="/adjustment-records/{{ $req->id }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
                                     <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
                                     <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
                                 </svg>
                             </a>
                             &nbsp;
+                            @if(($req->status1 == 'PENDING' || $req->status1 == 'SENT BACK' || $req->status1 == 'PENDING' || $req->status1 == 'SENT BACK') && $req->emp_ID == Auth::user()->id)
                             <!--Replace id field in href with actual id-->
                             <a class="btn btn-clear p-0" href="/adjustment-edit-id">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -118,21 +134,15 @@
                                     <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
                                 </svg>
                             </a>
+                            @endif
                         </td>
                     </tr>
-                    <tr onclick="window.location='/adjustment-records-id';">
-                        <!--Name shown only for management-->
-                        <td>John Doe</td>
-                        <td>03/02/22</td>
-                        <td>03/02/22</td>
-                        <td>04:01AM</td>
-                        <td>06:02PM</td>
-                        <td>Late</td>
-                        <td>APPROVED</td>
-                        <td>APPROVED</td>
-                        <!--If request is APPROVED and REJECTED and if the entry is not of the user, buttons are not shown-->
-                        <td></td>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="8">No adjustment requests created yet!</td>
                     </tr>
+                @endif
                 </tbody>
             </table>
         </div>

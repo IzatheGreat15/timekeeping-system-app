@@ -50,8 +50,9 @@ Route::get("/logout-user", [UserController::class, "logout_user"]);
 /* Attendance */
 Route::view("/attendance-records", 'employee.attendance-record');
 Route::view("/attendance-records-id", 'employee.attendance-spec');
-Route::view("/adjustment-records", 'employee.adjustment-record');
-Route::view("/adjustment-records-id", 'employee.adjustment-spec');
+Route::get("/adjustment-records", [AdjustmentEmpController::class, "show_adjustment"]);
+Route::view("/adjustment-records-id", "employee.adjustment-spec");
+Route::get("/adjustment-records/{id}", [AdjustmentEmpController::class, "view_adjustment"]);
 Route::view("/adjustment-new", 'employee.adjustment-new');
 Route::post("/adjustment-add", [AdjustmentEmpController::class, "add_adjustment"]);
 Route::view("/adjustment-edit-id", 'employee.adjustment-edit');
@@ -83,7 +84,7 @@ Route::post("/leave-request-search", [LeaveEmpController::class, "search_leave_r
 Route::view("/overtime-records", 'employee.overtime-records');
 Route::view("/overtime-records-id", 'employee.overtime-spec');
 Route::get("/overtime-request", [OvertimeEmpController::class, "show_overtime_requests"]);
-Route::view("/overtime-request-new", [OvertimeEmpController::class, "add_overtime_request"]);
+Route::view("/overtime-request-new", 'employee.overtime-request-new');
 Route::get("/overtime-request-edit", [OvertimeEmpController::class, "edit_overtime_request"]);
 
 /* Management */
