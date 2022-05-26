@@ -127,6 +127,20 @@ class AdjustmentEmpController extends Controller
     }
 
     /*
+        show edit form
+    */
+    public function edit_adjustment($id){
+        $req = DB::table('adjustment_emp')
+               ->select('adjustment_emp.*', 'time_adjustments.*', 'attendance.created_at AS date')
+               ->join('time_adjustments', 'time_adjustments.id', '=', 'adjustment_emp.time_ID')
+               ->join('attendance', 'attendance.id', '=', 'adjustment_emp.att_ID')
+               ->where('adjustment_emp.id', '=', $id)
+               ->get()->first();
+               
+        return view('employee.adjustment-edit', compact('req'));
+    }
+
+    /*
         Soft delete a new shift in database
     */
     public function delete_adjustment(Request $request){
