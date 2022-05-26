@@ -7,7 +7,7 @@
 
     <hr>
 
-    <!-- Updata data from lovertime_emp table --> 
+    <!-- Updata data from lovertime_emp table -->
 
     <!--Values of all fields are populated from the database-->
 
@@ -19,23 +19,31 @@
             @endforeach
         </ul>
     @endif
-    
+
     <!--Request Form-->
-    <form>
+    <form method="POST" action="/overtime-request-edited">
+    @csrf
+
+        <!-- Overtime Request ID -->
+        <div class="form-row">
+            <div class="col-sm mb-3">
+                <input type="hidden" class="form-control" name="id" value="{{ $overtimeRequests->id }}">
+            </div>
+        </div>
 
         <!--Date and Times-->
         <div class="form-row mb-4 mt-5">
             <div class="col-sm mb-3">
                 <label>Date: </label>
-                <input type="date" class="form-control">
+                <input type="date" class="form-control" value="{{ $overtimeRequests->date }}">
             </div>
             <div class="col-sm mb-3">
                 <label>From: </label>
-                <input type="time" class="form-control">
+                <input type="time" class="form-control" value="{{ $overtimeRequests->start_time }}">
             </div>
             <div class="col-sm mb-3">
                 <label>To: </label>
-                <input type="time" class="form-control">
+                <input type="time" class="form-control" value="{{ $overtimeRequests->end_time }}">
             </div>
             <!--Automatically calculates no. of hours-->
             <div class="col-sm mb-3">
@@ -48,7 +56,7 @@
         <div class="form-row mb-4">
             <div class="col-sm mb-3">
                 <label>Reason: </label>
-                <textarea class="form-control"></textarea>
+                <textarea class="form-control">{{ $overtimeRequests->reason }}</textarea>
             </div>
         </div>
 
