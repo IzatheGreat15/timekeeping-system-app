@@ -22,11 +22,12 @@
     
     <!--Form Date Filter-->
     <form>
+    @csrf
         <!--Date-->
         <div class="form-row mb-4">
             <div class="col-sm mb-3">
                 <label>Date: </label>
-                <input type="date" class="form-control">
+                <input type="date" class="form-control" name="date" max="<?php echo date('Y-m-d'); ?>" value="{{ date('Y-m-d', strtotime($req->date)) }}" >
             </div>
             <div class="col-sm mb-3">
             </div>
@@ -36,15 +37,15 @@
         <div class="form-row">
             <div class="col-sm mb-3 mx-3">
                 <label>Time In 1: </label>
-                <input type="time" class="form-control">
+                <input type="time" name="time_in1" class="form-control" value="{{ date('H:i', strtotime($req->time_in1))  }}">
             </div>
             <div class="col-sm mb-3 mx-3">
                 <label>Time In 2: </label>
-                <input type="time" class="form-control">
+                <input type="time" name="time_in2" class="form-control" value="{{ date('H:i', strtotime($req->time_in2))  }}">
             </div>
             <div class="col-sm mb-3 mx-3">
                 <label>Time In 3: </label>
-                <input type="time" class="form-control">
+                <input type="time" name="time_in3" class="form-control" value="{{ date('H:i', strtotime($req->time_in3))  }}">
             </div>
         </div>
 
@@ -52,15 +53,15 @@
         <div class="form-row">
             <div class="col-sm mb-3 mx-3">
                 <label>Time Out 1: </label>
-                <input type="time" class="form-control">
+                <input type="time" name="time_out1" class="form-control" value="{{ date('H:i', strtotime($req->time_out1))  }}">
             </div>
             <div class="col-sm mb-3 mx-3">
                 <label>Time Out 2: </label>
-                <input type="time" class="form-control">
+                <input type="time" name="time_out2" class="form-control" value="{{ date('H:i', strtotime($req->time_out2))  }}">
             </div>
             <div class="col-sm mb-3 mx-3">
                 <label>Time Out 3: </label>
-                <input type="time" class="form-control">
+                <input type="time" name="time_out3" class="form-control" value="{{ date('H:i', strtotime($req->time_out3))  }}">
             </div>
         </div>
 
@@ -68,7 +69,7 @@
         <div class="form-row mb-4">
             <div class="col-sm mb-3">
                 <label>Reason: </label>
-                <textarea class="form-control"></textarea>
+                <textarea class="form-control" name="reason">{{ $req->reason }}</textarea>
             </div>
         </div>
 
