@@ -91,6 +91,7 @@ Route::view("/overtime-request-new", 'employee.overtime-request-new');
 Route::get("/overtime-request-edit/{id}", [OvertimeEmpController::class, "edit_overtime_request"]);
 Route::post("/overtime-request-created", [OvertimeEmpController::class, "add_overtime_request"]);
 Route::post("/overtime-request-edited", [OvertimeEmpController::class, "update_overtime_request"]);
+Route::post("/overtime-request-deleted", [OvertimeEmpController::class, "delete_overtime_request"]);
 
 /* Management */
 Route::view("/management", 'management.dashboard');
