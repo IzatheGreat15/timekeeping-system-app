@@ -37,11 +37,15 @@ class LeaveEmpController extends Controller
                     ->join('main_leaves', 'main_leaves.id', '=', 'leave_emp.main_leave_ID')
                     ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
                     ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
-                    ->where('leave_emp.emp_ID', '=', Auth::user()->id)
-                    ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
-                    ->orWhere('approvals.approval2_ID', '=', Auth::user()->id)
-                    ->where('leave_emp.status1', '=', 'APPROVED')
-                    ->where('leave_emp.status2', '=', 'APPROVED')
+                    ->where(function($query){
+                        $query->where('leave_emp.status1', '=', 'APPROVED')
+                              ->where('leave_emp.status2', '=', 'APPROVED');
+                    })
+                    ->where(function($query){
+                        $query->where('leave_emp.emp_ID', '=', Auth::user()->id)
+                              ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
+                              ->orWhere('approvals.approval2_ID', '=', Auth::user()->id);
+                    })
                     ->get();
 
         return view('employee.leave-record', compact('requests'));

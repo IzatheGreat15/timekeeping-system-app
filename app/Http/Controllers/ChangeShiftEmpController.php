@@ -18,13 +18,16 @@ class ChangeShiftEmpController extends Controller
                    ->join('shift_emp', 'shift_emp.id', '=', 'shift_emp_ID')
                    ->join('shifts', 'shifts.id', '=', 'change_shift_emp.shift_ID')
                    ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
-                   ->where('change_shift_emp.emp_ID', '=', Auth::user()->id)
-                   ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
-                   ->orWhere('approvals.approval2_ID', '=', Auth::user()->id)
-                   ->where('change_shift_emp.status1', '=', "APPROVED")
-                   ->where('change_shift_emp.status2', '=', "APPROVED")
+                   ->where(function($query){
+                    $query->where('change_shift_emp.status1', '=', 'APPROVED')
+                          ->where('change_shift_emp.status2', '=', 'APPROVED');
+                })
+                ->where(function($query){
+                    $query->where('change_shift_emp.emp_ID', '=', Auth::user()->id)
+                          ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
+                          ->orWhere('approvals.approval2_ID', '=', Auth::user()->id);
+                })
                    ->get();
-
         return view('employee.shift-record', compact('requests'));         
     }
 
