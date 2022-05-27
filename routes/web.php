@@ -11,7 +11,7 @@ use App\Http\Controllers\MainLeaveController;
 use App\Http\Controllers\OvertimeEmpController;
 use App\Http\Controllers\SubLeaveController;
 use App\Http\Controllers\UserController;
-
+use App\Models\Attendance;
 use App\Models\Department;
 use App\Models\LeaveEmp;
 use App\Models\Shift;
@@ -33,9 +33,8 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/time-in-out', function () {
-    return view('employee.dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/time-in-out', [AttendanceController::class, "display_dashboard"])
+->middleware(['auth'])->name('dashboard');
 
 /* Replace the 'id' in the URL with actual ID */
 
@@ -46,7 +45,8 @@ Route::view("/notifications", 'general.notifications');
 Route::get("/logout-user", [UserController::class, "logout_user"]);
 
 /* Time in/out */
-//Route::view("/time-in-out", 'employee.dashboard');
+Route::get("/time-in/{id}", [AttendanceController::class, "time_in"]);
+Route::get("/time-out/{id}", [AttendanceController::class, "time_out"]);
 
 /* Attendance */
 Route::get("/attendance-records", [AttendanceController::class, "show_attendance"]);

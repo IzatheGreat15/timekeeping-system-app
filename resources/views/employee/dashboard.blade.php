@@ -21,8 +21,14 @@ $dubai_time = date('h:i:s A');
 @section('content')
 <!--Actual Content-->
 <div class="container bg-light p-3 p-sm-5 mb-5 shadow-lg w-100">
-    <button type="button" class="btn shadow-md">Time In</button>
-    <button type="button" class="btn shadow-md">Time Out</button>
+
+    <!-- Time In / Time Out Buttons -->
+    <form action="/time-in/{{ $att->ID }}" class="d-inline">
+        <button type="submit" class="btn shadow-md" id="ti_btn">Time In</button>
+    </form>
+    <form action="/time-out/{{ $att->ID }}" class="d-inline">
+        <button type="submit" class="btn shadow-md" id="to_btn">Time Out</button>
+    </form>
     
     <!-- Real Time Clock -->
     <div class="container bg-light p-2 p-sm-4 mb-3 mt-4 shadow" style="color:#767070;">
@@ -61,6 +67,8 @@ $dubai_time = date('h:i:s A');
         be filled out, every time the user times in or out.
     --> 
 
+    <p id="status">{{ $status }}</p>
+
     <!-- Table for Time in/out records -->
     <div class="container bg-light p-1 p-sm-4 mb-3 shadow" style="color:#767070;">
         <div class="table-responsive">
@@ -76,31 +84,67 @@ $dubai_time = date('h:i:s A');
                         </svg>
                         Date
                     </td>
-                    <td>03/02/2022</td>
+                    <td>{{ date('Y/m/d', strtotime($att->created_at)) }}</td>
                 </tr>
                 <tr>
                     <td>Time In (1)</td>
-                    <td>07:30:50AM</td>
+                    <td id="ti1">
+                        @if($att->time_in1 != NULL)
+                            {{ date('h:i A', strtotime($att->time_in1))  }}
+                        @else
+                            ----------
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <td>Time Out (1)</td>
-                    <td>07:30:50AM</td>
+                    <td id="to1">
+                        @if($att->time_out1 != NULL)
+                            {{ date('h:i A', strtotime($att->time_out1))  }}
+                        @else
+                            ----------
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <td>Time In (2)</td>
-                    <td>----------</td>
+                    <td  id="ti2">
+                        @if($att->time_in2 != NULL)
+                            {{ date('h:i A', strtotime($att->time_in2))  }}
+                        @else
+                            ----------
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <td>Time Out (2)</td>
-                    <td>----------</td>
+                    <td id="to2">
+                        @if($att->time_out2 != NULL)
+                            {{ date('h:i A', strtotime($att->time_out2))  }}
+                        @else
+                            ----------
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <td>Time In (3)</td>
-                    <td>----------</td>
+                    <td id="ti3">
+                        @if($att->time_in3 != NULL)
+                            {{ date('h:i A', strtotime($att->time_in3))  }}
+                        @else
+                            ----------
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <td>Time Out (3)</td>
-                    <td>----------</td>
+                    <td id="to3">
+                        @if($att->time_out3 != NULL)
+                            {{ date('h:i A', strtotime($att->time_out3))  }}
+                        @else
+                            ----------
+                        @endif
+                    </td>
                 </tr>
             </div>
             </table>
@@ -113,9 +157,24 @@ $dubai_time = date('h:i:s A');
     $(document).ready(function () {
         $("#time").addClass('active');
 
+        /* display real time clock */
         setInterval(manila_time, 1000);
         setInterval(us_time, 1000);
         setInterval(dubai_time, 1000);
+
+        /* toggle time in and time out buttons */
+        if($('#status').text() == 'time_in'){
+            $('#ti_btn').prop('disabled', false);
+            $('#to_btn').prop('disabled', true);
+        } 
+        if ($('#status').text() == 'time_out') {
+            $('#ti_btn').prop('disabled', true);
+            $('#to_btn').prop('disabled', false);
+        }
+        if ($('#status').text() == 'both') {
+            $('#ti_btn').prop('disabled', true);
+            $('#to_btn').prop('disabled', true);
+        }
     });
 
     function manila_time() {

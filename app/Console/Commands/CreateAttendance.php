@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class CreateAttendance extends Command
 {
@@ -37,6 +38,20 @@ class CreateAttendance extends Command
      */
     public function handle()
     {
-        return 0;
+        /* get all users from the database */
+        $users = DB::table('users')->select('*')->get();
+
+        foreach($users as $u){
+            /* create time adjustments and get ID */
+            $time_ID = DB::table('time_adjustments')
+                       ->insertGetId([]);
+
+            /* create an entry in the attendance for each uesr */
+            DB::table('attendance')
+            ->insert([
+                'emp_ID'      => $u->id,
+                'time_ID'     => $time_ID
+            ]);
+        }
     }
 }
