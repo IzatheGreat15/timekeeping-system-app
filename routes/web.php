@@ -40,7 +40,8 @@ Route::get('/time-in-out', [AttendanceController::class, "display_dashboard"])
 
 /* General */
 Route::view("/change-password", 'general.change-password');
-Route::view("/manage-account", 'general.manage-account');
+Route::post("/change-password-user", [UserController::class, "change_password"]);
+Route::get("/manage-account", [UserController::class, "show_account_auth"]);
 Route::view("/notifications", 'general.notifications');
 Route::get("/logout-user", [UserController::class, "logout_user"]);
 

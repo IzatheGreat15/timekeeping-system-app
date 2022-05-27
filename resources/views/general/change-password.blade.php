@@ -7,12 +7,36 @@
 
     <hr>
 
+    <!-- Success Message -->
+    @if ($message = Session::get('success'))
+        <ul class="list-group mb-3">
+            <li class="list-group-item list-group-item-success">{{ $message }}</li>
+        </ul>
+    @endif
+    
+    <!-- Error Messages -->
+    @if ($errors->any())
+        <ul class="list-group">
+            @foreach ($errors->all() as $error)
+                <li class="list-group-item list-group-item-danger mb-3">{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
+    
+    <!-- Error Message -->
+    @if ($message = Session::get('error'))
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-danger mb-3">{{ $message }}</li>
+        </ul>
+    @endif
+
     <!-- Form -->
-    <form class="mt-5">
+    <form class="mt-5" method="POST" action="/change-password-user">
+        @csrf
         <!-- Old Password -->
         <label>Old Password</label>
         <div class="input-group mb-3">
-            <input type="password" class="form-control" id="oldpass" />
+            <input type="password" class="form-control" name="old_password" id="oldpass" />
             <div class="input-group-append">
                 <span class="input-group-text">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16" id="oldsee" style="display: none;">
@@ -31,7 +55,7 @@
         <!-- New Password -->
         <label>New Password</label>
         <div class="input-group mb-3">
-            <input type="password" class="form-control" id="newpass" />
+            <input type="password" class="form-control" name="new_password" id="newpass" />
             <div class="input-group-append">
                 <span class="input-group-text">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16" id="newsee" style="display: none;">
@@ -50,7 +74,7 @@
         <!-- Confirm New Password -->
         <label>Confirm New Password</label>
         <div class="input-group mb-3">
-            <input type="password" class="form-control" id="confirmpass" />
+            <input type="password" class="form-control" name="confirm_password" id="confirmpass" />
             <div class="input-group-append">
                 <span class="input-group-text">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16" id="confirmsee" style="display: none;">
@@ -66,7 +90,7 @@
             </div>
         </div>
 
-        <button type="button" class="btn btn-block">Confirm</button>
+        <button type="submit" class="btn btn-block">Confirm</button>
     </form>
 </div>
 <script>

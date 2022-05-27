@@ -268,4 +268,47 @@ class UserController extends Controller
 
         return redirect('/');
     }
+
+    /*
+        Change password
+    */
+    public function change_password(Request $request){
+        /* validate all fields */
+        $request->validate([
+            'old_password'                => 'required',
+            'new_password'                => 'required',
+            'confirm_password'            => 'required',
+        ]);
+
+        if($request->new_password != $request->confirm_password)
+            return redirect('/change-password')->with('error', 'New Password and Confrim Password must match');
+
+        $user = DB::table('users')
+                ->select('*')
+                ->where('id', '=', Auth::user()->id)
+                ->get()->first();
+
+        if(!Hash::check($request->old_password, $user->password))
+            return redirect('/change-password')->with('error', 'Old Password must match with the stored password');
+
+        DB::table('users')->where('id', '=', Auth::user()->id)
+        ->update([
+            'password'       => Hash::make($request->new_password),
+            'updated_at'     => date('Y-m-d H:i:s')
+        ]);
+
+        return redirect('/change-password')->with('success', 'Password changed successfully');
+    }
+
+    /*
+        show manage account
+    */
+    public function show_account_auth(){
+        $user = DB::table('users')
+                ->select('users.*')
+                ->where('users.id', '=', Auth::user()->id)
+                ->get()->first();
+
+        return view('general.manage-account', compact('user'));
+    }
 }

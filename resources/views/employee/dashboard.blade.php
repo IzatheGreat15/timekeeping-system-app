@@ -67,7 +67,7 @@ $dubai_time = date('h:i:s A');
         be filled out, every time the user times in or out.
     --> 
 
-    <p id="status">{{ $status }}</p>
+    <p id="status" style="display: none;">{{ $status }}</p>
 
     <!-- Table for Time in/out records -->
     <div class="container bg-light p-1 p-sm-4 mb-3 shadow" style="color:#767070;">
