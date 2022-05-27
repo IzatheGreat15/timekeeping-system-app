@@ -39,16 +39,16 @@
             </div>
             <div class="col-sm mb-3">
                 <label>From: </label>
-                <input type="time" class="form-control" name="start_time" value="{{ $overtimeRequests->start_time }}">
+                <input type="time" class="form-control" name="start_time" id="start_time" value="{{ $overtimeRequests->start_time }}">
             </div>
             <div class="col-sm mb-3">
                 <label>To: </label>
-                <input type="time" class="form-control" name="end_time" value="{{ $overtimeRequests->end_time }}">
+                <input type="time" class="form-control" name="end_time" id="end_time" value="{{ $overtimeRequests->end_time }}">
             </div>
             <!--Automatically calculates no. of hours-->
             <div class="col-sm mb-3">
                 <label>No. of Hrs: </label>
-                <input type="text" class="form-control" style="background-color: transparent;" readonly>
+                <input type="text" class="form-control" id="hours" style="background-color: transparent;" readonly>
             </div>
         </div>
 
@@ -70,7 +70,40 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        timeFunc();
+
         $("#overtimes").addClass('active');
+
+        $("#start_time").change(function() {
+            /* split hours and minutes of the times */
+            const time = $("#start_time").val().split(":");
+
+            /* set min of end_time to be 1 hour later than the start_time */
+            $("#end_time").prop("min", (parseInt(time[0])+1).toString() + ":" + time[1]);
+        });
+
+        $("#start_time, #end_time").change(function() {
+            timeFunc();
+        });
     });
+
+    function timeFunc(){
+        var start_time = new Date("01/01/2007 " + $('#start_time').val());
+        var end_time = new Date("01/01/2007 " + $('#end_time').val());
+
+        var diff = (end_time - start_time) / 60000;
+
+        var minutes = diff % 60;
+        var hours = (diff - minutes) / 60;
+
+        if(hours !== "NaN"){
+            $("#hours").val((start_time > end_time)? 24 + hours : hours);
+            if($("#hours").val() < 1){
+                $("#hours").addClass("border border-danger");
+            } else {
+                $("#hours").removeClass("border border-danger");
+            }
+        }
+    }
 </script>
 @endsection

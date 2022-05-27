@@ -27,6 +27,27 @@ class OvertimeEmpController extends Controller
     }
 
     /*
+        Displays all overtime records in database - APPROVED
+    */
+    public function show_overtime_records(){
+        $requests = DB::table('overtime_emp')
+                   ->select('overtime_emp.*', 'users.first_name', 'users.last_name')
+                   ->join('users', 'users.id', '=', 'overtime_emp.emp_ID')
+                   ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                   ->where(function($query){
+                    $query->where('overtime_emp.status1', '=', 'APPROVED')
+                          ->where('overtime_emp.status2', '=', 'APPROVED');
+                })
+                ->where(function($query){
+                    $query->where('overtime_emp.emp_ID', '=', Auth::user()->id)
+                          ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
+                          ->orWhere('approvals.approval2_ID', '=', Auth::user()->id);
+                })
+                ->get();
+
+        return view('employee.overtime-records', compact('requests'));  
+    }
+    /*
         Stores a new overtime request in database
     */
     public function add_overtime_request(Request $request){
@@ -101,12 +122,35 @@ class OvertimeEmpController extends Controller
     }
 
     /*
+        view a specific overtime
+    */
+    public function view_overtime_request($id){
+        $req = DB::table('overtime_emp')
+                              ->select('overtime_emp.*', 'users.first_name', 'users.last_name', 'comments.*')
+                              ->join('users', 'users.id', '=', 'overtime_emp.emp_ID') 
+                              ->join('comments', 'comments.id', '=', 'overtime_emp.comment_ID')
+                              ->where('overtime_emp.id', '=', $id)
+                              ->get()->first();
+
+        $approvals = DB::table('overtime_emp')
+                    ->select('users.*', 'approvals.*')
+                    ->join('users', 'users.id', '=', 'overtime_emp.emp_ID')
+                    ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                    ->where('overtime_emp.id', '=', $id)
+                    ->get()->first();
+        return view('employee.overtime-spec', compact('req', 'approvals'));
+    }
+
+    /*
         Delete an overtime record in database
     */
     public function delete_overtime_request(Request $request){
         /* delete data */
         DB::table('overtime_emp')->where('id', '=', $request->id)
-                ->delete();
+                ->update([
+                    'status1'   => 'CANCELLED',
+                    'status2'   => 'CANCELLED'
+                ]);
 
         return redirect('/overtime-request')->with('success', 'Overtime request deleted successfully');
     }

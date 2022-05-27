@@ -58,7 +58,7 @@ Route::view("/adjustment-new", 'employee.adjustment-new');
 Route::post("/adjustment-add", [AdjustmentEmpController::class, "add_adjustment"]);
 Route::get("/adjustment-edit/{id}", [AdjustmentEmpController::class, "edit_adjustment"]);
 Route::post("/adjustment_update", [AdjustmentEmpController::class, "update_adjustment"]);
-Route::post("/adjustment-delete", [AdjustmentEmpController::class, "delete_adjustment"]);
+Route::post("/adjustment_delete", [AdjustmentEmpController::class, "delete_adjustment"]);
 
 /* Shift */
 Route::get("/shift-records", [ChangeShiftEmpController::class, "display_shift_records"]);
@@ -84,11 +84,11 @@ Route::post("/leave-request-delete", [LeaveEmpController::class, "delete_leave_r
 Route::post("/leave-request-search", [LeaveEmpController::class, "search_leave_request"]);
 
 /* Overtime */
-Route::view("/overtime-records", 'employee.overtime-records');
-Route::view("/overtime-records-id", 'employee.overtime-spec');
+Route::get("/overtime-records", [OvertimeEmpController::class, "show_overtime_records"]);
+Route::get("/overtime-records/{id}", [OvertimeEmpController::class, "view_overtime_request"]);
 Route::get("/overtime-request", [OvertimeEmpController::class, "show_overtime_requests"]);
 Route::view("/overtime-request-new", 'employee.overtime-request-new');
-//Route::view("/overtime-request/{id}", /* add the controller class */); //shows employee.overtime-spec
+Route::get("/overtime-request/{id}", [OvertimeEmpController::class, "view_overtime_request"]);
 Route::get("/overtime-request-edit/{id}", [OvertimeEmpController::class, "edit_overtime_request"]);
 Route::post("/overtime-request-created", [OvertimeEmpController::class, "add_overtime_request"]);
 Route::post("/overtime-request-edited", [OvertimeEmpController::class, "update_overtime_request"]);

@@ -13,16 +13,28 @@
     
     <!-- Error Messages -->
     @if ($errors->any())
-        <ul class="list-group mb-3">
+        <ul class="list-group">
             @foreach ($errors->all() as $error)
-                <li class="list-group-item list-group-item-danger">{{ $error }}</li>
+                <li class="list-group-item list-group-item-danger mb-3">{{ $error }}</li>
             @endforeach
+        </ul>
+    @endif
+
+    <!-- Error Message -->
+    @if ($message = Session::get('error'))
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-danger  mb-3">{{ $message }}</li>
         </ul>
     @endif
     
     <!--Form Date Filter-->
     <form method="POST" action="/adjustment_update">
         @csrf
+
+        <input type="hidden" value="{{ $req->ID }}" name="id">
+
+        <input type="hidden" value="{{ $req->emp_ID }}" name="emp_ID">
+
         <!--Date-->
         <div class="form-row mb-4">
             <div class="col-sm mb-3">

@@ -109,7 +109,7 @@
                         @else
                             <td>{{ date('h:i A', strtotime($req->time_out1))  }}</td>
                         @endif
-                        <td>{{ $req->reason }}</td>
+                        <td>{{ Str::limit($req->reason, 10) }}</td>
                         <td>{{ $req->status1 }}</td>
                         <td>{{ $req->status2 }}</td>
                         <td>
@@ -163,7 +163,7 @@
                 </div>
             </div>
                 
-            <form method="POST" action="/adjustment-delete"> 
+            <form method="POST" action="/adjustment_delete"> 
                 @csrf 
                 <input id="dept_id" name="id" style="display: none;" />
                 <p>Are you sure you want to delete?</p>

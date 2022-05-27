@@ -20,8 +20,8 @@
     
     <!-- Error Message -->
     @if ($message = Session::get('error'))
-        <ul class="list-group mb-3">
-            <li class="list-group-item list-group-item-danger">{{ $message }}</li>
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-danger  mb-3">{{ $message }}</li>
         </ul>
     @endif
 

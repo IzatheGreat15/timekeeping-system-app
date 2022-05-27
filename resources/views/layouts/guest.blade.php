@@ -21,8 +21,13 @@
         <style>
             body{
                 background: url('images/bg.png');
+                /* Full height */
+                height: 100%;
+
+                /* Center and scale the image nicely */
+                background-position: center;
                 background-repeat: no-repeat;
-                background-size: auto;
+                background-size: cover;
             }
         </style>
     </head>

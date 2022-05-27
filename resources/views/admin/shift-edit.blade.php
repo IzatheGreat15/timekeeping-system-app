@@ -94,7 +94,7 @@
 
         var minutes = diff % 60;
         var hours = (diff - minutes) / 60;
-
+alert(end_time - start_time);
         if(hours !== "NaN"){
             $("#hours").val((start_time > end_time)? 24 + hours : hours);
             if($("#hours").val() < 1){

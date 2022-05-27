@@ -33,15 +33,15 @@
                 </tr>
                 <tr>
                     <td class="w-50">Date Filed</td>
-                    <td class="w-50 font-weight-bold">{{ $req->created_at }}</td>
+                    <td class="w-50 font-weight-bold">{{ date('Y/m/d', strtotime($req->created_at)) }}</td>
                 </tr>
                 <tr>
                     <td class="w-50">From Date</td>
-                    <td class="w-50 font-weight-bold">{{ $req->start_date }}</td>
+                    <td class="w-50 font-weight-bold">{{ date('Y/m/d', strtotime($req->start_date)) }}</td>
                 </tr>
                 <tr>
                     <td class="w-50">To Date</td>
-                    <td class="w-50 font-weight-bold">{{ $req->end_date }}</td>
+                    <td class="w-50 font-weight-bold">{{ date('Y/m/d', strtotime($req->end_date)) }}</td>
                 </tr>
                 <tr>
                     <td class="w-50">Schedule</td>

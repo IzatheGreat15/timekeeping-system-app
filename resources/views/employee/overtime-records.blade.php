@@ -40,22 +40,26 @@
                 <input type="date" class="form-control">
             </div>
             <!--For Management Only-->
+            @if(Auth::user()->role == 'Management')
             <div class="col-sm mb-3">
                 <label>Employee: </label>
-                <input type="text" class="form-control" placeholder="John Doe">
+                <input type="text" class="form-control" name="name" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}">
             </div>
+            @endif
         </div>
     </form>
 
     <!--Overtime Records-->
     <div class="container bg-light p-1 p-sm-4 mb-3 mt-3 shadow">
         <div class="table-responsive">
-            <table class="table table-hover text-center">
+            <table class="table table-hover text-center" id="dept_table">
                 <thead>
                     <tr>
                         <th scope="col">Date Filed</th>
                         <!--Name shown only for management-->
+                        @if(Auth::user()->role == 'Management')
                         <th scope="col">Name</th>
+                        @endif
                         <th scope="col">Date</th>
                         <th scope="col">From</th>
                         <th scope="col">To</th>
@@ -65,27 +69,27 @@
                 </thead>
 
                 <tbody>
+                @if ($requests->count() > 0)
+                    @foreach ($requests as $req)
                     <!--Each row can be clicked redirect to overtime-spec.blade.php-->
-                    <tr onclick="window.location='/overtime-records-id';">
+                    <tr onclick="window.location='/overtime-records/{{ $req->id }}';">
                         <!--Name shown only for management-->
-                        <td>03/02/22</td>
-                        <td>John Doe</td>
-                        <td>03/02/22</td>
-                        <td>04:00AM</td>
-                        <td>06:00PM</td>
-                        <td>9</td>
-                        <td>Late</td>
+                        <td>{{ date('Y/m/d', strtotime($req->created_at)) }}</td>
+                        @if(Auth::user()->role == 'Management')
+                        <th scope="col">{{ $req->first_name }} {{ $req->last_name }}</th>
+                        @endif
+                        <td>{{ date('Y/m/d', strtotime($req->date)) }}</td>
+                        <td id="start_time{{ $loop->iteration }}">{{ date('h:i A', strtotime($req->start_time)) }}</td>
+                        <td id="end_time{{ $loop->iteration }}">{{ date('h:i A', strtotime($req->end_time)) }}</td>
+                        <td id="time_difference{{ $loop->iteration }}"></td>
+                        <td>{{ Str::limit($req->reason, 10)}}</td>
                     </tr>
-                    <tr onclick="window.location='/overtime-records-id';">
-                        <!--Name shown only for management-->
-                        <td>03/02/22</td>
-                        <td>John Doe</td>
-                        <td>03/02/22</td>
-                        <td>04:00AM</td>
-                        <td>06:00PM</td>
-                        <td>9</td>
-                        <td>Late</td>
-                    </tr>
+                    @endforeach
+                @else
+                <tr>
+                    <td colspan="10">No overtime records available yet!</td>
+                </tr>
+                @endif
                 </tbody>
             </table>
         </div>
@@ -95,6 +99,19 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#overtimes").addClass('active');
+
+        var x;
+        for(x = 1; x < $('#dept_table tr').length; x++){
+            var start_time = new Date("01/01/2007 " + $('#start_time' + x).text());
+            var end_time = new Date("01/01/2007 " + $('#end_time' + x).text());
+
+            var diff = (end_time - start_time) / 60000;
+
+            var minutes = diff % 60;
+            var hours = (diff - minutes) / 60;
+
+            $('#time_difference' + x).text((start_time > end_time)? 24 + hours : hours);
+        }
     });
 </script>
 @endsection

@@ -48,10 +48,12 @@
                 <input type="date" class="form-control">
             </div>
             <!--For Management Only - Employee-->
+            @if(Auth::user()->role == 'Management')
             <div class="col-sm mb-3">
                 <label>Employee: </label>
-                <input type="text" class="form-control" placeholder="John Doe">
+                <input type="text" class="form-control" name="name" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}">
             </div>
+            @endif
             <div class="col-sm mb-3">
                 <label>Status: </label>
                 <select class="form-control">
@@ -73,7 +75,9 @@
                     <tr>
                         <th scope="col">Date Filed</th>
                         <!--Name shown only for management-->
+                        @if(Auth::user()->role == 'Management')
                         <th scope="col">Name</th>
+                        @endif
                         <th scope="col">Date</th>
                         <th scope="col">From</th>
                         <th scope="col">To</th>
@@ -93,14 +97,16 @@
                             <td style="display: none;">{{ $or->id }}</td>
                             <!--Name shown only for management-->
                             <td>{{ date('Y/m/d', strtotime($or->created_at)) }}</td>
-                            <td>{{ $or->first_name }} {{ $or->last_name }}</td>
+                            @if(Auth::user()->role == 'Management')
+                                <td>{{ $or->first_name }} {{ $or->last_name }}</td>
+                            @endif
                             <td>{{ date('Y/m/d', strtotime($or->date)) }}</td>
-                            <td>{{ date('h:i A', strtotime($or->start_time)) }}</td>
-                            <td>{{ date('h:i A', strtotime($or->end_time)) }}</td>
-                            <td>9</td>
+                            <td id="start_time{{ $loop->iteration }}">{{ date('h:i A', strtotime($or->start_time)) }}</td>
+                            <td id="end_time{{ $loop->iteration }}">{{ date('h:i A', strtotime($or->end_time)) }}</td>
+                            <td id="time_difference{{ $loop->iteration }}"></td>
                             <td>{{ Str::limit($or->reason, 10)}}</td>
-                            <td>APPROVED</td>
-                            <td>REJECTED</td>
+                            <td>{{ $or->status1 }}</td>
+                            <td>{{ $or->status2 }}</td>
                             <!--If request is APPROVED and REJECTED or if request is not of the user, buttons are not shown-->
                             <td>
                             <a class="btn btn-clear p-0" href="/overtime-request/{{ $or->id }}">
@@ -154,9 +160,9 @@
 
             <form method="POST" action="/overtime-request-deleted">
                 @csrf
-                <input id="id" name="id" style="display: none;" />
+                <input id="dept_id" name="id" style="display: none;" />
                 <p>Are you sure you want to delete?</p>
-                    <button type="button" class="btn bg-success">YES</button>
+                    <button type="submit" class="btn bg-success">YES</button>
                     <button type="button" class="btn bg-danger" data-dismiss="modal" aria-label="Close">NO</button>
             </form>
         </div>
@@ -172,6 +178,19 @@
             var id = currRow.find('td:eq(0)').text();
             $("#dept_id").val(id);
         });
+
+        var x;
+        for(x = 1; x < $('#dept_table tr').length; x++){
+            var start_time = new Date("01/01/2007 " + $('#start_time' + x).text());
+            var end_time = new Date("01/01/2007 " + $('#end_time' + x).text());
+
+            var diff = (end_time - start_time) / 60000;
+
+            var minutes = diff % 60;
+            var hours = (diff - minutes) / 60;
+
+            $('#time_difference' + x).text((start_time > end_time)? 24 + hours : hours);
+        }
     });
 </script>
 @endsection

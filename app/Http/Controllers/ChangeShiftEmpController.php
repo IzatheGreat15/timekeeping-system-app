@@ -15,7 +15,7 @@ class ChangeShiftEmpController extends Controller
         $requests = DB::table('change_shift_emp')
                    ->select('change_shift_emp.*', 'users.first_name', 'users.last_name', 'shifts.shift_name', 'shifts.start_time', 'shifts.end_time', 'shift_emp.start_date', 'shift_emp.end_date')
                    ->join('users', 'users.id', '=', 'change_shift_emp.emp_ID')
-                   ->join('shift_emp', 'shift_emp.id', '=', 'shift_emp_ID')
+                   ->join('shift_emp', 'shift_emp.id', '=', 'change_shift_emp.shift_emp_ID')
                    ->join('shifts', 'shifts.id', '=', 'change_shift_emp.shift_ID')
                    ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
                    ->where(function($query){

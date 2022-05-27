@@ -131,7 +131,7 @@ class AdjustmentEmpController extends Controller
     */
     public function edit_adjustment($id){
         $req = DB::table('adjustment_emp')
-               ->select('adjustment_emp.*', 'time_adjustments.*', 'attendance.created_at AS date')
+               ->select('adjustment_emp.*', 'adjustment_emp.id AS ID', 'time_adjustments.*', 'attendance.created_at AS date')
                ->join('time_adjustments', 'time_adjustments.id', '=', 'adjustment_emp.time_ID')
                ->join('attendance', 'attendance.id', '=', 'adjustment_emp.att_ID')
                ->where('adjustment_emp.id', '=', $id)
@@ -142,6 +142,54 @@ class AdjustmentEmpController extends Controller
 
     /*
         Soft delete a new shift in database
+    */
+    public function update_adjustment(Request $request){
+        /* validate all fields */
+        $request->validate([
+            'date'         => 'required',
+            'reason'       => 'required',
+            'time_in1'     => 'required',
+            'time_out1'    => 'required'
+        ]);
+
+        $att_ID = DB::table('attendance')
+                  ->select('*')
+                  ->where('emp_ID', '=', $request->emp_ID)
+                  ->whereDate('created_at', '=', $request->date)
+                  ->get()->first();
+        
+        /* If chosen date does not exist in the attendance record of the user */
+        if(!isset($att_ID->id))
+            return back()->with('error', 'Error! No attendance with the date selected exists.');
+
+        DB::table('adjustment_emp')->where('id', '=', $request->id)
+        ->update([
+            'reason'       =>  $request->reason,
+            'updated_at'   => date('Y-m-d H:i:s'),
+            'att_ID'         => $att_ID->id
+        ]);
+
+        /* get the ID of time_ID*/
+        $app = DB::table('adjustment_emp')
+               ->select('*')
+               ->where('id', '=', $request->id)
+               ->get()->first();
+        
+        /* update time_adjustments */
+        DB::table('time_adjustments')->where('id', '=', $app->time_ID)
+        ->update([
+            'time_in1'     => $request->time_in1,
+            'time_out1'    => $request->time_out1,
+            'time_in2'     => $request->time_in2,
+            'time_out2'    => $request->time_out2,
+            'time_in3'     => $request->time_in3,
+            'time_out3'    => $request->time_out3,
+        ]);
+
+        return redirect('/adjustment-records')->with('success', 'Adjustment request updated successfully');
+    }
+    /*
+        Soft delete an adjustment request in database
     */
     public function delete_adjustment(Request $request){
         DB::table('adjustment_emp')->where('id', '=', $request->id)
