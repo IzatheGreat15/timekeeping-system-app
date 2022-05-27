@@ -70,8 +70,7 @@
                 <tbody>
                 @if($requests->count() > 0)
                     @foreach($requests as $req)
-                    <!--Each row can be clicked redirect to shift-spec.blade.php-->
-                    <tr onclick="window.location='/shift-records-id';">
+                    <tr>
                         <!--Name shown only for management-->
                         <td>{{ date('Y/m/d', strtotime($req->created_at)) }}</td>
                         @if(Auth::user()->role == 'Management')

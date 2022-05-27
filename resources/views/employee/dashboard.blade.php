@@ -1,38 +1,55 @@
 @extends('employee.navbar')
 
+<?php
+// Philippines
+date_default_timezone_set('Asia/Hong_Kong');
+$manila = date('D M j,  Y');
+$manila_time = date('h:i:s A');
+
+// US
+date_default_timezone_set('America/Montreal');
+$new_york = date('D M j,  Y');
+$us_time = date('h:i:s A');
+
+
+// Dubai
+date_default_timezone_set('Asia/Dubai');
+$dubai = date('D M j,  Y');
+$dubai_time = date('h:i:s A');
+?>
+
 @section('content')
 <!--Actual Content-->
-<div class="container bg-light p-3 p-sm-5 mb-5 shadow-lg">
+<div class="container bg-light p-3 p-sm-5 mb-5 shadow-lg w-100">
     <button type="button" class="btn shadow-md">Time In</button>
     <button type="button" class="btn shadow-md">Time Out</button>
     
     <!-- Real Time Clock -->
     <div class="container bg-light p-2 p-sm-4 mb-3 mt-4 shadow" style="color:#767070;">
-        <h1 class="float-right align-middle">7:30:05 PM</h1>
+        <h1 class="float-right align-middle manila_time">{{ $manila_time }}</h1>
         <h3>Manila, Philippines</h3>
-        <h5>March 02, 2022</h5>
+        <h5>{{ $manila }}</h5>
     </div>
-
     <div class="row">
         <div class="col-sm">
             <div class="container bg-light p-2 p-sm-4 mb-3 shadow" style="color:#767070;">
-                <h3 class="float-sm-right align-middle">7:30:05PM</h3>
-                <h3>New York</h3>
-                <h5>March 02, 2022</h5>
+                <h4 class="float-right align-middle" id="us_time">{{ $us_time }}</h4>
+                <h4>New York</h4>
+                <h5>{{ $new_york }}</h5>
             </div>
         </div>
         <div class="col-sm">
             <div class="container bg-light p-2 p-sm-4 mb-3 shadow" style="color:#767070;">
-                <h4 class="float-sm-right align-middle">7:30:05PM</h4>
-                <h3>Singapore</h3>
-                <h5>March 02, 2022</h5>
+                <h4 class="float-right align-middle manila_time">{{ $manila_time }}</h4>
+                <h4>Singapore</h4>
+                <h5>{{ $manila }}</h5>
             </div>
         </div>
         <div class="col-sm">
             <div class="container bg-light p-2 p-sm-4 mb-3 shadow" style="color:#767070;">
-                <h3 class="float-sm-right align-middle">7:30:05PM</h3>
+                <h4 class="float-right align-middle" id="dubai_time">{{ $dubai_time }}</h4>
                 <h3>Dubai</h3>
-                <h5>March 02, 2022</h5>
+                <h5>{{ $dubai }}</h5>
             </div>
         </div>
     </div>
@@ -95,6 +112,37 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#time").addClass('active');
+
+        setInterval(manila_time, 1000);
+        setInterval(us_time, 1000);
+        setInterval(dubai_time, 1000);
     });
+
+    function manila_time() {
+    $.ajax({
+        url: '/manila_time',
+        success: function(data) {
+        $('.manila_time').html(data);
+        },
+    });
+    }
+
+    function us_time() {
+    $.ajax({
+        url: '/us_time',
+        success: function(data) {
+        $('#us_time').html(data);
+        },
+    });
+    }
+
+    function dubai_time() {
+    $.ajax({
+        url: '/dubai_time',
+        success: function(data) {
+        $('#dubai_time').html(data);
+        },
+    });
+    }
 </script>
 @endsection

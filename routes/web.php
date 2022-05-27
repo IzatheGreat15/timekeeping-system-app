@@ -164,4 +164,8 @@ Route::post("/account-update", [UserController::class, "update_account"]);
 Route::post("/account-delete", [UserController::class, "delete_account"]);
 Route::post("/account-search", [UserController::class, "search_account"]);
 
+Route::view('/manila_time', 'employee.timezones.manila_time');
+Route::view('/us_time', 'employee.timezones.us_time');
+Route::view('/dubai_time', 'employee.timezones.dubai_time');
+
 require __DIR__.'/auth.php';
