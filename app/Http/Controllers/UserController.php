@@ -305,10 +305,39 @@ class UserController extends Controller
     */
     public function show_account_auth(){
         $user = DB::table('users')
-                ->select('users.*')
+                ->select('users.*', 'departments.dept_name', 'approvals.*')
+                ->join('departments', 'departments.id', '=', 'users.dept_ID')
+                ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
                 ->where('users.id', '=', Auth::user()->id)
                 ->get()->first();
 
         return view('general.manage-account', compact('user'));
+    }
+
+    /*
+        manage account
+    */
+    public function manage_account(Request $request){
+        DB::table('users')->where('id', '=', Auth::user()->id)
+            ->update([
+                'email'              => " "
+            ]);
+
+        /* validate all fields */
+        $request->validate([
+            'first_name'       => 'required',
+            'last_name'        => 'required',
+            'email'            => 'required|unique:users,email',
+        ]);
+
+        DB::table('users')->where('id', '=', Auth::user()->id)
+        ->update([
+            'first_name'       => $request->first_name,
+            'last_name'        => $request->last_name,
+            'email'            => $request->email,
+            'updated_at'       => date('Y-m-d H:i:s')
+        ]);
+
+        return redirect('/manage-account')->with('success', 'Account updated successfully');
     }
 }

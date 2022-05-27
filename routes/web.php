@@ -42,6 +42,7 @@ Route::get('/time-in-out', [AttendanceController::class, "display_dashboard"])
 Route::view("/change-password", 'general.change-password');
 Route::post("/change-password-user", [UserController::class, "change_password"]);
 Route::get("/manage-account", [UserController::class, "show_account_auth"]);
+Route::post("/manage-account-auth", [UserController::class, "manage_account"]);
 Route::view("/notifications", 'general.notifications');
 Route::get("/logout-user", [UserController::class, "logout_user"]);
 
