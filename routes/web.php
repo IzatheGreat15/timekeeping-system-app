@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdjustmentEmpController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ChangeShiftEmpController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepartmentController;
@@ -48,8 +49,8 @@ Route::get("/logout-user", [UserController::class, "logout_user"]);
 //Route::view("/time-in-out", 'employee.dashboard');
 
 /* Attendance */
-Route::view("/attendance-records", 'employee.attendance-record');
-Route::view("/attendance-records-id", 'employee.attendance-spec');
+Route::get("/attendance-records", [AttendanceController::class, "show_attendance"]);
+Route::get("/attendance-records/{id}", [AttendanceController::class, "view_attendance"]);
 
 /* Adjustment */
 Route::get("/adjustment-records", [AdjustmentEmpController::class, "show_adjustment"]);
