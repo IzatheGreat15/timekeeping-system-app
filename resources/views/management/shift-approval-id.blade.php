@@ -10,7 +10,7 @@
     <!-- Get data from change_shift_emp table -->
 
     <!--Employee Name-->
-    <h3>John Doe</h3>
+    <h3>{{$emp->first_name.' '.$emp->last_name}}</h3>
 
     <hr>
 
@@ -23,31 +23,33 @@
                     <table class="table table-hover">
                         <tr>
                             <td class="w-50">Shift</td>
-                            <td class="w-50 font-weight-bold">Graveyard Shift</td>
+                            <td class="w-50 font-weight-bold">{{$emp->old_shift_name}}</td>
                         </tr>
                         <tr>
                             <td class="w-50">Date Filed</td>
-                            <td class="w-50 font-weight-bold">03/02/2022</td>
+                            <td class="w-50 font-weight-bold">{{date('M d, Y', strtotime($emp->file_date))}}</td>
                         </tr>
                         <tr>
                             <td class="w-50">From Date</td>
-                            <td class="w-50 font-weight-bold">03/02/2022</td>
+                            <td class="w-50 font-weight-bold">{{date('M d, Y', strtotime($emp->start_date))}}</td>
                         </tr>
                         <tr>
                             <td class="w-50">To Date</td>
-                            <td class="w-50 font-weight-bold">03/02/2022</td>
+                            <td class="w-50 font-weight-bold">{{date('M d, Y', strtotime($emp->end_date))}}</td>
                         </tr>
                         <tr>
                             <td class="w-50">Schedule</td>
-                            <td class="w-50 font-weight-bold">04:00AM - 06:00PM</td>
+                            <td class="w-50 font-weight-bold">{{date('g:i A', strtotime($emp->old_start_time))}} - {{date('g:i A', strtotime($emp->old_end_time))}}</td>
                         </tr>
                         <tr>
                             <td class="w-50">No. of Hours</td>
-                            <td class="w-50 font-weight-bold">8</td>
+                            @if(strtotime($emp->old_end_time)-strtotime($emp->old_start_time) > 0)<td class="w-50 font-weight-bold">{{(strtotime($emp->old_end_time)-strtotime($emp->old_start_time))/3600}}</td>
+                            @else()<td class="w-50 font-weight-bold">{{24+(strtotime($emp->old_end_time)-strtotime($emp->old_start_time))/3600}}</td>
+                            @endif()
                         </tr>
                         <tr>
                             <td class="w-50 font-italic">Supervisor/Manager</td>
-                            <td class="w-50 font-weight-bold font-italic">Mr. Sherlock Holmes</td>
+                            <td class="w-50 font-weight-bold font-italic">{{$emp->ap1_fname.' '.$emp->ap1_lname}}</td>
                         </tr>
                     </table>
                 </div>
@@ -62,31 +64,33 @@
                     <table class="table table-hover">
                         <tr>
                             <td class="w-50">Shift</td>
-                            <td class="w-50 font-weight-bold">Graveyard Shift</td>
+                            <td class="w-50 font-weight-bold">{{$emp->new_shift_name}}</td>
                         </tr>
                         <tr>
                             <td class="w-50">Date Filed</td>
-                            <td class="w-50 font-weight-bold">03/02/2022</td>
+                            <td class="w-50 font-weight-bold">{{date('M d, Y', strtotime($emp->file_date))}}</td>
                         </tr>
                         <tr>
                             <td class="w-50">From Date</td>
-                            <td class="w-50 font-weight-bold">03/02/2022</td>
+                            <td class="w-50 font-weight-bold">{{date('M d, Y', strtotime($emp->start_date))}}</td>
                         </tr>
                         <tr>
                             <td class="w-50">To Date</td>
-                            <td class="w-50 font-weight-bold">03/02/2022</td>
+                            <td class="w-50 font-weight-bold">{{date('M d, Y', strtotime($emp->end_date))}}</td>
                         </tr>
                         <tr>
                             <td class="w-50">Schedule</td>
-                            <td class="w-50 font-weight-bold">04:00AM - 06:00PM</td>
+                            <td class="w-50 font-weight-bold">{{date('g:i A', strtotime($emp->new_start_time))}} - {{date('g:i A', strtotime($emp->new_end_time))}}</td>
                         </tr>
                         <tr>
                             <td class="w-50">No. of Hours</td>
-                            <td class="w-50 font-weight-bold">8</td>
+                            @if(strtotime($emp->new_end_time)-strtotime($emp->new_start_time) > 0)<td class="w-50 font-weight-bold">{{(strtotime($emp->new_end_time)-strtotime($emp->new_start_time))/3600}}</td>
+                            @else()<td class="w-50 font-weight-bold">{{24+(strtotime($emp->new_end_time)-strtotime($emp->new_start_time))/3600}}</td>
+                            @endif()
                         </tr>
                         <tr>
                             <td class="w-50 font-italic">Supervisor/Manager</td>
-                            <td class="w-50 font-weight-bold font-italic">Mr. Sherlock Holmes</td>
+                            <td class="w-50 font-weight-bold font-italic">{{$emp->ap1_fname.' '.$emp->ap1_lname}}</td>
                         </tr>
                     </table>
                 </div>
@@ -99,34 +103,34 @@
                 <table class="table table-hover">
                 <tr>
                         <td class="w-50 font-italic">Postion of Approver 1</td>
-                        <td class="w-50 font-weight-bold font-italic">Mr. Mycroft Holmes (Datetime)</td>
+                        <td class="w-50 font-weight-bold font-italic">{{$emp->ap1_fname.' '.$emp->ap1_lname}} (Datetime)</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic">Status 1</td>
-                        <td class="w-50 font-weight-bold font-italic">SENT BACK</td>
+                        <td class="w-50 font-weight-bold font-italic">{{$emp->status1}}</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic" colspan="2">Remarks</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-weight-bold font-italic text-justify" colspan="2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            {{$emp->comment1}}
                         </td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic">Postion of Approver 2</td>
-                        <td class="w-50 font-weight-bold font-italic">Mr. Mycroft Holmes (Datetime)</td>
+                        <td class="w-50 font-weight-bold font-italic">{{$emp->ap2_fname.' '.$emp->ap2_lname}} (Datetime)</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic">Status 2</td>
-                        <td class="w-50 font-weight-bold font-italic">PENDING</td>
+                        <td class="w-50 font-weight-bold font-italic">{{$emp->status2}}</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic" colspan="2">Remarks</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-weight-bold font-italic text-justify" colspan="2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        {{$emp->comment2}}
                         </td>
                     </tr>
                 </table>
@@ -134,30 +138,35 @@
         </div>
 
     <!--Management Form-->
+    @if(($emp->status2 == "PENDING" || $emp->status1 == "PENDING") && $emp->status2 != "REJECTED" && $emp->status1 != "REJECTED")
     <div class="container bg-light p-1 p-sm-4 mb-3 mt-3 col-md shadow">
         <!-- Form -->
-        <form>
-            <!-- Vaue is the change_shift_emp ID -->
-            <input type="text" style="display: none;"/>
-
+        <form method="POST" action="/approve-shift">
+            @csrf
+            <!-- adjustment_emp ID --> 
+            <input value="{{$emp->id}}"type="text" style="display: none;" name="id"/>
+            <input value="{{$emp->shift_id}}"type="text" style="display: none;" name="shift_id"/>
+            <input value="{{$emp->new_id}}"type="text" style="display: none;" name="new_id"/>
+            
             <div class="form-row mb-4">
                 <div class="col-sm mb-3">
                     <label>Comment: </label>
-                    <textarea class="form-control"></textarea>
+                    <textarea class="form-control" name="managementComment"></textarea>
                 </div>
             </div>
             <!--
-                Once approved, change the shift_ID of the shift_emp table to the shift_ID of the change_shift_emp table
+                If Approved, replace the time_ID of the attendance with the time_ID of the adjustment
             -->
             <div class="form-row mb-4">
                 <div class="col-sm mb-3">
-                    <button class="btn shadow-md bg-danger">Reject</button>
-                    <button class="btn shadow-md">Send Back</button>
-                    <button class="btn shadow-md bg-success">Approve</button>
+                    <button class="btn shadow-md bg-danger" name="submit" value="-1">Reject</button>
+                    <button class="btn shadow-md" name="submit" value="0">Send Back</button>
+                    <button class="btn shadow-md bg-success" name="submit" value="1">Approve</button>
                 </div>
             </div>
         </form>
     </div>
+    @endif()
 </div>
 
 <script type="text/javascript">

@@ -18,7 +18,7 @@
         <div class="col-md mb-3">
             <br>
             <!--Department Name - shows only if the account is NOT a CEO-->
-            <h3>Department Name</h3>
+            <h3>{{$dept->dept_name}}</h3>
         </div>
         
         <div class="col-md mb-3">
@@ -59,17 +59,21 @@
                 </thead>
 
                 <tbody>
+                    @foreach($list as $emp)
                     <!--Each row can be clicked redirect to overtime-approval-id.blade.php-->
-                    <tr onclick="window.location='/overtime-approvals-id';">
-                        <td>03/02/22</td>
-                        <td>John Doe</td>
-                        <td>Marketing</td>
-                        <td>03/02/22</td>
-                        <td>04:00AM</td>
-                        <td>06:00PM</td>
-                        <td>9</td>
-                        <td>Late</td>
+                    <tr onclick="window.location='/overtime-approvals-id/{{$emp->id}}';">
+                        <td>{{date('M d, Y', strtotime($emp->file_date))}}</td>
+                        <td>{{$emp->first_name.' '.$emp->last_name}}</td>
+                        <td>{{$emp->dept_name}}</td>
+                        <td>{{date('M d, Y', strtotime($emp->date))}}</td>
+                        <td>{{date('g:i A', strtotime($emp->start_time))}}</td>
+                        <td>{{date('g:i A', strtotime($emp->end_time))}}</td>
+                        @if(strtotime($emp->end_time)-strtotime($emp->start_time) > 0)<td>{{(strtotime($emp->end_time)-strtotime($emp->start_time))/3600}}</td>
+                        @else()<td class="w-50 font-weight-bold">{{24+(strtotime($emp->end_time)-strtotime($emp->start_time))/3600}}</td>
+                        @endif()
+                        <td>{{$emp->reason}}</td>
                     </tr>
+                    @endforeach()
                 </tbody>
             </table>
         </div>

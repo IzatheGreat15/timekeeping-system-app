@@ -17,7 +17,7 @@
         <div class="col-md mb-3">
             <br>
             <!--Department Name - shows only if the account is NOT a CEO-->
-            <h3>Department Name</h3>
+            <h3>{{$dept->dept_name}}</h3>
         </div>
         
         <div class="col-md mb-3">
@@ -60,17 +60,19 @@
 
                 <tbody>
                     <!--Each row can be clicked redirect to shift-approvals-id.blade.php-->
-                    <tr onclick="window.location='/shift-approvals-id';">
-                        <td>03/02/22</td>
-                        <td>John Doe</td>
-                        <td>Marketing</td>
-                        <td>03/02/22 <br> 03/02/22</td>
-                        <td>Graveyard Shift</td>
-                        <td>04:00AM <br> 06:00PM</td>
-                        <td>Late</td>
-                        <td>APPROVED</td>
-                        <td>REJECTED</td>
+                    @foreach($list as $emp)
+                    <tr onclick="window.location='/shift-approvals-id/{{$emp->id}}';">
+                        <td>{{date('M d, Y', strtotime($emp->file_date))}}</td>
+                        <td>{{$emp->first_name.' '.$emp->last_name}}</td>
+                        <td>{{$emp->dept_name}}</td>
+                        <td>{{date('M d, Y', strtotime($emp->start_date))}} <br> {{date('M d, Y', strtotime($emp->end_date))}}</td>
+                        <td>{{$emp->shift_name}}</td>
+                        <td>{{date('g:i A', strtotime($emp->start_time))}} <br> {{date('g:i A', strtotime($emp->end_time))}}</td>
+                        <td> </td>
+                        <td>{{$emp->status1}}</td>
+                        <td>{{$emp->status2}}</td>
                     </tr>
+                    @endforeach()
                 </tbody>
             </table>
         </div>

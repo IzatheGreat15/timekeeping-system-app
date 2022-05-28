@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Console\\Commands\\CreateAttendance' => $baseDir . '/app/Console/Commands/CreateAttendance.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\AdjustmentEmpController' => $baseDir . '/app/Http/Controllers/AdjustmentEmpController.php',
@@ -26,11 +27,13 @@ return array(
     'App\\Http\\Controllers\\LeaveBalEmpController' => $baseDir . '/app/Http/Controllers/LeaveBalEmpController.php',
     'App\\Http\\Controllers\\LeaveEmpController' => $baseDir . '/app/Http/Controllers/LeaveEmpController.php',
     'App\\Http\\Controllers\\MainLeaveController' => $baseDir . '/app/Http/Controllers/MainLeaveController.php',
+    'App\\Http\\Controllers\\ManagementController' => $baseDir . '/app/Http/Controllers/ManagementController.php',
     'App\\Http\\Controllers\\OvertimeEmpController' => $baseDir . '/app/Http/Controllers/OvertimeEmpController.php',
     'App\\Http\\Controllers\\ShiftController' => $baseDir . '/app/Http/Controllers/ShiftController.php',
     'App\\Http\\Controllers\\ShiftEmpController' => $baseDir . '/app/Http/Controllers/ShiftEmpController.php',
     'App\\Http\\Controllers\\SubLeaveController' => $baseDir . '/app/Http/Controllers/SubLeaveController.php',
     'App\\Http\\Controllers\\TimeAdjustmentController' => $baseDir . '/app/Http/Controllers/TimeAdjustmentController.php',
+    'App\\Http\\Controllers\\UserController' => $baseDir . '/app/Http/Controllers/UserController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\Authenticate' => $baseDir . '/app/Http/Middleware/Authenticate.php',
     'App\\Http\\Middleware\\EncryptCookies' => $baseDir . '/app/Http/Middleware/EncryptCookies.php',
@@ -41,6 +44,7 @@ return array(
     'App\\Http\\Middleware\\TrustProxies' => $baseDir . '/app/Http/Middleware/TrustProxies.php',
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
     'App\\Http\\Requests\\Auth\\LoginRequest' => $baseDir . '/app/Http/Requests/Auth/LoginRequest.php',
+    'App\\Mail\\NotifMail' => $baseDir . '/app/Mail/NotifMail.php',
     'App\\Models\\AdjustmentEmp' => $baseDir . '/app/Models/AdjustmentEmp.php',
     'App\\Models\\Approval' => $baseDir . '/app/Models/Approval.php',
     'App\\Models\\Attendance' => $baseDir . '/app/Models/Attendance.php',
@@ -56,6 +60,7 @@ return array(
     'App\\Models\\SubLeave' => $baseDir . '/app/Models/SubLeave.php',
     'App\\Models\\TimeAdjustment' => $baseDir . '/app/Models/TimeAdjustment.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
+    'App\\Notifications\\NotifRequest' => $baseDir . '/app/Notifications/NotifRequest.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',
     'App\\Providers\\BroadcastServiceProvider' => $baseDir . '/app/Providers/BroadcastServiceProvider.php',

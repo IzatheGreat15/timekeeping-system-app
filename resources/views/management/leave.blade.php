@@ -18,7 +18,7 @@
         <div class="col-md mb-3">
             <br>
             <!--Department Name - shows only if the account is NOT a CEO-->
-            <h3>Department Name</h3>
+            <h3>{{$dept->dept_name}}</h3>
         </div>
         
         <div class="col-md mb-3">
@@ -60,16 +60,18 @@
 
                 <tbody>
                     <!--Each row can be clicked redirect to leave-spec.blade.php-->
-                    <tr onclick="window.location='/leave-approvals-id';">
-                        <td>03/02/2022</td>
-                        <td>John Doe</td>
-                        <td>Marketing</td>
-                        <td>03/02/2022</td>
-                        <td>03/02/2022</td>
-                        <td>Magna Carta</td>
-                        <td>PENDING</td>
-                        <td>PENDING</td>
+                    @foreach($list as $emp)
+                    <tr onclick="window.location='/leave-approvals-id/{{$emp->id}}';">
+                        <td>{{date('M d, Y', strtotime($emp->file_date))}}</td>
+                        <td>{{$emp->first_name.' '.$emp->last_name}}</td>
+                        <td>{{$emp->dept_name}}</td>
+                        <td>{{date('M d, Y', strtotime($emp->start_date))}}</td>
+                        <td>{{date('M d, Y', strtotime($emp->end_date))}}</td>
+                        <td>{{$emp->main_leave_name}}</td>
+                        <td>{{$emp->status1}}</td>
+                        <td>{{$emp->status2}}</td>
                     </tr>
+                    @endforeach()
                 </tbody>
             </table>
         </div>
