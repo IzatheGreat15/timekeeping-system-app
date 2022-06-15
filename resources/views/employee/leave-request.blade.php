@@ -106,7 +106,8 @@
                     </tr>
                 </thead>
 
-                <tbody>
+                <!-- ALL RECORDS -->
+                <tbody id="all">
                 @if($requests->count() > 0)
                     @foreach($requests as $req)
                     <tr>
@@ -166,6 +167,334 @@
                     </tr>
                 @endif
                 </tbody>
+                <div>
+                    {{ $requests->links(); }}
+                </div>
+
+                <!-- PENDING RECORDS -->
+                <tbody id="pending">
+                @if($pending->count() > 0)
+                    @foreach($pending as $req)
+                    <tr>
+                        <!-- Hide ID -->
+                        <td style="display: none;">{{ $req->id }}</td>
+                        <!--Name shown only for management-->
+                        <td>{{ date('Y/m/d', strtotime($req->created_at)) }}</td>
+                        @if(Auth::user()->role == 'Management')
+                            <td>{{ $req->first_name }} {{ $req->last_name }}</td>
+                        @endif
+                        <td>{{ date('Y/m/d', strtotime($req->start_date)) }}</td>
+                        <td>{{ date('Y/m/d', strtotime($req->end_date)) }}</td>
+                        @if($req->sub_leave_ID > 0)
+                            <td>
+                                {{ 
+                                    Str::limit(DB::table('sub_leaves')
+                                       ->select('sub_leave_name')
+                                       ->where('id', '=', $req->sub_leave_ID)
+                                       ->get()->first()->sub_leave_name, 10)
+                                }}
+                            </td>
+
+                        @else
+                            <td>{{ Str::limit($req->main_leave_name, 10)}}</td>
+                        @endif
+                        <td>{{ $req->status1 }}</td>
+                        <td>{{ $req->status2 }}</td>
+                        <!--If request is APPROVED and REJECTED and if the entry is not of the user, buttons are disabled-->
+                        <td>
+                            <a class="btn btn-clear p-0" href="/leave-records/{{ $req->id }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                </svg>
+                            </a>
+                            &nbsp;
+                            @if(($req->status1 == 'PENDING' || $req->status1 == 'SENT BACK' || $req->status1 == 'PENDING' || $req->status1 == 'SENT BACK') && $req->emp_ID == Auth::user()->id)
+                            <a class="btn btn-clear p-0" href="/leave-request-edit/{{ $req->id }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                </svg>
+                            </a>
+                            &nbsp;
+                            <a class="btn btn-clear p-0 delete" data-toggle="modal" data-target=".delete-modal-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                                </svg>
+                            </a>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="8">No pending leave requests created yet!</td>
+                    </tr>
+                @endif
+                </tbody>
+                <div>
+                    {{ $pending->links(); }}
+                </div>
+
+                <!-- SENT BACK RECORDS -->
+                <tbody id="sent">
+                @if($sent->count() > 0)
+                    @foreach($sent as $req)
+                    <tr>
+                        <!-- Hide ID -->
+                        <td style="display: none;">{{ $req->id }}</td>
+                        <!--Name shown only for management-->
+                        <td>{{ date('Y/m/d', strtotime($req->created_at)) }}</td>
+                        @if(Auth::user()->role == 'Management')
+                            <td>{{ $req->first_name }} {{ $req->last_name }}</td>
+                        @endif
+                        <td>{{ date('Y/m/d', strtotime($req->start_date)) }}</td>
+                        <td>{{ date('Y/m/d', strtotime($req->end_date)) }}</td>
+                        @if($req->sub_leave_ID > 0)
+                            <td>
+                                {{ 
+                                    Str::limit(DB::table('sub_leaves')
+                                       ->select('sub_leave_name')
+                                       ->where('id', '=', $req->sub_leave_ID)
+                                       ->get()->first()->sub_leave_name, 10)
+                                }}
+                            </td>
+
+                        @else
+                            <td>{{ Str::limit($req->main_leave_name, 10)}}</td>
+                        @endif
+                        <td>{{ $req->status1 }}</td>
+                        <td>{{ $req->status2 }}</td>
+                        <!--If request is APPROVED and REJECTED and if the entry is not of the user, buttons are disabled-->
+                        <td>
+                            <a class="btn btn-clear p-0" href="/leave-records/{{ $req->id }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                </svg>
+                            </a>
+                            &nbsp;
+                            @if(($req->status1 == 'PENDING' || $req->status1 == 'SENT BACK' || $req->status1 == 'PENDING' || $req->status1 == 'SENT BACK') && $req->emp_ID == Auth::user()->id)
+                            <a class="btn btn-clear p-0" href="/leave-request-edit/{{ $req->id }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                </svg>
+                            </a>
+                            &nbsp;
+                            <a class="btn btn-clear p-0 delete" data-toggle="modal" data-target=".delete-modal-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                                </svg>
+                            </a>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="8">No sent back leave requests created yet!</td>
+                    </tr>
+                @endif
+                </tbody>
+                <div>
+                    {{ $sent->links(); }}
+                </div>
+
+                <!-- CANCELLED RECORDS -->
+                <tbody id="cancel">
+                @if($cancel->count() > 0)
+                    @foreach($cancel as $req)
+                    <tr>
+                        <!-- Hide ID -->
+                        <td style="display: none;">{{ $req->id }}</td>
+                        <!--Name shown only for management-->
+                        <td>{{ date('Y/m/d', strtotime($req->created_at)) }} CANCEL</td>
+                        @if(Auth::user()->role == 'Management')
+                            <td>{{ $req->first_name }} {{ $req->last_name }}</td>
+                        @endif
+                        <td>{{ date('Y/m/d', strtotime($req->start_date)) }}</td>
+                        <td>{{ date('Y/m/d', strtotime($req->end_date)) }}</td>
+                        @if($req->sub_leave_ID > 0)
+                            <td>
+                                {{ 
+                                    Str::limit(DB::table('sub_leaves')
+                                       ->select('sub_leave_name')
+                                       ->where('id', '=', $req->sub_leave_ID)
+                                       ->get()->first()->sub_leave_name, 10)
+                                }}
+                            </td>
+
+                        @else
+                            <td>{{ Str::limit($req->main_leave_name, 10)}}</td>
+                        @endif
+                        <td>{{ $req->status1 }}</td>
+                        <td>{{ $req->status2 }}</td>
+                        <!--If request is APPROVED and REJECTED and if the entry is not of the user, buttons are disabled-->
+                        <td>
+                            <a class="btn btn-clear p-0" href="/leave-records/{{ $req->id }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                </svg>
+                            </a>
+                            &nbsp;
+                            @if(($req->status1 == 'PENDING' || $req->status1 == 'SENT BACK' || $req->status1 == 'PENDING' || $req->status1 == 'SENT BACK') && $req->emp_ID == Auth::user()->id)
+                            <a class="btn btn-clear p-0" href="/leave-request-edit/{{ $req->id }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                </svg>
+                            </a>
+                            &nbsp;
+                            <a class="btn btn-clear p-0 delete" data-toggle="modal" data-target=".delete-modal-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                                </svg>
+                            </a>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="8">No cancelled leave requests created yet!</td>
+                    </tr>
+                @endif
+                </tbody>
+                <div>
+                    {{ $cancel->links(); }}
+                </div>
+
+                <!-- APPROVE RECORDS -->
+                <tbody id="approve">
+                @if($approve->count() > 0)
+                    @foreach($approve as $req)
+                    <tr>
+                        <!-- Hide ID -->
+                        <td style="display: none;">{{ $req->id }}</td>
+                        <!--Name shown only for management-->
+                        <td>{{ date('Y/m/d', strtotime($req->created_at)) }}</td>
+                        @if(Auth::user()->role == 'Management')
+                            <td>{{ $req->first_name }} {{ $req->last_name }}</td>
+                        @endif
+                        <td>{{ date('Y/m/d', strtotime($req->start_date)) }}</td>
+                        <td>{{ date('Y/m/d', strtotime($req->end_date)) }}</td>
+                        @if($req->sub_leave_ID > 0)
+                            <td>
+                                {{ 
+                                    Str::limit(DB::table('sub_leaves')
+                                       ->select('sub_leave_name')
+                                       ->where('id', '=', $req->sub_leave_ID)
+                                       ->get()->first()->sub_leave_name, 10)
+                                }}
+                            </td>
+
+                        @else
+                            <td>{{ Str::limit($req->main_leave_name, 10)}}</td>
+                        @endif
+                        <td>{{ $req->status1 }}</td>
+                        <td>{{ $req->status2 }}</td>
+                        <!--If request is APPROVED and REJECTED and if the entry is not of the user, buttons are disabled-->
+                        <td>
+                            <a class="btn btn-clear p-0" href="/leave-records/{{ $req->id }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                </svg>
+                            </a>
+                            &nbsp;
+                            @if(($req->status1 == 'PENDING' || $req->status1 == 'SENT BACK' || $req->status1 == 'PENDING' || $req->status1 == 'SENT BACK') && $req->emp_ID == Auth::user()->id)
+                            <a class="btn btn-clear p-0" href="/leave-request-edit/{{ $req->id }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                </svg>
+                            </a>
+                            &nbsp;
+                            <a class="btn btn-clear p-0 delete" data-toggle="modal" data-target=".delete-modal-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                                </svg>
+                            </a>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="8">No approved requests created yet!</td>
+                    </tr>
+                @endif
+                </tbody>
+                <div>
+                    {{ $approve->links(); }}
+                </div>
+
+                <!-- REJECTED RECORDS -->
+                <tbody id="reject">
+                @if($reject->count() > 0)
+                    @foreach($reject as $req)
+                    <tr>
+                        <!-- Hide ID -->
+                        <td style="display: none;">{{ $req->id }}</td>
+                        <!--Name shown only for management-->
+                        <td>{{ date('Y/m/d', strtotime($req->created_at)) }}</td>
+                        @if(Auth::user()->role == 'Management')
+                            <td>{{ $req->first_name }} {{ $req->last_name }}</td>
+                        @endif
+                        <td>{{ date('Y/m/d', strtotime($req->start_date)) }}</td>
+                        <td>{{ date('Y/m/d', strtotime($req->end_date)) }}</td>
+                        @if($req->sub_leave_ID > 0)
+                            <td>
+                                {{ 
+                                    Str::limit(DB::table('sub_leaves')
+                                       ->select('sub_leave_name')
+                                       ->where('id', '=', $req->sub_leave_ID)
+                                       ->get()->first()->sub_leave_name, 10)
+                                }}
+                            </td>
+
+                        @else
+                            <td>{{ Str::limit($req->main_leave_name, 10)}}</td>
+                        @endif
+                        <td>{{ $req->status1 }}</td>
+                        <td>{{ $req->status2 }}</td>
+                        <!--If request is APPROVED and REJECTED and if the entry is not of the user, buttons are disabled-->
+                        <td>
+                            <a class="btn btn-clear p-0" href="/leave-records/{{ $req->id }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                </svg>
+                            </a>
+                            &nbsp;
+                            @if(($req->status1 == 'PENDING' || $req->status1 == 'SENT BACK' || $req->status1 == 'PENDING' || $req->status1 == 'SENT BACK') && $req->emp_ID == Auth::user()->id)
+                            <a class="btn btn-clear p-0" href="/leave-request-edit/{{ $req->id }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                </svg>
+                            </a>
+                            &nbsp;
+                            <a class="btn btn-clear p-0 delete" data-toggle="modal" data-target=".delete-modal-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                                </svg>
+                            </a>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="8">No rejected leave requests created yet!</td>
+                    </tr>
+                @endif
+                </tbody>
+                <div>
+                    {{ $reject->links(); }}
+                </div>
             </table>
         </div>
     </div>
@@ -197,6 +526,8 @@
 </div>
 
 <script type="text/javascript">
+    var status = ['all', 'pending', 'sent', 'reject', 'approve', 'cancel'];
+
     $(document).ready(function () {
         $("#leaves").addClass('active');
 
@@ -205,10 +536,36 @@
             var id = currRow.find('td:eq(0)').text();
             $("#dept_id").val(id);
         });
+
+        hide_record();
+        $('#all').show();
     });
+
+    $('select[name="status"]').change(function() {
+        hide_record();
+         var status = $('select[name="status"]').val();
+         switch(status){
+             case 'ALL' : $('#all').show(); break;
+             case 'PENDING' : $('#pending').show(); break;
+             case 'SENT BACK' : $('#sent').show(); break;
+             case 'REJECTED' : $('#reject').show(); break;
+             case 'APPROVED' : $('#approve').show(); break;
+             case 'CANCELLED' : $('#cancel').show(); break;
+         }
+    });
+
+    function hide_record(){
+        $('#all').hide();
+        $('#pending').hide();
+        $('#sent').hide();
+        $('#reject').hide();
+        $('#approve').hide();
+        $('#cancel').hide();
+    }
 
     $('input[name="start_date"]').change(function() {
         $('input[name="end_date"]').attr("min", $('input[name="start_date"]').val());
     });
+
 </script>
 @endsection

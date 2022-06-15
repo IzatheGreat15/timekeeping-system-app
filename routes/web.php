@@ -85,6 +85,7 @@ Route::get("/leave-request-edit/{id}", [LeaveEmpController::class, "edit_leave_r
 Route::post("/leave-request-update", [LeaveEmpController::class, "update_leave_request"]);
 Route::post("/leave-request-delete", [LeaveEmpController::class, "delete_leave_request"]);
 Route::post("/leave-request-search", [LeaveEmpController::class, "search_leave_request"]);
+Route::get("/status-leave/ajax", [LeaveEmpController::class, "status_dopdown"]);
 
 /* Overtime */
 Route::get("/overtime-records", [OvertimeEmpController::class, "show_overtime_records"]);

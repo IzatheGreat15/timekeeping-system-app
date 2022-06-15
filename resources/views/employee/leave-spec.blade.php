@@ -54,8 +54,8 @@
                 <tr>
                     <td class="w-50">Supporting Documents</td>
                     <td class="w-50 font-weight-bold text-info">
-                        <a href="public/supporting_docs/{{ Auth::user()->id }}"
-                           download="{{ $req->document_file }}">
+                        <a href="<?php echo public_path('supporting_docs\'.Auth::user()->id.'\'.$req->document_file);?>"
+                        target="_blank">
                             {{ $req->document_file }}
                         </a>
                     </td>

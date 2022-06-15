@@ -141,7 +141,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="11">No confirmed leave requests yet!</td>
+                        <td colspan="11">No attendance yet!</td>
                     </tr>
                 @endif
                 </tbody>
