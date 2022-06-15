@@ -18,7 +18,7 @@
         <div class="col-md mb-3">
             <br>
             <!--Department Name - shows only if the account is NOT a CEO-->
-            <h3>Department Name</h3>
+            <h3>{{$dept->dept_name}}</h3>
         </div>
         
         <div class="col-md mb-3">
@@ -61,17 +61,25 @@
 
                 <tbody>
                     <!--Each row can be clicked redirect to adjustment-approvals-id.blade.php-->
-                    <tr onclick="window.location='/adjustment-approvals-id';">
-                        <td>John Doe</td>
-                        <td>Marketing</td>
-                        <td>03/02/22</td>
-                        <td>03/02/22</td>
-                        <td>04:01AM</td>
-                        <td>06:02PM</td>
-                        <td>Late</td>
-                        <td>PENDING</td>
-                        <td>-------</td>
-                    </tr>
+                    @if(count($list) < 1)
+                        <tr><td colspan="9">
+                            <center><h2>No record available.</h2></center>
+                        </td></tr>
+                    @else()
+                        @foreach($list as $emp)
+                        <tr onclick="window.location='/adjustment-approvals-id/{{$emp->id}}';">
+                            <td>{{$emp->first_name.' '.$emp->last_name}}</td>
+                            <td>{{$emp->dept_name}}</td>
+                            <td>{{date('M d, Y', strtotime($emp->file_date))}}</td>
+                            <td>{{date('M d, Y', strtotime($emp->issue_date))}}</td>
+                            <td>{{date('g:i A', strtotime($emp->time_in1))}}</td>
+                            <td>{{date('g:i A', strtotime($emp->time_out3))}}</td>
+                            <td>{{$emp->reason}}</td>
+                            <td>{{$emp->status1}}</td>
+                            <td>{{$emp->status2}}</td>
+                        </tr>
+                        @endforeach()
+                    @endif()
                 </tbody>
             </table>
         </div>

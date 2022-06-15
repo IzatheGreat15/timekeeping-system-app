@@ -18,7 +18,7 @@
         <div class="col-md mb-3">
             <br>
             <!--Department Name - shows only if the account is NOT a CEO-->
-            <h3>Department Name</h3>
+            <h3>{{$dept->dept_name}}</h3>
         </div>
         
         <div class="col-md mb-3">
@@ -50,24 +50,26 @@
                         <th scope="col">Position</th>
                         <th scope="col">Manager/ <br> Supervisor</th>
                         <th scope="col">Manager/ <br> Supervisor</th>
-                        <th scope="col">Substitue</th>
+                        <th scope="col">Substitute</th>
                         <th scope="col">STATUS</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <!--Each row can be clicked redirect to employee-spec.blade.php-->
-                    <tr onclick="window.location='/employee-records-id';">
-                        <td>John Doe</td>
-                        <td>03/02/2022</td>
-                        <td>Graveyard Shift</td>
-                        <td>Marketing</td>
-                        <td>Employee</td>
-                        <td>Mr. Sherlock Holmes</td>
-                        <td>Mr. John Watson</td>
-                        <td>Mr. Jim Moriarty</td>
-                        <td>ACTIVE</td>
+                    @foreach($list as $emp)
+                    <tr onclick="window.location='/employee-records-id/{{$emp->id}}';">
+                        <td>{{$emp->uFN.' '.$emp->uLN}}</td>
+                        <td>{{date('M d, Y', strtotime($emp->created_at))}}</td>
+                        <td>{{$emp->shift_name}}</td>
+                        <td>{{$emp->dept_name}}</td>
+                        <td>{{$emp->position}}</td>
+                        <td>{{$emp->a1FN.' '.$emp->a1LN}}</td>
+                        <td>{{$emp->a2FN.' '.$emp->a2LN}}</td>
+                        <td>{{$emp->sFN.' '.$emp->sLN}}</td>
+                        <td>{{$emp->status}}</td>
                     </tr>
+                    @endforeach()
                 </tbody>
             </table>
         </div>

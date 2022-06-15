@@ -546,6 +546,7 @@ class ComposerStaticInitbec4ecd5790e649bd5f6147b970d6b6e
     );
 
     public static $classMap = array (
+        'App\\Console\\Commands\\CreateAttendance' => __DIR__ . '/../..' . '/app/Console/Commands/CreateAttendance.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\AdjustmentEmpController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdjustmentEmpController.php',
@@ -566,11 +567,13 @@ class ComposerStaticInitbec4ecd5790e649bd5f6147b970d6b6e
         'App\\Http\\Controllers\\LeaveBalEmpController' => __DIR__ . '/../..' . '/app/Http/Controllers/LeaveBalEmpController.php',
         'App\\Http\\Controllers\\LeaveEmpController' => __DIR__ . '/../..' . '/app/Http/Controllers/LeaveEmpController.php',
         'App\\Http\\Controllers\\MainLeaveController' => __DIR__ . '/../..' . '/app/Http/Controllers/MainLeaveController.php',
+        'App\\Http\\Controllers\\ManagementController' => __DIR__ . '/../..' . '/app/Http/Controllers/ManagementController.php',
         'App\\Http\\Controllers\\OvertimeEmpController' => __DIR__ . '/../..' . '/app/Http/Controllers/OvertimeEmpController.php',
         'App\\Http\\Controllers\\ShiftController' => __DIR__ . '/../..' . '/app/Http/Controllers/ShiftController.php',
         'App\\Http\\Controllers\\ShiftEmpController' => __DIR__ . '/../..' . '/app/Http/Controllers/ShiftEmpController.php',
         'App\\Http\\Controllers\\SubLeaveController' => __DIR__ . '/../..' . '/app/Http/Controllers/SubLeaveController.php',
         'App\\Http\\Controllers\\TimeAdjustmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/TimeAdjustmentController.php',
+        'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
@@ -581,6 +584,7 @@ class ComposerStaticInitbec4ecd5790e649bd5f6147b970d6b6e
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Http\\Requests\\Auth\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Auth/LoginRequest.php',
+        'App\\Mail\\NotifMail' => __DIR__ . '/../..' . '/app/Mail/NotifMail.php',
         'App\\Models\\AdjustmentEmp' => __DIR__ . '/../..' . '/app/Models/AdjustmentEmp.php',
         'App\\Models\\Approval' => __DIR__ . '/../..' . '/app/Models/Approval.php',
         'App\\Models\\Attendance' => __DIR__ . '/../..' . '/app/Models/Attendance.php',
@@ -596,6 +600,7 @@ class ComposerStaticInitbec4ecd5790e649bd5f6147b970d6b6e
         'App\\Models\\SubLeave' => __DIR__ . '/../..' . '/app/Models/SubLeave.php',
         'App\\Models\\TimeAdjustment' => __DIR__ . '/../..' . '/app/Models/TimeAdjustment.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
+        'App\\Notifications\\NotifRequest' => __DIR__ . '/../..' . '/app/Notifications/NotifRequest.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
