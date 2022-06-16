@@ -143,7 +143,7 @@ class LeaveEmpController extends Controller
                     ->join('comments', 'comments.id', '=', 'leave_emp.comment_ID')
                     ->where('leave_emp.id', '=', $id)
                     ->get()->first();
-        $filePath = ;
+                    
         $approvals = DB::table('leave_emp')
                     ->select('users.*', 'approvals.*')
                     ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
