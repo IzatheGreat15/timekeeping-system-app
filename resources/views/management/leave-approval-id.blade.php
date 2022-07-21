@@ -41,7 +41,12 @@
                 </tr>
                 <tr>
                     <td class="w-50">Supporting Documents</td>
-                    <td class="w-50 font-weight-bold"><a href={{ asset($emp->document_file) }} target="_top">{{$fname}}</a></td>
+                    <td class="w-50 font-weight-bold">
+                        <a href="/download/{{ $emp->document_file }}/{{ $emp->emp_ID }}"
+                        target="_blank">
+                            {{ $emp->document_file }}
+                        </a>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -52,7 +57,7 @@
                 <table class="table table-hover">
                 <tr>
                         <td class="w-50 font-italic">Postion of Approver 1</td>
-                        <td class="w-50 font-weight-bold font-italic">{{$emp->ap1_fname.' '.$emp->ap1_lname}} (Datetime)</td>
+                        <td class="w-50 font-weight-bold font-italic">{{$emp->ap1_fname.' '.$emp->ap1_lname}} ({{ $emp->updated_at1 }})</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic">Status 1</td>
@@ -68,7 +73,7 @@
                     </tr>
                     <tr>
                         <td class="w-50 font-italic">Postion of Approver 2</td>
-                        <td class="w-50 font-weight-bold font-italic">{{$emp->ap2_fname.' '.$emp->ap2_lname}} (Datetime)</td>
+                        <td class="w-50 font-weight-bold font-italic">{{$emp->ap2_fname.' '.$emp->ap2_lname}} ({{ $emp->updated_at2 }})</td>
                     </tr>
                     <tr>
                         <td class="w-50 font-italic">Status 2</td>

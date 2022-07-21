@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AttendanceExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AttendanceController extends Controller
 {
@@ -15,11 +18,7 @@ class AttendanceController extends Controller
         $requests = DB::table('attendance')
                     ->select('attendance.*', 'attendance.created_at AS date', 'attendance.id AS ID', 'time_adjustments.*', 'shift_emp.*', 'shifts.*', 'users.*')
                     ->join('time_adjustments','time_adjustments.id','=','attendance.time_ID')
-                    ->join('shift_emp',function($join) {
-                        $join->on('shift_emp.emp_ID','=','attendance.emp_ID')
-                        ->on('shift_emp.start_date','<','attendance.created_at')
-                        ->on('shift_emp.end_date','>=','attendance.created_at');
-                    })
+                    ->join('shift_emp', 'shift_emp.emp_ID','=','attendance.emp_ID')
                     ->join('shifts','shifts.id','=','shift_emp.shift_ID')
                     ->join('users','users.id','=','attendance.emp_ID')
                     ->join('approvals','approvals.id','=','users.approval_ID')
@@ -31,18 +30,86 @@ class AttendanceController extends Controller
         return view('employee.attendance-record', compact('requests'));
     }
 
+    /**
+     * Search or export attendance
+     */
+    public function search_export_attendance(Request $request){
+        /* validate all fields */
+        $valid = Validator::make($request->all(), [
+            'start_date'         => 'required',
+            'end_date'           => 'required'
+        ]);
+
+        if($valid->fails()){
+            return redirect('/attendance-records')->withErrors($valid);
+        }
+
+        $requests = NULL;
+        $info = $request->input('name');
+        switch ($request->input('action')) {
+            case 'search':
+                /* if there is a name */
+                if($request->has('name')){
+                    $requests = DB::table('attendance')
+                            ->select('attendance.*', 'attendance.created_at AS date', 'attendance.id AS ID', 'time_adjustments.*', 'shift_emp.*', 'shifts.*', 'users.*')
+                            ->join('time_adjustments','time_adjustments.id','=','attendance.time_ID')
+                            ->join('shift_emp', 'shift_emp.emp_ID','=','attendance.emp_ID')
+                            ->join('shifts','shifts.id','=','shift_emp.shift_ID')
+                            ->join('users','users.id','=','attendance.emp_ID')
+                            ->join('approvals','approvals.id','=','users.approval_ID')
+                            ->where(function($query) use ($info){
+                                $query->where(DB::raw('lower(users.first_name)'), 'like', '%' . strtolower($info) . '%')
+                                ->orWhere(DB::raw('lower(users.last_name)'), 'like', '%' . strtolower($info) . '%');
+                            })
+                            ->where(function ($query) use ($request){
+                                $query->whereBetween('attendance.created_at', [$request->start_date, $request->end_date])
+                                      ->orwhereDate('attendance.created_at', $request->start_date)
+                                      ->orwhereDate('attendance.created_at', $request->end_date);
+                            })
+                            ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                            ->get();
+                } else {
+                    $requests = DB::table('attendance')
+                            ->select('attendance.*', 'attendance.created_at AS date', 'attendance.id AS ID', 'time_adjustments.*', 'shift_emp.*', 'shifts.*', 'users.*')
+                            ->join('time_adjustments','time_adjustments.id','=','attendance.time_ID')
+                            ->join('shift_emp', 'shift_emp.emp_ID','=','attendance.emp_ID')
+                            ->join('shifts','shifts.id','=','shift_emp.shift_ID')
+                            ->join('users','users.id','=','attendance.emp_ID')
+                            ->join('approvals','approvals.id','=','users.approval_ID')
+                            ->where(function ($query) use ($request){
+                                $query->whereBetween('attendance.created_at', [$request->start_date, $request->end_date])
+                                      ->orwhereDate('attendance.created_at', $request->start_date)
+                                      ->orwhereDate('attendance.created_at', $request->end_date);
+                            })
+                            ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                            ->get();
+                }
+                if(isset($requests->first()->id))
+                    return view('employee.attendance-record', compact('requests'));
+                else
+                    return redirect('/attendance-records')->with('error', 'No attendance found. Try Again');
+                break;
+    
+            case 'export':
+                $dept = DB::table('departments')
+                        ->select('dept_name')
+                        ->where('id', '=', Auth::user()->dept_ID)
+                        ->get()->first();
+                $filename = $dept->dept_name."_".date("Y")."_".date("M d", strtotime($request->start_date))." - ".date("M d", strtotime($request->end_date)).".xlsx";
+                            
+                return Excel::download(new AttendanceExport($request->start_date, $request->end_date), $filename);
+                break;
+        }
+    }
+
     /*
         view an attendance
      */
     public function view_attendance($id){
         $req = DB::table('attendance')
-                    ->select('attendance.*', 'attendance.created_at AS date', 'attendance.id AS ID', 'time_adjustments.*', 'shift_emp.*', 'shifts.*', 'users.*')
+                    ->select('attendance.*', 'attendance.emp_ID AS empID', 'attendance.created_at AS date', 'attendance.id AS ID', 'time_adjustments.*', 'shift_emp.*', 'shifts.*', 'users.*')
                     ->join('time_adjustments','time_adjustments.id','=','attendance.time_ID')
-                    ->join('shift_emp',function($join) {
-                        $join->on('shift_emp.emp_ID','=','attendance.emp_ID')
-                        ->on('shift_emp.start_date','<','attendance.created_at')
-                        ->on('shift_emp.end_date','>=','attendance.created_at');
-                    })
+                    ->join('shift_emp', 'shift_emp.emp_ID','=','attendance.emp_ID')
                     ->join('shifts','shifts.id','=','shift_emp.shift_ID')
                     ->join('users','users.id','=','attendance.emp_ID')
                     ->join('approvals','approvals.id','=','users.approval_ID')
@@ -52,10 +119,21 @@ class AttendanceController extends Controller
         $approvals = DB::table('users')
                      ->select('approvals.*')
                      ->join('approvals', 'approvals.id', '=', 'approval_ID')
-                     ->where('users.id', '=', $req->emp_ID)
+                     ->where('users.id', '=', $req->empID)
                      ->get()->first();
 
-        return view('employee.attendance-spec', compact('req', 'approvals'));
+        $timein = strtotime($req->time_in3);
+        $timeout = strtotime($req->time_out3);
+        $diff = round(($timeout-$timein)/3600, 3);
+echo $diff;
+        
+
+        $hours = strtok($diff, ".");
+        $mins = strtok(" ");
+        //$mins = ($mins[0] == "0")? $mins[1] : $mins;
+
+
+        //return view('employee.attendance-spec', compact('req', 'approvals', 'hours', 'mins'));
     }
 
     /*

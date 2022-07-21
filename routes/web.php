@@ -15,7 +15,7 @@ use App\Http\Controllers\ChangeShiftEmpController;
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\ManagementController;
 use App\Http\Controllers\NotifRequestController;
-
+use App\Http\Controllers\ShiftEmpController;
 use App\Models\Attendance;
 use App\Models\Department;
 use App\Models\LeaveEmp;
@@ -23,6 +23,7 @@ use App\Models\Shift;
 use App\Models\Main_Leave;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NotifMail;
+use App\Models\ChangeShiftEmp;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +64,7 @@ Route::middleware('auth')->group(function () {
     /* Attendance */
     Route::get("/attendance-records", [AttendanceController::class, "show_attendance"]);
     Route::get("/attendance-records/{id}", [AttendanceController::class, "view_attendance"]);
+    Route::post("/search-export-attendance", [AttendanceController::class, "search_export_attendance"]);
 
     /* Adjustment */
     Route::get("/adjustment-records", [AdjustmentEmpController::class, "show_adjustment"]);
@@ -72,10 +74,12 @@ Route::middleware('auth')->group(function () {
     Route::get("/adjustment-edit/{id}", [AdjustmentEmpController::class, "edit_adjustment"]);
     Route::post("/adjustment_update", [AdjustmentEmpController::class, "update_adjustment"]);
     Route::post("/adjustment_delete", [AdjustmentEmpController::class, "delete_adjustment"]);
+    Route::post("/adjustment-search", [AdjustmentEmpController::class, "search_adjustment"]);
 
     /* Shift */
     Route::get("/shift-records", [ChangeShiftEmpController::class, "display_shift_records"]);
-    Route::get("/shift-records/{id}", [ChangeShiftEmpController::class, "view_change_shift"]);
+    Route::post("/shift-records-search", [ChangeShiftEmpController::class, "search_shift_records"]);
+
     Route::get("/shift-change", [ChangeShiftEmpController::class, "display_change_shift"]);
     Route::get("/shift-change/{id}", [ChangeShiftEmpController::class, "view_change_shift"]);
     Route::get("/shift-change-new", [ChangeShiftEmpController::class, "new_change_shift"]);
@@ -83,11 +87,13 @@ Route::middleware('auth')->group(function () {
     Route::get("/shift-change-edit/{id}", [ChangeShiftEmpController::class, "edit_change_shift"]);
     Route::post("/shift-change-update", [ChangeShiftEmpController::class, "update_change_shift"]);
     Route::post("/shift-change-delete", [ChangeShiftEmpController::class, "delete_change_shift"]);
-    //search to be done
+    Route::post("/shift-change-search", [ChangeShiftEmpController::class, "search_change_shift"]);
 
     /* Leave */
     Route::get("/leave-records", [LeaveEmpController::class, "show_leave_record"]);
     Route::get("/leave-records/{id}", [LeaveEmpController::class, "view_leave_record"]);
+    Route::post("/leave-records-search", [LeaveEmpController::class, "search_leave_record"]);
+
     Route::get("/leave-request", [LeaveEmpController::class, "show_leave_request"]);
     Route::get("/leave-request-new", [LeaveEmpController::class, "new_leave_request"]);
     Route::post("/add-leave-request", [LeaveEmpController::class, "add_leave_request"]);
@@ -95,10 +101,13 @@ Route::middleware('auth')->group(function () {
     Route::post("/leave-request-update", [LeaveEmpController::class, "update_leave_request"]);
     Route::post("/leave-request-delete", [LeaveEmpController::class, "delete_leave_request"]);
     Route::post("/leave-request-search", [LeaveEmpController::class, "search_leave_request"]);
+    Route::get("/download/{filename}/{id}", [LeaveEmpController::class, "download_file"]);
 
     /* Overtime */
     Route::get("/overtime-records", [OvertimeEmpController::class, "show_overtime_records"]);
     Route::get("/overtime-records/{id}", [OvertimeEmpController::class, "view_overtime_request"]);
+    Route::post("/overtime-record-search", [OvertimeEmpController::class, "search_overtime_record"]);
+
     Route::get("/overtime-request", [OvertimeEmpController::class, "show_overtime_requests"]);
     Route::view("/overtime-request-new", 'employee.overtime-request-new');
     Route::get("/overtime-request/{id}", [OvertimeEmpController::class, "view_overtime_request"]);
@@ -106,6 +115,7 @@ Route::middleware('auth')->group(function () {
     Route::post("/overtime-request-created", [OvertimeEmpController::class, "add_overtime_request"]);
     Route::post("/overtime-request-edited", [OvertimeEmpController::class, "update_overtime_request"]);
     Route::post("/overtime-request-deleted", [OvertimeEmpController::class, "delete_overtime_request"]);
+    Route::post("/overtime-request-search", [OvertimeEmpController::class, "search_overtime_request"]);
 
     /* Management */
 
@@ -124,12 +134,13 @@ Route::middleware('auth')->group(function () {
     Route::get("/approve-overtimes", [ManagementController::class, "show_management_overtimes"]);
     Route::get("/overtime-approvals-id/{id}", [ManagementController::class, "show_management_overtimes_indiv"]);
 
-    /*** 
-    Route::view("/manage-shifts", 'management.manage-shift');
-    Route::view("/shift-manage-id", 'management.shift-manage-id');
-    Route::view("/shift-manage-new", 'management.manage-shift-new');
-    Route::view("/shift-manage-edit", 'management.manage-shift-edit');
-    ***/
+    Route::get("/manage-shifts", [ShiftEmpController::class, "show_manage_shift"]);
+    Route::get("/shift-manage/{id}", [ShiftEmpController::class, "view_manage_shift"]);
+    Route::get("/shift-manage-new", [ShiftEmpController::class, "new_manage_shift"]);
+    Route::post("/add-manage-shift", [ShiftEmpController::class, "add_manage_shift"]);
+    Route::get("/shift-manage-edit/{id}", [ShiftEmpController::class, "edit_manage_shift"]);
+    Route::post("/update-manage-shift", [ShiftEmpController::class, "update_manage_shift"]);
+    Route::post("/manage-shift-delete", [ShiftEmpController::class, "delete_manage_shift"]);
 
     Route::post("/approve-attendance", [ApprovalController::class, "approve_attendance"]);
     Route::post("/approve-shift", [ApprovalController::class, "approve_shift"]);

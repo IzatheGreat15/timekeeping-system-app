@@ -3,7 +3,7 @@
 @section('content')
 <!--Actual Content-->
 <div class="container bg-light p-3 p-sm-5 mb-5 shadow-lg" style="color:#767070;">
-    <a type="button" class="btn shadow-md bg-danger" href="{{ url()->previous() }}" style="color:white">
+    <a type="button" class="btn shadow-md bg-danger" href="/leave-records" style="color:white">
         Back </a>
 
     <br><br>
@@ -54,7 +54,7 @@
                 <tr>
                     <td class="w-50">Supporting Documents</td>
                     <td class="w-50 font-weight-bold text-info">
-                        <a href="<?php echo public_path('supporting_docs\'.Auth::user()->id.'\'.$req->document_file);?>"
+                        <a href="/download/{{ $req->document_file }}/{{ $req->emp_ID }}"
                         target="_blank">
                             {{ $req->document_file }}
                         </a>
@@ -139,5 +139,6 @@
     $(document).ready(function () {
         $("#leaves").addClass('active');
     });
+
 </script>
 @endsection

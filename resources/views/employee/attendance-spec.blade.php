@@ -35,7 +35,7 @@
                             </span> 
                             -
                             <span id="end_time">
-                                {{ date('h:i A', strtotime($req->end_time))  }}
+                                {{ date('h:i A', strtotime($req->end_time))  }} 
                             </span>
                         </td>
                     <tr>
@@ -45,7 +45,9 @@
                     <tr>
                     <tr>
                         <td class="w-50">Tardy:</td>
-                        <td class="w-50 font-weight-bold" id="tardy"></td>
+                        <td class="w-50 font-weight-bold">
+                            {{ $hours }} hrs {{ $mins }} mins
+                        </td>
                     <tr>
                     <tr>
                         <td class="w-50" colspan="2">Superiors:</td>
@@ -202,6 +204,8 @@
             var hours = (diff - minutes) / 60;
 
             var shift = (start_time > end_time)? 24 + hours : hours;
+
+
             $('#tardy').text(shift-total_hrs);
     });
 </script>

@@ -26,6 +26,152 @@ class ChangeShiftEmpController extends Controller
         return view('employee.shift-record', compact('requests'));         
     }
 
+    /**
+     * search for a shift record
+     */
+    public function search_shift_records(Request $request){
+        /* validate all fields */
+        $request->validate([
+            'start_date'         => 'required',
+            'end_date'           => 'required'
+        ]);
+
+        $requests = NULL;
+        $info = $request->input('name');
+
+        /* get search word from the database */
+        /* make sure the search function is case insensitive; search in leave name, description, and balance */
+
+        /* if there is a name */
+        if(isset($request->name)){
+            $requests = DB::table('shift_emp')
+                        ->select('users.first_name', 'users.last_name', 'shifts.shift_name', 'shifts.start_time', 'shifts.end_time', 'shift_emp.*')
+                        ->join('users', 'users.id', '=', 'shift_emp.emp_ID')
+                        ->join('shifts', 'shifts.id', '=', 'shift_emp.shift_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->where(function($query) use ($info){
+                            $query->where(DB::raw('lower(users.first_name)'), 'like', '%' . strtolower($info) . '%')
+                            ->orWhere(DB::raw('lower(users.last_name)'), 'like', '%' . strtolower($info) . '%');
+                        })
+                        ->where(function($query) use ($request){
+                            $query->whereBetween('shift_emp.start_date', [$request->start_date, $request->end_date])
+                                  ->orWhereBetween('shift_emp.end_date', [$request->start_date, $request->end_date]);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->get();
+        } else {
+            $requests = DB::table('shift_emp')
+                        ->select('users.first_name', 'users.last_name', 'shifts.shift_name', 'shifts.start_time', 'shifts.end_time', 'shift_emp.*')
+                        ->join('users', 'users.id', '=', 'shift_emp.emp_ID')
+                        ->join('shifts', 'shifts.id', '=', 'shift_emp.shift_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->where(function($query) use ($request){
+                            $query->whereBetween('shift_emp.start_date', [$request->start_date, $request->end_date])
+                                  ->orWhereBetween('shift_emp.end_date', [$request->start_date, $request->end_date]);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->get();
+        }
+
+        if(isset($requests->first()->id))
+            return view('employee.shift-record', compact('requests'));
+        else
+            return redirect('/shift-records')->with('error', 'No shift found. Try Again');
+    }
+
+    /**
+     * search for a change shift record
+     */
+    public function search_change_shift(Request $request){
+        /* validate all fields */
+        $request->validate([
+            'start_date'         => 'required',
+            'end_date'           => 'required'
+        ]);
+
+        $requests = NULL;
+        $info = $request->input('name');
+
+        /* get search word from the database */
+        /* make sure the search function is case insensitive; search in leave name, description, and balance */
+
+        /* if there is a name */
+        if(isset($request->name) && $request->status == "ALL"){
+            $requests = DB::table('change_shift_emp')
+                        ->select('change_shift_emp.*', 'users.first_name', 'users.last_name', 'shifts.shift_name', 'shifts.start_time', 'shifts.end_time', 'shift_emp.start_date', 'shift_emp.end_date')
+                        ->join('users', 'users.id', '=', 'change_shift_emp.emp_ID')
+                        ->join('shift_emp', 'shift_emp.id', '=', 'shift_emp_ID')
+                        ->join('shifts', 'shifts.id', '=', 'change_shift_emp.shift_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->where(function($query) use ($info){
+                            $query->where(DB::raw('lower(users.first_name)'), 'like', '%' . strtolower($info) . '%')
+                            ->orWhere(DB::raw('lower(users.last_name)'), 'like', '%' . strtolower($info) . '%');
+                        })
+                        ->where(function($query) use ($request){
+                            $query->whereBetween('change_shift_emp.start_date', [$request->start_date, $request->end_date])
+                                  ->orWhereBetween('change_shift_emp.end_date', [$request->start_date, $request->end_date]);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->get();
+        } else if (!isset($request->name) && $request->status != "ALL"){
+            $requests = DB::table('change_shift_emp')
+                        ->select('change_shift_emp.*', 'users.first_name', 'users.last_name', 'shifts.shift_name', 'shifts.start_time', 'shifts.end_time', 'shift_emp.start_date', 'shift_emp.end_date')
+                        ->join('users', 'users.id', '=', 'change_shift_emp.emp_ID')
+                        ->join('shift_emp', 'shift_emp.id', '=', 'shift_emp_ID')
+                        ->join('shifts', 'shifts.id', '=', 'change_shift_emp.shift_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->where(function($query) use ($request){
+                            $query->whereBetween('change_shift_emp.start_date', [$request->start_date, $request->end_date])
+                                  ->orWhereBetween('change_shift_emp.end_date', [$request->start_date, $request->end_date]);
+                        })
+                        ->where(function($query) use ($request){
+                            $query->where('change_shift_emp.status1', '=', $request->status)
+                            ->orWhere('change_shift_emp.status2', '=', $request->status);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->get();
+        } elseif (isset($request->name) && $request->status != "ALL") {
+            $requests = DB::table('change_shift_emp')
+                        ->select('change_shift_emp.*', 'users.first_name', 'users.last_name', 'shifts.shift_name', 'shifts.start_time', 'shifts.end_time', 'shift_emp.start_date', 'shift_emp.end_date')
+                        ->join('users', 'users.id', '=', 'change_shift_emp.emp_ID')
+                        ->join('shift_emp', 'shift_emp.id', '=', 'shift_emp_ID')
+                        ->join('shifts', 'shifts.id', '=', 'change_shift_emp.shift_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->where(function($query) use ($info){
+                            $query->where(DB::raw('lower(users.first_name)'), 'like', '%' . strtolower($info) . '%')
+                            ->orWhere(DB::raw('lower(users.last_name)'), 'like', '%' . strtolower($info) . '%');
+                        })
+                        ->where(function($query) use ($request){
+                            $query->where('change_shift_emp.status1', '=', $request->status)
+                            ->orWhere('change_shift_emp.status2', '=', $request->status);
+                        })
+                        ->where(function($query) use ($request){
+                            $query->whereBetween('change_shift_emp.start_date', [$request->start_date, $request->end_date])
+                                  ->orWhereBetween('change_shift_emp.end_date', [$request->start_date, $request->end_date]);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->get();
+        } else {
+            $requests = DB::table('change_shift_emp')
+                        ->select('change_shift_emp.*', 'users.first_name', 'users.last_name', 'shifts.shift_name', 'shifts.start_time', 'shifts.end_time', 'shift_emp.start_date', 'shift_emp.end_date')
+                        ->join('users', 'users.id', '=', 'change_shift_emp.emp_ID')
+                        ->join('shift_emp', 'shift_emp.id', '=', 'shift_emp_ID')
+                        ->join('shifts', 'shifts.id', '=', 'change_shift_emp.shift_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->where(function($query) use ($request){
+                            $query->whereBetween('change_shift_emp.start_date', [$request->start_date, $request->end_date])
+                                  ->orWhereBetween('change_shift_emp.end_date', [$request->start_date, $request->end_date]);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->get();
+        }
+
+        if(isset($requests->first()->id))
+            return view('employee.shift-change', compact('requests'));  
+        else
+            return redirect('/shift-change')->with('error', 'No change shifts found. Try Again');
+    }
+
     /*
         display all change shift requests
      */

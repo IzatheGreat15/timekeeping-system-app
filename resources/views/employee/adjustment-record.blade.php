@@ -26,6 +26,15 @@
         </ul>
     @endif
 
+    <!-- Error Messages -->
+    @if ($errors->any())
+        <ul class="list-group">
+            @foreach ($errors->all() as $error)
+                <li class="list-group-item list-group-item-danger mb-3">{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
+
     <!--Redirect to adjustment-new.blade.php-->
     <a type="button" class="btn shadow-md mb-4" href="/adjustment-new" style="color:white">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-plus-circle" viewBox="0 1 16 16" style="overflow: visible">
@@ -35,32 +44,36 @@
     New Request </a>
 
     <!--Form Date Filter-->
-    <form>
+    <form method="POST" action="/adjustment-search">
+        @csrf
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>From: </label>
-                <input type="date" class="form-control">
+                <input type="date" name="start_date" class="form-control">
             </div>
             <div class="col-sm mb-3">
                 <label>To: </label>
-                <input type="date" class="form-control">
+                <input type="date" name="end_date" class="form-control">
             </div>
             <!--For Management Only - Employee-->
             @if(Auth::user()->role == 'Management')
             <div class="col-sm mb-3">
                 <label>Employee: </label>
-                <input type="text" class="form-control" name="name" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}">
+                <input type="text" class="form-control" name="name">
             </div>
             @endif
             <div class="col-sm mb-3">
                 <label>Status: </label>
-                <select class="form-control">
+                <select class="form-control" name="status">
                     <option>ALL</option>
                     <option>PENDING</option>
                     <option>SENT BACK</option>
                     <option>APPROVED</option>
                     <option>REJECTED</option>
                 </select>
+            </div>
+            <div class="col-sm-1 mt-4">
+                <button type="submit" class="form-control btn bg-info">Search</button>
             </div>
         </div>
     </form>
@@ -182,6 +195,10 @@
             var currRow = $(this).closest("tr");
             var id = currRow.find('td:eq(0)').text();
             $("#dept_id").val(id);
+        });
+
+        $('input[name="start_date"]').change(function() {
+            $('input[name="end_date"]').attr("min", $('input[name="start_date"]').val());
         });
     });
 </script>

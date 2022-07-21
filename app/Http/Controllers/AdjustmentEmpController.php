@@ -201,5 +201,102 @@ class AdjustmentEmpController extends Controller
 
         return redirect('/adjustment-records')->with('success', 'Adjustment request cancelled successfully');
     }
+
+    /**
+     * Search for entries of adjustments in database
+     */
+    public function search_adjustment(Request $request){
+        /* validate all fields */
+        $request->validate([
+            'start_date'         => 'required',
+            'end_date'           => 'required'
+        ]);
+
+        $requests = NULL;
+        $info = $request->input('name');
+
+        /* get search word from the database */
+        /* make sure the search function is case insensitive; search in leave name, description, and balance */
+
+        /* if there is a name */
+        if(isset($request->name)){
+            $requests = DB::table('adjustment_emp')
+                        ->select('adjustment_emp.*', 'users.first_name', 'users.last_name', 'attendance.created_at AS date', 'time_adjustments.time_in1', 'time_adjustments.time_out1', 'time_adjustments.time_out2', 'time_adjustments.time_out3')
+                        ->join('users', 'users.id', '=', 'adjustment_emp.emp_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->join('time_adjustments', 'time_adjustments.id', '=', 'adjustment_emp.time_ID')
+                        ->join('attendance', 'attendance.id', '=', 'adjustment_emp.att_ID')
+                        ->where(function($query) use ($info){
+                            $query->where(DB::raw('lower(users.first_name)'), 'like', '%' . strtolower($info) . '%')
+                            ->orWhere(DB::raw('lower(users.last_name)'), 'like', '%' . strtolower($info) . '%');
+                        })
+                        ->where(function ($query) use ($request){
+                            $query->whereBetween('adjustment_emp.created_at', [$request->start_date, $request->end_date])
+                                  ->orwhereDate('adjustment_emp.created_at', $request->start_date)
+                                  ->orwhereDate('adjustment_emp.created_at', $request->end_date);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->get();
+        } else if (!isset($request->name) && $request->status != "ALL"){
+            $requests = DB::table('adjustment_emp')
+                        ->select('adjustment_emp.*', 'users.first_name', 'users.last_name', 'attendance.created_at AS date', 'time_adjustments.time_in1', 'time_adjustments.time_out1', 'time_adjustments.time_out2', 'time_adjustments.time_out3')
+                        ->join('users', 'users.id', '=', 'adjustment_emp.emp_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->join('time_adjustments', 'time_adjustments.id', '=', 'adjustment_emp.time_ID')
+                        ->join('attendance', 'attendance.id', '=', 'adjustment_emp.att_ID')
+                        ->where(function ($query) use ($request){
+                            $query->whereBetween('adjustment_emp.created_at', [$request->start_date, $request->end_date])
+                                  ->orwhereDate('adjustment_emp.created_at', $request->start_date)
+                                  ->orwhereDate('adjustment_emp.created_at', $request->end_date);
+                        })
+                        ->where(function($query) use ($request){
+                            $query->where('adjustment_emp.status1', '=', $request->status)
+                            ->orWhere('adjustment_emp.status2', '=', $request->status);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->get();
+        } elseif (isset($request->name) && $request->status != "ALL") {
+            $requests = DB::table('adjustment_emp')
+                        ->select('adjustment_emp.*', 'users.first_name', 'users.last_name', 'attendance.created_at AS date', 'time_adjustments.time_in1', 'time_adjustments.time_out1', 'time_adjustments.time_out2', 'time_adjustments.time_out3')
+                        ->join('users', 'users.id', '=', 'adjustment_emp.emp_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->join('time_adjustments', 'time_adjustments.id', '=', 'adjustment_emp.time_ID')
+                        ->join('attendance', 'attendance.id', '=', 'adjustment_emp.att_ID')
+                        ->where(function($query) use ($info){
+                            $query->where(DB::raw('lower(users.first_name)'), 'like', '%' . strtolower($info) . '%')
+                            ->orWhere(DB::raw('lower(users.last_name)'), 'like', '%' . strtolower($info) . '%');
+                        })
+                        ->where(function($query) use ($request){
+                            $query->where('adjustment_emp.status1', '=', $request->status)
+                            ->orWhere('adjustment_emp.status2', '=', $request->status);
+                        })
+                        ->where(function ($query) use ($request){
+                            $query->whereBetween('adjustment_emp.created_at', [$request->start_date, $request->end_date])
+                                  ->orwhereDate('adjustment_emp.created_at', $request->start_date)
+                                  ->orwhereDate('adjustment_emp.created_at', $request->end_date);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->get();
+        } else {
+            $requests = DB::table('adjustment_emp')
+                        ->select('adjustment_emp.*', 'users.first_name', 'users.last_name', 'attendance.created_at AS date', 'time_adjustments.time_in1', 'time_adjustments.time_out1', 'time_adjustments.time_out2', 'time_adjustments.time_out3')
+                        ->join('users', 'users.id', '=', 'adjustment_emp.emp_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->join('time_adjustments', 'time_adjustments.id', '=', 'adjustment_emp.time_ID')
+                        ->join('attendance', 'attendance.id', '=', 'adjustment_emp.att_ID')
+                        ->where(function ($query) use ($request){
+                            $query->whereBetween('adjustment_emp.created_at', [$request->start_date, $request->end_date])
+                                  ->orwhereDate('adjustment_emp.created_at', $request->start_date)
+                                  ->orwhereDate('adjustment_emp.created_at', $request->end_date);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->get();
+        }
+
+        if(isset($requests->first()->id))
+            return view('employee.adjustment-record', compact('requests'));
+        else
+            return redirect('/shift-change')->with('error', 'No change shift found. Try Again');
+    }
 }
 

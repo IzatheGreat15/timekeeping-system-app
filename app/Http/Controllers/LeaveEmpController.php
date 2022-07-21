@@ -6,6 +6,8 @@ use App\Models\LeaveEmp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Auth\Access\Response;
+use File;
 
 class LeaveEmpController extends Controller
 {
@@ -23,68 +25,7 @@ class LeaveEmpController extends Controller
                     ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
                     ->orWhere('approvals.approval2_ID', '=', Auth::user()->id)
                     ->paginate(10);
-
-        $pending = DB::table('leave_emp')
-                    ->select('leave_emp.*', 'users.first_name', 'users.last_name', 'main_leaves.main_leave_name')
-                    ->join('main_leaves', 'main_leaves.id', '=', 'leave_emp.main_leave_ID')
-                    ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
-                    ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
-                    ->where('leave_emp.emp_ID', '=', Auth::user()->id)
-                    ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
-                    ->orWhere('approvals.approval2_ID', '=', Auth::user()->id)
-                    ->where('leave_emp.status1', '=', 'PENDING')
-                    ->orWhere('leave_emp.status2', '=', 'PENDING')
-                    ->paginate(10);
-
-        $sent = DB::table('leave_emp')
-                    ->select('leave_emp.*', 'users.first_name', 'users.last_name', 'main_leaves.main_leave_name')
-                    ->join('main_leaves', 'main_leaves.id', '=', 'leave_emp.main_leave_ID')
-                    ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
-                    ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
-                    ->where('leave_emp.emp_ID', '=', Auth::user()->id)
-                    ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
-                    ->orWhere('approvals.approval2_ID', '=', Auth::user()->id)
-                    ->where('leave_emp.status1', '=', 'SENT BACK')
-                    ->orWhere('leave_emp.status2', '=', 'SENT BACK')
-                    ->paginate(10);
-
-        $cancel = DB::table('leave_emp')
-                    ->select('leave_emp.*', 'users.first_name', 'users.last_name', 'main_leaves.main_leave_name')
-                    ->join('main_leaves', 'main_leaves.id', '=', 'leave_emp.main_leave_ID')
-                    ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
-                    ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
-                    ->where('leave_emp.emp_ID', '=', Auth::user()->id)
-                    ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
-                    ->orWhere('approvals.approval2_ID', '=', Auth::user()->id)
-                    ->where('leave_emp.status1', '=', 'CANCELLED')
-                    ->orWhere('leave_emp.status2', '=', 'CANCELLED')
-                    ->paginate(10);
-
-        $approve = DB::table('leave_emp')
-                    ->select('leave_emp.*', 'users.first_name', 'users.last_name', 'main_leaves.main_leave_name')
-                    ->join('main_leaves', 'main_leaves.id', '=', 'leave_emp.main_leave_ID')
-                    ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
-                    ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
-                    ->where('leave_emp.emp_ID', '=', Auth::user()->id)
-                    ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
-                    ->orWhere('approvals.approval2_ID', '=', Auth::user()->id)
-                    ->where('leave_emp.status1', '=', 'APPROVED')
-                    ->orWhere('leave_emp.status2', '=', 'APPROVED')
-                    ->paginate(10);
-
-        $reject = DB::table('leave_emp')
-                    ->select('leave_emp.*', 'users.first_name', 'users.last_name', 'main_leaves.main_leave_name')
-                    ->join('main_leaves', 'main_leaves.id', '=', 'leave_emp.main_leave_ID')
-                    ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
-                    ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
-                    ->where('leave_emp.emp_ID', '=', Auth::user()->id)
-                    ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
-                    ->orWhere('approvals.approval2_ID', '=', Auth::user()->id)
-                    ->where('leave_emp.status1', '=', 'REJECTED')
-                    ->orWhere('leave_emp.status2', '=', 'REJECTED')
-                    ->paginate(10);
-                    echo $pending;
-        return view('employee.leave-request', compact('requests', 'pending', 'sent', 'cancel', 'approve', 'reject'));
+        return view('employee.leave-request', compact('requests'));
     }
 
     /*
@@ -152,6 +93,163 @@ class LeaveEmpController extends Controller
                     ->get()->first();
 
         return view('employee.leave-spec', compact('req', 'approvals'));
+    }
+
+    /**
+     * go back to previous page
+     */
+    public function previous_leave(){
+        echo url()->previous();
+    }
+
+    /**
+     * search for a leave record
+     */
+    public function search_leave_record(Request $request){
+        /* validate all fields */
+        $request->validate([
+            'start_date'         => 'required',
+            'end_date'           => 'required'
+        ]);
+
+        $requests = NULL;
+        $info = $request->input('name');
+
+        /* get search word from the database */
+        /* make sure the search function is case insensitive; search in leave name, description, and balance */
+
+        /* if there is a name */
+        if(isset($request->name)){
+            $requests = DB::table('leave_emp')
+                        ->select('leave_emp.*', 'users.first_name', 'users.last_name', 'main_leaves.main_leave_name')
+                        ->join('main_leaves', 'main_leaves.id', '=', 'leave_emp.main_leave_ID')
+                        ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->where(function($query){
+                            $query->where('leave_emp.status1', '=', 'APPROVED')
+                                ->where('leave_emp.status2', '=', 'APPROVED');
+                        })
+                        ->where(function($query) use ($info){
+                            $query->where(DB::raw('lower(users.first_name)'), 'like', '%' . strtolower($info) . '%')
+                            ->orWhere(DB::raw('lower(users.last_name)'), 'like', '%' . strtolower($info) . '%');
+                        })
+                        ->where(function($query) use ($request){
+                            $query->whereBetween('leave_emp.start_date', [$request->start_date, $request->end_date])
+                                  ->orWhereBetween('leave_emp.end_date', [$request->start_date, $request->end_date]);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->get();
+        } else {
+            $requests = DB::table('leave_emp')
+                        ->select('leave_emp.*', 'users.first_name', 'users.last_name', 'main_leaves.main_leave_name')
+                        ->join('main_leaves', 'main_leaves.id', '=', 'leave_emp.main_leave_ID')
+                        ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->where(function($query){
+                            $query->where('leave_emp.status1', '=', 'APPROVED')
+                                ->where('leave_emp.status2', '=', 'APPROVED');
+                        })
+                        ->where(function($query) use ($request){
+                            $query->whereBetween('leave_emp.start_date', [$request->start_date, $request->end_date])
+                                  ->orWhereBetween('leave_emp.end_date', [$request->start_date, $request->end_date]);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->get();
+        }
+
+        if(isset($requests->first()->id))
+            return view('employee.leave-record', compact('requests'));
+        else
+            return redirect('/leave-records')->with('error', 'No leave found. Try Again');
+    }
+
+    /**
+     * search for a leave request
+     */
+    public function search_leave_request(Request $request){
+        /* validate all fields */
+        $request->validate([
+            'start_date'         => 'required',
+            'end_date'           => 'required'
+        ]);
+
+        $requests = NULL;
+        $info = $request->input('name');
+
+        /* get search word from the database */
+        /* make sure the search function is case insensitive; search in leave name, description, and balance */
+
+        /* if there is a name */
+        if(isset($request->name) && $request->status == "ALL"){
+            $requests = DB::table('leave_emp')
+                        ->select('leave_emp.*', 'users.first_name', 'users.last_name', 'main_leaves.main_leave_name')
+                        ->join('main_leaves', 'main_leaves.id', '=', 'leave_emp.main_leave_ID')
+                        ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->where(function($query) use ($info){
+                            $query->where(DB::raw('lower(users.first_name)'), 'like', '%' . strtolower($info) . '%')
+                            ->orWhere(DB::raw('lower(users.last_name)'), 'like', '%' . strtolower($info) . '%');
+                        })
+                        ->where(function($query) use ($request){
+                            $query->whereBetween('leave_emp.start_date', [$request->start_date, $request->end_date])
+                                  ->orWhereBetween('leave_emp.end_date', [$request->start_date, $request->end_date]);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->paginate(10);
+        } else if (!isset($request->name) && $request->status != "ALL"){
+            $requests = DB::table('leave_emp')
+                        ->select('leave_emp.*', 'users.first_name', 'users.last_name', 'main_leaves.main_leave_name')
+                        ->join('main_leaves', 'main_leaves.id', '=', 'leave_emp.main_leave_ID')
+                        ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->where(function($query) use ($request){
+                            $query->whereBetween('leave_emp.start_date', [$request->start_date, $request->end_date])
+                                  ->orWhereBetween('leave_emp.end_date', [$request->start_date, $request->end_date]);
+                        })
+                        ->where(function($query) use ($request){
+                            $query->where('leave_emp.status1', '=', $request->status)
+                            ->orWhere('leave_emp.status2', '=', $request->status);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->paginate(10);
+        } elseif (isset($request->name) && $request->status != "ALL") {
+            $requests = DB::table('leave_emp')
+                        ->select('leave_emp.*', 'users.first_name', 'users.last_name', 'main_leaves.main_leave_name')
+                        ->join('main_leaves', 'main_leaves.id', '=', 'leave_emp.main_leave_ID')
+                        ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->where(function($query) use ($info){
+                            $query->where(DB::raw('lower(users.first_name)'), 'like', '%' . strtolower($info) . '%')
+                            ->orWhere(DB::raw('lower(users.last_name)'), 'like', '%' . strtolower($info) . '%');
+                        })
+                        ->where(function($query) use ($request){
+                            $query->where('leave_emp.status1', '=', $request->status)
+                            ->orWhere('leave_emp.status2', '=', $request->status);
+                        })
+                        ->where(function($query) use ($request){
+                            $query->whereBetween('leave_emp.start_date', [$request->start_date, $request->end_date])
+                                  ->orWhereBetween('leave_emp.end_date', [$request->start_date, $request->end_date]);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->paginate(10);
+        } else {
+            $requests = DB::table('leave_emp')
+                        ->select('leave_emp.*', 'users.first_name', 'users.last_name', 'main_leaves.main_leave_name')
+                        ->join('main_leaves', 'main_leaves.id', '=', 'leave_emp.main_leave_ID')
+                        ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
+                        ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
+                        ->where(function($query) use ($request){
+                            $query->whereBetween('leave_emp.start_date', [$request->start_date, $request->end_date])
+                                  ->orWhereBetween('leave_emp.end_date', [$request->start_date, $request->end_date]);
+                        })
+                        ->where('users.dept_ID', '=', Auth::user()->dept_ID)
+                        ->paginate(10);
+        }
+
+        if($requests->count() > 0)
+            return view('employee.leave-request', compact('requests')); 
+        else
+            return redirect('/leave-request')->with('error', 'No leave request found. Try Again');
     }
 
     /*
@@ -335,84 +433,12 @@ class LeaveEmpController extends Controller
         return redirect('/leave-request')->with('success', 'Leave request cancelled successfully');
     }
 
-    /*
-        Search for a leave request
+    /**
+     * Download supporting documents
      */
-    public function search_leave_request(Request $request){
-        $start_date = $request->start_date;
-        $end_date = $request->end_date;
-        $name = $request->name;
-        $status = $request->status;
-        echo $start_date." ".$end_date." ".$name." ".$status." ";
-
-        /* search for entries in database that matches with inputs from the form */
-        /*
-        $requests = DB::table('leave_emp')
-                    ->select('leave_emp.*', 'users.first_name', 'users.last_name', 'main_leaves.main_leave_name')
-                    ->join('main_leaves', 'main_leaves.id', '=', 'leave_emp.main_leave_ID')
-                    ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
-                    ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
-                    ->where('leave_emp.emp_ID', '=', Auth::user()->id)
-                    ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
-                    ->orWhere('approvals.approval2_ID', '=', Auth::user()->id)
-                    ->where(function($query){
-                    ->where('leave_emp.start_date', '<=', $start_date)
-                    ->orWhere('leave_emp.end_date', '>=', $end_date)z
-                    })
-                    ->where(DB::raw('lower(users.first_name)'), 'like', '%' . strtolower($name) . '%')
-                    ->orWhere(DB::raw('lower(users.last_name)'), 'like', '%' . strtolower($name) . '%')
-                    ->where('leave_emp.status1', '=', $status)
-                    ->orWhere('leave_emp.status2', '=', $status)
-                    ->get();
-*/
-        $requests = DB::table('leave_emp')
-                    ->select('leave_emp.*', 'users.first_name', 'users.last_name', 'main_leaves.main_leave_name')
-                    ->join('main_leaves', 'main_leaves.id', '=', 'leave_emp.main_leave_ID')
-                    ->join('users', 'users.id', '=', 'leave_emp.emp_ID')
-                    ->join('approvals', 'approvals.id', '=', 'users.approval_ID')
-                    ->where(function($query){
-                        $query->where('leave_emp.emp_ID', '=', Auth::user()->id)
-                        ->orWhere('approvals.approval1_ID', '=', Auth::user()->id)
-                        ->orWhere('approvals.approval2_ID', '=', Auth::user()->id);
-                    })
-                    // ->where([
-                    //     ['leave_emp.start_date', '<=', $start_date],
-                    //     // [function($query) use ($request){
-                    //     //     if($name = $request->name){
-                    //     //         $query->orWhere('users.first_name', 'LIKE', '%' .$name. '%')
-                    //     //         ->orWhere('users.last_name', 'LIKE', '%' .$name. '%');
-                    //     //     }
-                    //     //     if($status = $request->status){
-                    //     //         if($status != 'ALL'){
-                    //     //             $query->orWhere('leave_emp.status1', '=', $status)
-                    //     //                 ->orWhere('leave_emp.status2', '=', $status);
-                    //     //                 echo "here";
-                    //     //         }
-                    //     //     }
-                    //     // }]
-                    // ])->get();
-                    ->where(function($query) use ($request){
-                        if($date = $request->start_date){
-                            $query->where('leave_emp.start_date', '<=', $date);
-                        }
-                    })
-                    ->where(function($query) use ($request){
-                        if($name = $request->name){
-                            $query->where('users.first_name', 'LIKE', '%' .$name. '%')
-                            ->orWhere('users.last_name', 'LIKE', '%' .$name. '%');
-                        }
-                    })
-                    ->where(function($query) use ($request){
-                        if($status = $request->status){
-                            $query->where('leave_emp.status1', '<=', $status)
-                            ->orWhere('leave_emp.status2', '<=', $status);
-                        }
-                    })->get();
-        
-        echo $requests;
-        // if($requests->count() > 0)
-        //     return view('employee.leave-request', compact('requests'));
-        // else
-        //     return redirect('/leave-request')->with('error', 'No leave request found. Try Again');
+    public function download_file($filename, $id){
+        echo $filename." ".$id;
+        $file = public_path('supporting_docs/'.$id.'/'.$filename);
+        return Response()->download($file);
     }
 }

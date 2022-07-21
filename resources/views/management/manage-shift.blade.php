@@ -14,6 +14,20 @@
 
     <hr>
 
+    <!-- Success Message -->
+    @if ($message = Session::get('success'))
+        <ul class="list-group mb-3">
+            <li class="list-group-item list-group-item-success">{{ $message }}</li>
+        </ul>
+    @endif
+
+    <!-- Error Message -->
+    @if ($message = Session::get('error'))
+        <ul class="list-group mb-3">
+            <li class="list-group-item list-group-item-danger">{{ $message }}</li>
+        </ul>
+    @endif
+
     <!--Redirect to shift-manage-new.blade.php-->
     <a type="button" class="btn shadow-md mb-3" href="/shift-manage-new" style="color:white">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-plus-circle" viewBox="0 1 16 16" style="overflow: visible">
@@ -26,7 +40,10 @@
         <div class="col-md mb-3">
             <br>
             <!--Department Name - shows only if the account is NOT a CEO-->
-            <h3>Department Name</h3>
+            <h3>{{ $dept->dept_name }}</h3>
+        </div>
+
+        <div class="col-md mb-3">
         </div>
         
         <div class="col-md mb-3">
@@ -35,17 +52,6 @@
                 <input type="text" class="form-control">
             </form>
         </div>
-
-        <div class="col-sm mb-3">
-                <label>Status: </label>
-                <select class="form-control">
-                    <option>ALL</option>
-                    <option>PENDING</option>
-                    <option>SENT BACK</option>
-                    <option>APPROVED</option>
-                    <option>REJECTED</option>
-                </select>
-            </div>
     </div>
 
     <!--Shift Records-->
@@ -57,7 +63,9 @@
                         <th scope="col">Date Filed</th>
                         <!--Department shown only for CEO-->
                         <th scope="col">Name</th>
-                        <th scope="col">Department</th>
+                        @if(Auth::user()->dept_ID == NULL)
+                            <th scope="col">Department</th>
+                        @endif
                         <th scope="col">From Date</th>
                         <th scope="col">To Date</th>
                         <th scope="col">Shift</th>
@@ -67,24 +75,28 @@
                 </thead>
 
                 <tbody>
+                @if($shifts->count() > 0)
+                    @foreach($shifts as $shift)
                     <tr>
-                        <td style="display: none;">001</td>
-                        <td>03/02/22</td>
-                        <td>John Doe</td>
-                        <td>Marketing</td>
-                        <td>03/02/22</td>
-                        <td>03/02/22</td>
-                        <td>Graveyard Shift</td>
-                        <td>04:00AM <br> 06:00PM</td>
+                        <td style="display: none;">{{ $shift->id }}</td>
+                        <td>{{ date('Y/m/d', strtotime($shift->created_at)) }}</td>
+                        <td>{{ $shift->first_name }} {{ $shift->last_name }}</td>
+                        @if(Auth::user()->dept_ID == NULL)
+                            <td>{{ $shift->dept_name }}</td>
+                        @endif
+                        <td>{{ date('Y/m/d', strtotime($shift->start_date)) }}</td>
+                        <td>{{ date('Y/m/d', strtotime($shift->end_date)) }}</td>
+                        <td>{{ $shift->shift_name }}</td>
+                        <td>{{ date('h:i A', strtotime($shift->start_time)) }} <br> {{ date('h:i A', strtotime($shift->end_time)) }}</td>
                         <td>
-                            <a class="btn btn-clear p-0" href="/shift-manage-id">
+                            <a class="btn btn-clear p-0" href="/shift-manage/{{ $shift->id }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
                                     <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
                                     <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
                                 </svg>
                             </a>
                             &nbsp;
-                            <a class="btn btn-clear p-0" href="/shift-manage-edit">
+                            <a class="btn btn-clear p-0" href="/shift-manage-edit/{{ $shift->id }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
@@ -98,6 +110,12 @@
                             </a>
                         </td>
                     </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="11">No shifts assigned yet!</td>
+                    </tr>
+                @endif
                 </tbody>
             </table>
         </div>
@@ -118,11 +136,11 @@
                 </div>
             </div>
                 
-            <form>
-                <input id="dept_id" style="display: none;" />
-
+            <form method="POST" action="/manage-shift-delete">
+                @csrf
+                <input id="dept_id" name="id" style="display: none;" />
                 <p>Are you sure you want to delete?</p>
-                    <button type="button" class="btn bg-success">YES</button>
+                    <button type="submit" class="btn bg-success">YES</button>
                     <button type="button" class="btn bg-danger" data-dismiss="modal" aria-label="Close">NO</button>
             </form>
         </div>

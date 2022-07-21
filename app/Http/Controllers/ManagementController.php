@@ -195,7 +195,7 @@ class ManagementController extends Controller
             'ap2.first_name AS ap2_fname', 'ap2.last_name AS ap2_lname', 
             'departments.dept_name', 
             'comments.comment1', 'comments.comment2',
-            'leave_emp.start_date', 'leave_emp.end_date',
+            'leave_emp.start_date', 'leave_emp.end_date', 'leave_emp.emp_ID', 'leave_emp.updated_at1', 'leave_emp.updated_at2',
             'main_leaves.main_leave_name',
             'leave_emp.created_at AS file_date', 'leave_emp.reason', 'leave_emp.document_file', 'leave_emp.status1', 'leave_emp.status2',
         )
@@ -208,10 +208,8 @@ class ManagementController extends Controller
         ->join('comments', 'comments.id', '=', 'leave_emp.comment_id')
         ->where('leave_emp.id', '=', $id)
         ->get()->first();
-        $fname = $emp->document_file;
-        $emp->document_file = 'supporting_docs/'.Auth::user()->id.'/'.$emp->document_file;
 
-        return view('management.leave-approval-id', ['emp' => $emp, 'fname' => $fname]);
+        return view('management.leave-approval-id', ['emp' => $emp]);
     }
 
     function show_management_overtimes(){

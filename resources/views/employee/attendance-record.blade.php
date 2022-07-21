@@ -26,22 +26,41 @@
         </ul>
     @endif
 
+    <!-- Error Messages -->
+    @if ($errors->any())
+        <ul class="list-group">
+            @foreach ($errors->all() as $error)
+                <li class="list-group-item list-group-item-danger mb-3">{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
+
     <!--Form Date Filter-->
-    <form>
+    <form method="POST" action="/search-export-attendance">
+        @csrf 
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>From: </label>
-                <input type="date" class="form-control">
+                <input type="date" name="start_date" class="form-control">
             </div>
             <div class="col-sm mb-3">
                 <label>To: </label>
-                <input type="date" class="form-control">
+                <input type="date" name="end_date" class="form-control">
             </div>
             <!--For Management Only-->
             @if(Auth::user()->role == 'Management')
             <div class="col-sm mb-3">
                 <label>Employee: </label>
-                <input type="text" class="form-control" name="name" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}">
+                <input type="text" class="form-control" name="name">
+            </div>
+            @endif
+            <div class="col-sm-1 mt-4">
+                <button type="submit" name="action" value="search" class="form-control btn bg-info">Search</button>
+            </div>
+            <!--For Management Only-->
+            @if(Auth::user()->role == 'Management')
+            <div class="col-sm-1 mt-4">
+                <button type="submit" name="action" value="export" class="form-control btn bg-success">Export</button>
             </div>
             @endif
         </div>
@@ -189,6 +208,10 @@
             var shift = (start_time > end_time)? 24 + hours : hours;
             $('#tardy'+x).text(shift-total_hrs);
         }
+
+        $('input[name="start_date"]').change(function() {
+            $('input[name="end_date"]').attr("min", $('input[name="start_date"]').val());
+        });
     });
 </script>
 @endsection

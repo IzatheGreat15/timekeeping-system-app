@@ -26,6 +26,10 @@
         <!-- Employee Name -->
         <div class="form-row">
             <div class="col-sm mb-3">
+                <label>Employee Number: </label>
+                <input type="number" name="emp_ID" class="form-control" minlength="10" required>
+            </div>
+            <div class="col-sm mb-3">
                 <label>First Name: </label>
                 <input type="text" name="first_name" class="form-control" required>
             </div>
@@ -39,7 +43,7 @@
         <div class="form-row">
             <div class="col-sm mb-3">
                 <label>Email: </label>
-                <input type="text" name="email" class="form-control" required>
+                <input type="email" name="email" class="form-control" required>
             </div>
             <div class="col-sm mb-3">
                 <label>Password: </label>
