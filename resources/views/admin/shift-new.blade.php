@@ -48,6 +48,50 @@
             </div>
         </div>
 
+        <br />
+
+        <!-- Break Times -->
+        <div class="form-row">
+            <div class="col-sm mb-3">
+                <label>Break Time: </label>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-sm mb-3">
+                <label>Start Time: </label>
+                <input type="time" id="break_start1" name="break_start1" class="form-control" required/>
+            </div>
+            <div class="col-sm mb-3">
+                <label>End Time: </label>
+                <input type="time" id="break_end1" name="break_end1" class="form-control" required/>
+            </div>
+
+            <!-- Automatically calculates no. of hours when start/end time fields change -->
+            <div class="col-sm mb-3">
+                <label>No. of Hours: </label>
+                <input type="text" id="break_hours1" class="form-control" readonly style="background-color: transparent;"/>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-sm mb-3">
+                <label>Start Time: </label>
+                <input type="time" id="break_start2" name="break_start2" class="form-control"/>
+            </div>
+            <div class="col-sm mb-3">
+                <label>End Time: </label>
+                <input type="time" id="break_end2" name="break_end2" class="form-control" />
+            </div>
+
+            <!-- Automatically calculates no. of hours when start/end time fields change -->
+            <div class="col-sm mb-3">
+                <label>No. of Hours: </label>
+                <input type="text" id="break_hours2" class="form-control" readonly style="background-color: transparent;"/>
+            </div>
+        </div>
+
+
         <div class="flex items-center justify-end mt-4">
             <a type="button" class="btn shadow-md bg-danger" href="/shifts" style="color:white">
                 Back </a>
@@ -67,11 +111,21 @@
 
             /* set min of end_time to be 1 hour later than the start_time */
             $("#end_time").prop("min", (parseInt(time[0])+1).toString() + ":" + time[1]);
+            $("#break_start1").prop("min", (parseInt(time[0])+1).toString() + ":" + time[1]);
         });
 
         $("#start_time, #end_time").change(function() {
             var start_time = new Date("01/01/2007 " + $('#start_time').val());
             var end_time = new Date("01/01/2007 " + $('#end_time').val());
+
+            /* split hours and minutes of the times */
+            const time = $("#end_time").val().split(":");
+
+            /* set max of break_start1 to be 1 hour earlier than the end_time */
+            $("#break_start1").prop("max", (parseInt(time[0])-1).toString() + ":" + time[1]);
+            $("#break_end1").prop("max", (parseInt(time[0])-1).toString() + ":" + time[1]);
+            $("#break_start2").prop("max", (parseInt(time[0])-1).toString() + ":" + time[1]);
+            $("#break_end2").prop("max", (parseInt(time[0])-1).toString() + ":" + time[1]);
 
             var diff = (end_time - start_time) / 60000;
 
@@ -84,6 +138,66 @@
                     $("#hours").addClass("border border-danger");
                 } else {
                     $("#hours").removeClass("border border-danger");
+                }
+            }
+        });
+
+        $("#break_start1").change(function() {
+            /* split hours and minutes of the times */
+            const time = $("#break_start1").val().split(":");
+
+            /* set min of end_time to be 1 hour later than the start_time */
+            $("#break_end1").prop("min", (parseInt(time[0])+1).toString() + ":" + time[1]);
+        });
+
+        $("#break_start1, #break_end1").change(function() {
+            var start_time = new Date("01/01/2007 " + $('#break_start1').val());
+            var end_time = new Date("01/01/2007 " + $('#break_end1').val());
+
+            /* split hours and minutes of the times */
+            const time = $("#break_end1").val().split(":");
+
+            /* set min of break_start2 to be 1 hour later than the break_end1 */
+            $("#break_start2").prop("min", (parseInt(time[0])+1).toString() + ":" + time[1]);
+
+            var diff = (end_time - start_time) / 60000;
+
+            var minutes = diff % 60;
+            var hours = (diff - minutes) / 60;
+
+            if(hours !== "NaN"){
+                $("#break_hours1").val((start_time > end_time)? 24 + hours : hours);
+                if($("#break_hours1").val() < 1){
+                    $("#break_hours1").addClass("border border-danger");
+                } else {
+                    $("#break_hours1").removeClass("border border-danger");
+                }
+            }
+        });
+
+        $("#break_start2").change(function() {
+            /* split hours and minutes of the times */
+            const time = $("#break_start2").val().split(":");
+
+            /* set min of end_time to be 1 hour later than the start_time */
+            $("#break_end2").prop("min", (parseInt(time[0])+1).toString() + ":" + time[1]);
+        });
+
+        $("#break_start2, #break_end2").change(function() {
+            var start_time = new Date("01/01/2007 " + $('#break_start2').val());
+            var end_time = new Date("01/01/2007 " + $('#break_end2').val());
+
+            var diff = (end_time - start_time) / 60000;
+
+            var minutes = diff % 60;
+            var hours = (diff - minutes) / 60;
+
+            if(hours !== "NaN"){
+                $("#break_hours2").val((start_time > end_time)? 24 + hours : hours);
+                if($("#break_hours2").val() < 1){
+                    $("#break_hours2").addClass("border border-danger");
+                } else {
+                    $("#break_hours2").removeClass("border border-danger");
                 }
             }
         });

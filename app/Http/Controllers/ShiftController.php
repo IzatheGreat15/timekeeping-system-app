@@ -24,9 +24,11 @@ class ShiftController extends Controller
     public function add_shift(Request $request){
         /* validate all fields */
         $request->validate([
-            'shift_name' => 'required',
-            'start_time' => 'required',
-            'end_time'   => 'required'
+            'shift_name'   => 'required',
+            'start_time'   => 'required',
+            'end_time'     => 'required',
+            'break_start1' => 'required',
+            'break_end1'   => 'required'
         ]);
 
         /* insert data */
@@ -53,17 +55,23 @@ class ShiftController extends Controller
     public function update_shift(Request $request){
         /* validate all fields */
         $request->validate([
-            'shift_name' => 'required',
-            'start_time' => 'required',
-            'end_time'   => 'required'
+            'shift_name'   => 'required',
+            'start_time'   => 'required',
+            'end_time'     => 'required',
+            'break_start1' => 'required',
+            'break_end1'   => 'required'
         ]);
 
         /* update data */
         DB::table('shifts')->where('id', '=', $request->id)
                 ->update([
-                    'shift_name' => $request->shift_name,
-                    'start_time' => $request->start_time,
-                    'end_time'   => $request->end_time,
+                    'shift_name'   => $request->shift_name,
+                    'start_time'   => $request->start_time,
+                    'end_time'     => $request->end_time,
+                    'break_start1' => $request->break_start1,
+                    'break_end1'   => $request->break_end1,
+                    'break_start2' => $request->break_start2,
+                    'break_end2'   => $request->break_end2,
                     'updated_at' => date('Y-m-d H:i:s')
                 ]);
 
